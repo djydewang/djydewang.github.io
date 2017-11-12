@@ -132,13 +132,13 @@
 											
 												sortStaticImportsAlphabetically
 												
-													<li>true</li>
+													<li>false</li>
 												
 												<br/>
 											
 												groups
 												
-													<li>com,/^java\./,org</li>
+													<li>/^java\./,javax,org</li>
 												
 												<br/>
 											
@@ -150,7 +150,7 @@
 											
 												option
 												
-													<li>inflow</li>
+													<li>top</li>
 												
 												<br/>
 											
@@ -167,13 +167,13 @@
 											
 												sortStaticImportsAlphabetically
 												
-													<li>true</li>
+													<li>false</li>
 												
 												<br/>
 											
 												groups
 												
-													<li>com,/^java\./,org</li>
+													<li>/^java\./,javax,org</li>
 												
 												<br/>
 											
@@ -185,7 +185,7 @@
 											
 												option
 												
-													<li>inflow</li>
+													<li>top</li>
 												
 												<br/>
 											
@@ -218,37 +218,68 @@
 						<tr class="b">
 							<td>base</td>
 							<td id="filesBase">1954</td>
-							<td id="totalBase">2018</td>
+							<td id="totalBase">1887</td>
 							
-								<td id="warningSeverityNumBase">2018</td>
+								<td id="warningSeverityNumBase">1887</td>
 							
 						</tr>
 						<tr class="a">
 							<td>patch</td>
 							<td id="filesPatch">1954</td>
-							<td id="totalPatch">2028</td>
+							<td id="totalPatch">1883</td>
 							
-								<td id="warningSeverityNumPatch">2028</td>
+								<td id="warningSeverityNumPatch">1883</td>
 							
 						</tr>
 						<tr class="d">
 							<td>difference</td>
-							<td id="filesDiff">10</td>
-							<td id="totalDiff">10</td>
+							<td id="filesDiff">4</td>
+							<td id="totalDiff">4</td>
 							
-								<td id="warningSeverityNumDiff">10</td>
+								<td id="warningSeverityNumDiff">4</td>
 							
 						<tr>
 					</table>
 
 					<br />
-					Number of unique base messages reported below: <span id="uniqueMessagesBase">0</span><br />
-					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">10</span><br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">4</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">0</span><br />
 				</div>
 			</div>
 
 			<div class="section">
 				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/com/opensymphony/xwork2/inject/Inject.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;java.lang.annotation.ElementType.*&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/com/opensymphony/xwork2/inject/Inject.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
 				<div class="section">
 					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/com/opensymphony/xwork2/ognl/accessor/CompoundRootAccessor.java</h3>
 					<tr class="b">
@@ -262,46 +293,15 @@
 						</tr>
 						
 							
-								<tr class="a">
-							
-								<td><a name="A1" href = "#A1">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;java.lang.String.format&#39;</td>
+								<tr class="b">
 								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/com/opensymphony/xwork2/ognl/accessor/CompoundRootAccessor.java.html#L34">34</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/org/apache/struts2/interceptor/validation/SkipValidation.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
 								<td><a name="A2" href = "#A2">#</a></td>
 								<td>warning</td>
 								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;java.lang.annotation.Retention&#39;</td>
+								<td>&#39;org.apache.commons.lang3.BooleanUtils.toBoolean&#39; should be separated from previous imports.</td>
 								
 									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/org/apache/struts2/interceptor/validation/SkipValidation.java.html#L26">26</a></td>
+									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/main/java/com/opensymphony/xwork2/ognl/accessor/CompoundRootAccessor.java.html#L35">35</a></td>
 								
 								
 									<td> </td>
@@ -312,7 +312,7 @@
 					</table>
 				</div>
 				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/com/opensymphony/xwork2/interceptor/ParameterRemoverInterceptorTest.java</h3>
+					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/result/ServletRedirectResultTest.java</h3>
 					<tr class="b">
 					<table border="0" class="bodyTable">
 					        <th></th>
@@ -324,15 +324,15 @@
 						</tr>
 						
 							
-								<tr class="a">
-							
+								<tr class="b">
+								
 								<td><a name="A3" href = "#A3">#</a></td>
 								<td>warning</td>
 								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.easymock.EasyMock.*&#39;</td>
+								<td>&#39;org.easymock.EasyMock.createControl&#39; should be separated from previous imports.</td>
 								
 									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/com/opensymphony/xwork2/interceptor/ParameterRemoverInterceptorTest.java.html#L9">9</a></td>
+									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/result/ServletRedirectResultTest.java.html#L25">25</a></td>
 								
 								
 									<td> </td>
@@ -343,7 +343,7 @@
 					</table>
 				</div>
 				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/dispatcher/ParameterTest.java</h3>
+					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/portlet/src/test/java/org/apache/struts2/portlet/result/PortletResultTest.java</h3>
 					<tr class="b">
 					<table border="0" class="bodyTable">
 					        <th></th>
@@ -355,201 +355,15 @@
 						</tr>
 						
 							
-								<tr class="a">
-							
+								<tr class="b">
+								
 								<td><a name="A4" href = "#A4">#</a></td>
 								<td>warning</td>
 								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.testng.Assert.*&#39;</td>
+								<td>Wrong order for &#39;org.apache.struts2.portlet.PortletConstants.ACTION_PARAM&#39; import.</td>
 								
 									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/dispatcher/ParameterTest.java.html#L6">6</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/interceptor/ServletConfigInterceptorTest.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A5" href = "#A5">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.easymock.EasyMock.*&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/interceptor/ServletConfigInterceptorTest.java.html#L37">37</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/util/URLDecoderUtilTest.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A6" href = "#A6">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.junit.Assert.*&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/core/src/test/java/org/apache/struts2/util/URLDecoderUtilTest.java.html#L5">5</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/bean-validation/src/main/java/org/apache/struts/beanvalidation/constraints/FieldMatch.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A7" href = "#A7">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;java.lang.annotation.ElementType.ANNOTATION_TYPE&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/bean-validation/src/main/java/org/apache/struts/beanvalidation/constraints/FieldMatch.java.html#L31">31</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/cdi/src/test/java/org/apache/struts2/cdi/CdiObjectFactoryTest.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A8" href = "#A8">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.jboss.weld.environment.se.WeldContainer&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/cdi/src/test/java/org/apache/struts2/cdi/CdiObjectFactoryTest.java.html#L6">6</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/json/src/test/java/org/apache/struts2/json/JSONReaderTest.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A9" href = "#A9">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.junit.Assert.assertEquals&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/json/src/test/java/org/apache/struts2/json/JSONReaderTest.java.html#L5">5</a></td>
-								
-								
-									<td> </td>
-									
-								
-							</tr>
-						
-					</table>
-				</div>
-				<div class="section">
-					<h3>/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/junit/src/test/java/org/apache/struts2/convention/StrutsJUnit4ConventionTestCaseTest.java</h3>
-					<tr class="b">
-					<table border="0" class="bodyTable">
-					        <th></th>
-							<th>Severity</th>
-							<th>Rule</th>
-							<th>Message</th>
-							<th>Line</th>
-							<th>Col</th>
-						</tr>
-						
-							
-								<tr class="a">
-							
-								<td><a name="A10" href = "#A10">#</a></td>
-								<td>warning</td>
-								<td>ImportOrder</td>
-								<td>Extra separation in import group before &#39;org.junit.Assert.assertEquals&#39;</td>
-								
-									
-									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/junit/src/test/java/org/apache/struts2/convention/StrutsJUnit4ConventionTestCaseTest.java.html#L27">27</a></td>
+									<td><a href = "xref/home/bbg/project/contribution-master/checkstyle-tester/repositories/apache-struts/plugins/portlet/src/test/java/org/apache/struts2/portlet/result/PortletResultTest.java.html#L47">47</a></td>
 								
 								
 									<td> </td>
