@@ -1,0 +1,1409 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">289</td>
+							<td id="totalBase">722</td>
+							
+								<td id="warningSeverityNumBase">722</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">289</td>
+							<td id="totalPatch">760</td>
+							
+								<td id="warningSeverityNumPatch">760</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">38</td>
+							<td id="totalDiff">38</td>
+							
+								<td id="warningSeverityNumDiff">38</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">0</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">38</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck1Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction1&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck1Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck2Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction2&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck2Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck3Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction3&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck3Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck4Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction4&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck4Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck5Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction5&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck5Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck6Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction6&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck6Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck7Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction7&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck7Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck8Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction8&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyCheck8Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.CheckedFunction1&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr-test/src-gen/test/java/io/vavr/test/PropertyTest.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/APITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.CharSeq&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/APITest.java.html#L18">18</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction0Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A11" href = "#A11">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction0Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction1Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A12" href = "#A12">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction1Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction2Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A13" href = "#A13">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction2Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction3Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A14" href = "#A14">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction3Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction4Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A15" href = "#A15">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction4Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction5Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A16" href = "#A16">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction5Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction6Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A17" href = "#A17">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction6Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction7Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A18" href = "#A18">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction7Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction8Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A19" href = "#A19">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/CheckedFunction8Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function0Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A20" href = "#A20">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function0Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function1Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A21" href = "#A21">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function1Test.java.html#L16">16</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function2Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A22" href = "#A22">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function2Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function3Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A23" href = "#A23">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function3Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function4Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A24" href = "#A24">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function4Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function5Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A25" href = "#A25">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function5Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function6Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A26" href = "#A26">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function6Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function7Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A27" href = "#A27">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function7Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function8Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A28" href = "#A28">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.control.Try&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Function8Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple0Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A29" href = "#A29">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple0Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple1Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A30" href = "#A30">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple1Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple2Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A31" href = "#A31">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple2Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple3Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A32" href = "#A32">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple3Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple4Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A33" href = "#A33">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple4Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple5Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A34" href = "#A34">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple5Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple6Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A35" href = "#A35">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple6Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple7Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A36" href = "#A36">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple7Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple8Test.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A37" href = "#A37">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.collection.List&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src-gen/test/java/io/vavr/Tuple8Test.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src/test/java/io/vavr/control/TryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A38" href = "#A38">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;io.vavr.*&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/Vavr/vavr/src/test/java/io/vavr/control/TryTest.java.html#L14">14</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

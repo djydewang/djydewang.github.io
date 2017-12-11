@@ -1,0 +1,541 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">13652</td>
+							<td id="totalBase">14682</td>
+							
+								<td id="warningSeverityNumBase">14682</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">13652</td>
+							<td id="totalPatch">14692</td>
+							
+								<td id="warningSeverityNumPatch">14692</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">10</td>
+							<td id="totalDiff">10</td>
+							
+								<td id="warningSeverityNumDiff">10</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">0</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">10</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/com/sun/jmx/mbeanserver/DefaultMXBeanMappingFactory.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;com.sun.jmx.remote.util.EnvHelp&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/com/sun/jmx/mbeanserver/DefaultMXBeanMappingFactory.java.html#L33">33</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/java/nio/file/TempFileHelper.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;sun.security.action.GetPropertyAction&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/java/nio/file/TempFileHelper.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/javax/swing/colorchooser/ValueFormatter.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;javax.swing.JFormattedTextField&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/javax/swing/colorchooser/ValueFormatter.java.html#L32">32</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/javax/swing/plaf/nimbus/NimbusLookAndFeel.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;javax.swing.JComponent&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/javax/swing/plaf/nimbus/NimbusLookAndFeel.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/sun/java2d/pisces/Stroker.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;sun.awt.geom.PathConsumer2D&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/sun/java2d/pisces/Stroker.java.html#L33">33</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/sun/management/MappedMXBeanType.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;com.sun.management.VMOption&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/src/share/classes/sun/management/MappedMXBeanType.java.html#L44">44</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/FullScreen/TranslucentWindow/TranslucentWindow.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;sun.awt.SunToolkit&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/FullScreen/TranslucentWindow/TranslucentWindow.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/dnd/FileListBetweenJVMsTest/FileListBetweenJVMsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;test.java.awt.regtesthelpers.process.ProcessCommunicator&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/dnd/FileListBetweenJVMsTest/FileListBetweenJVMsTest.java.html#L40">40</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/dnd/URIListBetweenJVMsTest/URIListBetweenJVMsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;test.java.awt.regtesthelpers.process.ProcessCommunicator&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/dnd/URIListBetweenJVMsTest/URIListBetweenJVMsTest.java.html#L40">40</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/print/PrinterJob/ImagePrinting/ImageTypes.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;javax.print.*&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/openjdk7/test/java/awt/print/PrinterJob/ImagePrinting/ImageTypes.java.html#L41">41</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
