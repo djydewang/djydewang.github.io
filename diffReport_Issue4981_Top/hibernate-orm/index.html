@@ -1,0 +1,1553 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>true</li>
+												
+												<br/>
+											
+												option
+												
+													<li>top</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												sortStaticImportsAlphabetically
+												
+													<li>true</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./, javax, org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>true</li>
+												
+												<br/>
+											
+												option
+												
+													<li>top</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+								<th>Severity-error</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">6386</td>
+							<td id="totalBase">4507</td>
+							
+								<td id="warningSeverityNumBase">4435</td>
+							
+								<td id="errorSeverityNumBase">72</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">6386</td>
+							<td id="totalPatch">4549</td>
+							
+								<td id="warningSeverityNumPatch">4477</td>
+							
+								<td id="errorSeverityNumPatch">72</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">42</td>
+							<td id="totalDiff">42</td>
+							
+								<td id="warningSeverityNumDiff">42</td>
+							
+								<td id="errorSeverityNumDiff">0</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">0</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">42</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/annotations/id/sequences/IdTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/annotations/id/sequences/IdTest.java.html#L55">55</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/bytecode/enhancement/customer/CustomerEnhancerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.hibernate.testing.junit4.ExtraAssertions.assertTyping&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/bytecode/enhancement/customer/CustomerEnhancerTest.java.html#L54">54</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/hql/EJBQLTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/hql/EJBQLTest.java.html#L44">44</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/instrument/cases/TestCustomColumnReadAndWrite.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/instrument/cases/TestCustomColumnReadAndWrite.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/namingstrategy/FullyQualifiedEntityNameNamingStrategyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/namingstrategy/FullyQualifiedEntityNameNamingStrategyTest.java.html#L28">28</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/ops/MergeMultipleEntityCopiesCustomTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.TestCase.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/ops/MergeMultipleEntityCopiesCustomTest.java.html#L38">38</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/ops/MergeMultipleEntityCopiesDisallowedByDefaultTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.TestCase.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/ops/MergeMultipleEntityCopiesDisallowedByDefaultTest.java.html#L35">35</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/MySQL57TimestampPropertyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertNotNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/MySQL57TimestampPropertyTest.java.html#L49">49</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/TimePropertyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/TimePropertyTest.java.html#L41">41</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/TimestampPropertyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertNotNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-core/src/test/java/org/hibernate/test/temporal/TimestampPropertyTest.java.html#L46">46</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/emops/MergeMultipleEntityCopiesCustomTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A11" href = "#A11">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.TestCase.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/emops/MergeMultipleEntityCopiesCustomTest.java.html#L39">39</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/emops/MergeMultipleEntityCopiesDisallowedByDefaultTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A12" href = "#A12">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.TestCase.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/emops/MergeMultipleEntityCopiesDisallowedByDefaultTest.java.html#L35">35</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/lock/LockTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A13" href = "#A13">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.*&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-entitymanager/src/test/java/org/hibernate/ejb/test/lock/LockTest.java.html#L47">47</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/main/java/org/hibernate/envers/configuration/metadata/reader/ComponentAuditingData.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A14" href = "#A14">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.hibernate.envers.tools.Tools.newHashMap&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/main/java/org/hibernate/envers/configuration/metadata/reader/ComponentAuditingData.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedAPITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A15" href = "#A15">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedAPITest.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedAuditedManyToManyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A16" href = "#A16">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedAuditedManyToManyTest.java.html#L17">17</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedBidirectional2.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A17" href = "#A17">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedBidirectional2.java.html#L36">36</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedChildAuditing.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A18" href = "#A18">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedChildAuditing.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedChildReferencing.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A19" href = "#A19">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedChildReferencing.java.html#L38">38</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedComponentMapKey.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A20" href = "#A20">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedComponentMapKey.java.html#L38">38</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedComponents.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A21" href = "#A21">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedComponents.java.html#L39">39</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedCompositeCustom.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A22" href = "#A22">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedCompositeCustom.java.html#L36">36</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedDoubleJoinColumnBidirectionalList.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A23" href = "#A23">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedDoubleJoinColumnBidirectionalList.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedEnumSet.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A24" href = "#A24">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedEnumSet.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedForDefaultNotUsing.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A25" href = "#A25">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedForDefaultNotUsing.java.html#L41">41</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedIdMapKey.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A26" href = "#A26">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedIdMapKey.java.html#L36">36</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedManyToOneInComponent.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A27" href = "#A27">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedManyToOneInComponent.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedNotOwnedBidirectional.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A28" href = "#A28">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedNotOwnedBidirectional.java.html#L38">38</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedNullProperties.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A29" href = "#A29">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedNullProperties.java.html#L36">36</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedOneToManyInComponent.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A30" href = "#A30">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedOneToManyInComponent.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedStringMap.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A31" href = "#A31">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedStringMap.java.html#L35">35</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedStringSet.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A32" href = "#A32">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedStringSet.java.html#L35">35</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedUnversionedProperties.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A33" href = "#A33">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/HasChangedUnversionedProperties.java.html#L36">36</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/ModifiedFlagSuffix.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A34" href = "#A34">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/modifiedflags/ModifiedFlagSuffix.java.html#L40">40</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/JoinNaming.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A35" href = "#A35">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/JoinNaming.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/ids/JoinEmbIdNaming.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A36" href = "#A36">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/ids/JoinEmbIdNaming.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/ids/JoinMulIdNaming.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A37" href = "#A37">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-envers/src/test/java/org/hibernate/envers/test/integration/naming/ids/JoinMulIdNaming.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/AbstractFunctionalTestCase.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A38" href = "#A38">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.infinispan.test.TestingUtil.withTx&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/AbstractFunctionalTestCase.java.html#L13">13</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/BasicTransactionalTestCase.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A39" href = "#A39">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;junit.framework.Assert.assertNotNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/BasicTransactionalTestCase.java.html#L48">48</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/cluster/NaturalIdInvalidationTestCase.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A40" href = "#A40">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.infinispan.test.TestingUtil.tmpDirectory&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/functional/cluster/NaturalIdInvalidationTestCase.java.html#L28">28</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/stress/PutFromLoadStressTestCase.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A41" href = "#A41">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.infinispan.test.TestingUtil.withTx&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/stress/PutFromLoadStressTestCase.java.html#L32">32</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/stress/SecondLevelCacheStressTestCase.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A42" href = "#A42">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.infinispan.test.TestingUtil.withTx&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/hibernate-orm/hibernate-infinispan/src/test/java/org/hibernate/test/cache/infinispan/stress/SecondLevelCacheStressTestCase.java.html#L55">55</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

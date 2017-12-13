@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DBCS xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright (c) 2010, 2015, Oracle and/or its affiliates. All rights reserved.</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * This code is free software; you can redistribute it and/or modify it</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * under the terms of the GNU General Public License version 2 only, as</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * published by the Free Software Foundation.  Oracle designates this</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> * particular file as subject to the "Classpath" exception as provided</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> * by Oracle in the LICENSE file that accompanied this code.</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * This code is distributed in the hope that it will be useful, but WITHOUT</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * version 2 for more details (a copy is included in the LICENSE file that</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * accompanied this code).</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_comment"> * You should have received a copy of the GNU General Public License version</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_comment"> * 2 along with this work; if not, write to the Free Software Foundation,</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_comment"> * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_comment"> * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_comment"> * or visit www.oracle.com if you need additional information or have any</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> * questions.</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">package</strong> build.tools.charsetmapping;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> java.util.Scanner;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> java.util.Formatter;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> build.tools.charsetmapping.Utils.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> DBCS {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_comment">// pattern used by this class to read in mapping table</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">static</strong> Pattern mPattern = Pattern.compile(<span class="jxr_string">"(?:0x)?(&#92;&#92;p{XDigit}++)&#92;&#92;s++(?:0x)?(&#92;&#92;p{XDigit}++)(?:&#92;&#92;s++#.*)?"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> genClass(String type, Charset cs,
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>                                  String srcDir, String dstDir, String template)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">throws</strong> Exception
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>      {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          String clzName = cs.clzName;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          String csName  = cs.csName;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          String hisName = cs.hisName;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          String pkgName = cs.pkgName;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">boolean</strong> isASCII = cs.isASCII;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          <strong class="jxr_keyword">int</strong> b1Min = cs.b1Min;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">int</strong> b1Max = cs.b1Max;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          <strong class="jxr_keyword">int</strong> b2Min = cs.b2Min;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">int</strong> b2Max = cs.b2Max;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          StringBuilder b2cSB = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          StringBuilder b2cNRSB = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          StringBuilder c2bNRSB = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          <strong class="jxr_keyword">char</strong>[] db = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[0x10000];
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          <strong class="jxr_keyword">char</strong>[] c2bIndex = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[0x100];
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">int</strong> c2bOff = 0x100;    <em class="jxr_comment">// first 0x100 for unmappable segs</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          Arrays.fill(db, UNMAPPABLE_DECODING);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          Arrays.fill(c2bIndex, UNMAPPABLE_DECODING);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>          <strong class="jxr_keyword">char</strong>[] b2cIndex = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[0x100];
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          Arrays.fill(b2cIndex, UNMAPPABLE_DECODING);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <em class="jxr_comment">// (1)read in .map to parse all b-&gt;c entries</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          FileInputStream in = <strong class="jxr_keyword">new</strong> FileInputStream(<strong class="jxr_keyword">new</strong> File(srcDir, clzName + <span class="jxr_string">".map"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          Parser p = <strong class="jxr_keyword">new</strong> Parser(in, mPattern);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          Entry  e = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>          <strong class="jxr_keyword">while</strong> ((e = p.next()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>              db[e.bs] = (<strong class="jxr_keyword">char</strong>)e.cp;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">if</strong> (e.bs &gt; 0x100 &amp;&amp;    <em class="jxr_comment">// db</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>                  b2cIndex[e.bs&gt;&gt;8] == UNMAPPABLE_DECODING) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>                  b2cIndex[e.bs&gt;&gt;8] = 1;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>              <strong class="jxr_keyword">if</strong> (c2bIndex[e.cp&gt;&gt;8] == UNMAPPABLE_DECODING) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  c2bOff += 0x100;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>                  c2bIndex[e.cp&gt;&gt;8] = 1;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>              }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>          }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          Output out = <strong class="jxr_keyword">new</strong> Output(<strong class="jxr_keyword">new</strong> Formatter(b2cSB));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          out.format(<span class="jxr_string">"%n    static final String b2cSBStr =%n"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          out.format(db, 0x00, 0x100,  <span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          out.format(<span class="jxr_string">"%n        static final String[] b2cStr = {%n"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>          <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 0x100; i++) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>              <strong class="jxr_keyword">if</strong> (b2cIndex[i] == UNMAPPABLE_DECODING) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>                  out.format(<span class="jxr_string">"            null,%n"</span>);  <em class="jxr_comment">//unmappable segments</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>                  out.format(db, i, b2Min, b2Max, <span class="jxr_string">","</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              }
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>          out.format(<span class="jxr_string">"        };%n"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>          out.close();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>         <em class="jxr_comment">// (2)now parse the .nr file which includes "b-&gt;c" non-roundtrip entries</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>         File f = <strong class="jxr_keyword">new</strong> File(srcDir, clzName + <span class="jxr_string">".nr"</span>);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         <strong class="jxr_keyword">if</strong> (f.exists()) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             in = <strong class="jxr_keyword">new</strong> FileInputStream(f);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             p = <strong class="jxr_keyword">new</strong> Parser(in, mPattern);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             e = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">while</strong> ((e = p.next()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 <em class="jxr_comment">// A &lt;b,c&gt; pair</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>                 sb.append((<strong class="jxr_keyword">char</strong>)e.bs);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                 sb.append((<strong class="jxr_keyword">char</strong>)e.cp);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <strong class="jxr_keyword">char</strong>[] nr = sb.toString().toCharArray();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>             out = <strong class="jxr_keyword">new</strong> Output(<strong class="jxr_keyword">new</strong> Formatter(b2cNRSB));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>             out.format(<span class="jxr_string">"String b2cNR =%n"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             out.format(nr, 0, nr.length,  <span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             out.close();
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             b2cNRSB.append(<span class="jxr_string">"String b2cNR = null;"</span>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>         }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>         <em class="jxr_comment">// (3)finally the .c2b file which includes c-&gt;b non-roundtrip entries</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>         f = <strong class="jxr_keyword">new</strong> File(srcDir, clzName + <span class="jxr_string">".c2b"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         <strong class="jxr_keyword">if</strong> (f.exists()) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>             StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a>             in = <strong class="jxr_keyword">new</strong> FileInputStream(f);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>             p = <strong class="jxr_keyword">new</strong> Parser(in, mPattern);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>             e = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a>             <strong class="jxr_keyword">while</strong> ((e = p.next()) != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>                 <em class="jxr_comment">// A &lt;b,c&gt; pair</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a>                 <strong class="jxr_keyword">if</strong> (c2bIndex[e.cp&gt;&gt;8] == UNMAPPABLE_DECODING) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a>                     c2bOff += 0x100;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a>                     c2bIndex[e.cp&gt;&gt;8] = 1;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>                 }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a>                 sb.append((<strong class="jxr_keyword">char</strong>)e.bs);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>                 sb.append((<strong class="jxr_keyword">char</strong>)e.cp);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>             }
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>             <strong class="jxr_keyword">char</strong>[] nr = sb.toString().toCharArray();
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             out = <strong class="jxr_keyword">new</strong> Output(<strong class="jxr_keyword">new</strong> Formatter(c2bNRSB));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>             out.format(<span class="jxr_string">"String c2bNR =%n"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a>             out.format(nr, 0, nr.length,  <span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>             out.close();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>             c2bNRSB.append(<span class="jxr_string">"String c2bNR = null;"</span>);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a>         }
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a>         <em class="jxr_comment">// (4)it's time to generate the source file</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a>         String b2c = b2cSB.toString();
+<a class="jxr_linenumber" name="L149" href="#L149">149</a>         String b2cNR = b2cNRSB.toString();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a>         String c2bNR = c2bNRSB.toString();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
+<a class="jxr_linenumber" name="L152" href="#L152">152</a>         Scanner s = <strong class="jxr_keyword">new</strong> Scanner(<strong class="jxr_keyword">new</strong> File(srcDir, template));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a>         PrintStream ops = <strong class="jxr_keyword">new</strong> PrintStream(<strong class="jxr_keyword">new</strong> FileOutputStream(
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>                              <strong class="jxr_keyword">new</strong> File(dstDir, clzName + <span class="jxr_string">".java"</span>)));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <strong class="jxr_keyword">if</strong> (hisName == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>             hisName = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>         <em class="jxr_comment">// (5) c2b replacement, only used for JIs0208/0212, which</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>         <em class="jxr_comment">// are two pure db charsets so default '3f' does not work</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>         <em class="jxr_comment">// TBD: move this into configuration file</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a>         String c2bRepl = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>         <strong class="jxr_keyword">if</strong> (clzName.startsWith(<span class="jxr_string">"JIS_X_0208"</span>)) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>             c2bRepl = <span class="jxr_string">"new byte[]{ (byte)0x21, (byte)0x29 },"</span>;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (clzName.startsWith(<span class="jxr_string">"JIS_X_0212"</span>)) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>             c2bRepl = <span class="jxr_string">"new byte[]{ (byte)0x22, (byte)0x44 },"</span>;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a>         } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (clzName.startsWith(<span class="jxr_string">"IBM300"</span>)) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>             c2bRepl = <span class="jxr_string">"new byte[]{ (byte)0x42, (byte)0x6f },"</span>;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>         }
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">while</strong> (s.hasNextLine()) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>             String line = s.nextLine();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a>             <strong class="jxr_keyword">if</strong> (line.indexOf(<span class="jxr_string">"$"</span>) == -1) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>                 ops.println(line);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>                 <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>             }
+<a class="jxr_linenumber" name="L176" href="#L176">176</a>             line = line.replace(<span class="jxr_string">"$PACKAGE$"</span> , pkgName)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>                        .replace(<span class="jxr_string">"$IMPLEMENTS$"</span>, (hisName == <strong class="jxr_keyword">null</strong>)?
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>                                 <span class="jxr_string">""</span> : <span class="jxr_string">"implements HistoricallyNamedCharset"</span>)
+<a class="jxr_linenumber" name="L179" href="#L179">179</a>                        .replace(<span class="jxr_string">"$NAME_CLZ$"</span>, clzName)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>                        .replace(<span class="jxr_string">"$NAME_ALIASES$"</span>,
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>                                 <span class="jxr_string">"sun.nio.cs"</span>.equals(pkgName) ?
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>                                 <span class="jxr_string">"StandardCharsets.aliases_"</span> + clzName :
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>                                 <span class="jxr_string">"ExtendedCharsets.aliasesFor(\&quot;"</span> + csName + <span class="jxr_string">"\&quot;)"</span>)
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>                        .replace(<span class="jxr_string">"$NAME_CS$"</span> , csName)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>                        .replace(<span class="jxr_string">"$CONTAINS$"</span>,
+<a class="jxr_linenumber" name="L186" href="#L186">186</a>                                 <span class="jxr_string">"MS932"</span>.equals(clzName)?
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>                                 <span class="jxr_string">"return ((cs.name().equals(\&quot;US-ASCII\&quot;)) || (cs instanceof JIS_X_0201) || (cs instanceof "</span> + clzName + <span class="jxr_string">"));"</span>:
+<a class="jxr_linenumber" name="L188" href="#L188">188</a>                                 (isASCII ?
+<a class="jxr_linenumber" name="L189" href="#L189">189</a>                                  <span class="jxr_string">"return ((cs.name().equals(\&quot;US-ASCII\&quot;)) || (cs instanceof "</span> + clzName + <span class="jxr_string">"));"</span>:
+<a class="jxr_linenumber" name="L190" href="#L190">190</a>                                  <span class="jxr_string">"return (cs instanceof "</span> + clzName + <span class="jxr_string">");"</span>))
+<a class="jxr_linenumber" name="L191" href="#L191">191</a>                        .replace(<span class="jxr_string">"$HISTORICALNAME$"</span>,
+<a class="jxr_linenumber" name="L192" href="#L192">192</a>                                 (hisName == <strong class="jxr_keyword">null</strong>)? <span class="jxr_string">""</span> :
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>                                 <span class="jxr_string">"    public String historicalName() { return \&quot;"</span> + hisName + <span class="jxr_string">"\&quot;; }"</span>)
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>                        .replace(<span class="jxr_string">"$DECTYPE$"</span>, type)
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>                        .replace(<span class="jxr_string">"$ENCTYPE$"</span>, type)
+<a class="jxr_linenumber" name="L196" href="#L196">196</a>                        .replace(<span class="jxr_string">"$B1MIN$"</span>   , <span class="jxr_string">"0x"</span> + Integer.toString(b1Min, 16))
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>                        .replace(<span class="jxr_string">"$B1MAX$"</span>   , <span class="jxr_string">"0x"</span> + Integer.toString(b1Max, 16))
+<a class="jxr_linenumber" name="L198" href="#L198">198</a>                        .replace(<span class="jxr_string">"$B2MIN$"</span>   , <span class="jxr_string">"0x"</span> + Integer.toString(b2Min, 16))
+<a class="jxr_linenumber" name="L199" href="#L199">199</a>                        .replace(<span class="jxr_string">"$B2MAX$"</span>   , <span class="jxr_string">"0x"</span> + Integer.toString(b2Max, 16))
+<a class="jxr_linenumber" name="L200" href="#L200">200</a>                        .replace(<span class="jxr_string">"$ASCIICOMPATIBLE$"</span>, isASCII ? <span class="jxr_string">"true"</span> : <span class="jxr_string">"false"</span>)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a>                        .replace(<span class="jxr_string">"$B2C$"</span>, b2c)
+<a class="jxr_linenumber" name="L202" href="#L202">202</a>                        .replace(<span class="jxr_string">"$C2BLENGTH$"</span>, <span class="jxr_string">"0x"</span> + Integer.toString(c2bOff, 16))
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>                        .replace(<span class="jxr_string">"$NONROUNDTRIP_B2C$"</span>, b2cNR)
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>                        .replace(<span class="jxr_string">"$NONROUNDTRIP_C2B$"</span>, c2bNR)
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>                        .replace(<span class="jxr_string">"$ENC_REPLACEMENT$"</span>, c2bRepl);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>             ops.println(line);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a>         }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a>         ops.close();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a>     }
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> }
+</pre>
+<hr/>
+<div id="footer"></div>
+</body>
+</html>
