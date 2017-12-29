@@ -1,0 +1,2714 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										<td class="b">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="a">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												separatedStaticImports
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">2752</td>
+							<td id="totalBase">2078</td>
+							
+								<td id="warningSeverityNumBase">2078</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">2752</td>
+							<td id="totalPatch">2019</td>
+							
+								<td id="warningSeverityNumPatch">2019</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">72</td>
+							<td id="totalDiff">85</td>
+							
+								<td id="warningSeverityNumDiff">85</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">72</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">13</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/actions/test/ContextMenuActionsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/actions/test/ContextMenuActionsTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/actions/test/GroupByActionTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/actions/test/GroupByActionTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/builder/test/FindBugsWorkerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/builder/test/FindBugsWorkerTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/builder/test/ResourceUtilsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/builder/test/ResourceUtilsTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/decorator/test/LabelDecoratorTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/decorator/test/LabelDecoratorTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/properties/test/PropertiesPageTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/properties/test/PropertiesPageTest.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/quickfix/test/QuickfixMulti.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/quickfix/test/QuickfixMulti.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/reporter/test/JdtUtilTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/reporter/test/JdtUtilTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/reporter/test/MarkerUtilTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collections&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/reporter/test/MarkerUtilTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/test/AbstractPluginTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collections&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/test/AbstractPluginTest.java.html#L31">31</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/test/AbstractQuickfixTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A11" href = "#A11">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/test/AbstractQuickfixTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/explorer/test/FilterBugsDialogTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A12" href = "#A12">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collections&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/explorer/test/FilterBugsDialogTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/explorer/test/TestBugGroup.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A13" href = "#A13">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/explorer/test/TestBugGroup.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/AbstractBugExplorerViewTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A14" href = "#A14">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/AbstractBugExplorerViewTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/BugExplorerViewTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A15" href = "#A15">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/BugExplorerViewTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/BugExplorerViewTwoSrcFoldersTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A16" href = "#A16">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/BugExplorerViewTwoSrcFoldersTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/FindBugsPerspectiveTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A17" href = "#A17">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.CoreException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin-test/src/de/tobject/findbugs/view/test/FindBugsPerspectiveTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/preferences/FindBugsPreferenceInitializer.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A18" href = "#A18">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/preferences/FindBugsPreferenceInitializer.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/reporter/MarkerReporter.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A19" href = "#A19">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/reporter/MarkerReporter.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/view/explorer/GroupType.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A20" href = "#A20">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/de/tobject/findbugs/view/explorer/GroupType.java.html#L22">22</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/BugResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A21" href = "#A21">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;java.util.Objects.requireNonNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/BugResolution.java.html#L4">4</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A22" href = "#A22">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/BugResolution.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/ChangePublicToProtectedResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A23" href = "#A23">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.eclipse.jdt.core.dom.Modifier.ModifierKeyword.PROTECTED_KEYWORD&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/ChangePublicToProtectedResolution.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A24" href = "#A24">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/ChangePublicToProtectedResolution.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CorrectOddnessCheckResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A25" href = "#A25">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;java.lang.Integer.parseInt&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CorrectOddnessCheckResolution.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A26" href = "#A26">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>&#39;org.eclipse.jdt.core.dom.InfixExpression.Operator.EQUALS&#39; should be separated from previous imports.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CorrectOddnessCheckResolution.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A27" href = "#A27">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;javax.annotation.CheckForNull&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CorrectOddnessCheckResolution.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateAndOddnessCheckResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A28" href = "#A28">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateAndOddnessCheckResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateDoPrivilegedBlockResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A29" href = "#A29">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;java.util.Objects.requireNonNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateDoPrivilegedBlockResolution.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A30" href = "#A30">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>&#39;org.eclipse.jdt.core.dom.Modifier.ModifierKeyword.PUBLIC_KEYWORD&#39; should be separated from previous imports.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateDoPrivilegedBlockResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A31" href = "#A31">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.security.AccessController&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateDoPrivilegedBlockResolution.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateMutableCloneResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A32" href = "#A32">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateMutableCloneResolution.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateRemainderOddnessCheckResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A33" href = "#A33">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateRemainderOddnessCheckResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateSuperCallResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A34" href = "#A34">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Map&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/CreateSuperCallResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/FieldModifierResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A35" href = "#A35">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/FieldModifierResolution.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/MakeInnerTypeStaticResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A36" href = "#A36">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/MakeInnerTypeStaticResolution.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/RemoveUselessMethodResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A37" href = "#A37">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/RemoveUselessMethodResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/RemoveUselessStatementResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A38" href = "#A38">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.core.runtime.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/RemoveUselessStatementResolution.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/UseEqualsResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A39" href = "#A39">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.eclipse.jdt.core.dom.InfixExpression.Operator.EQUALS&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/UseEqualsResolution.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A40" href = "#A40">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashSet&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/UseEqualsResolution.java.html#L28">28</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/UseValueOfResolution.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A41" href = "#A41">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashSet&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/UseValueOfResolution.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/util/ASTUtil.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A42" href = "#A42">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>&#39;org.eclipse.core.runtime.Assert.isTrue&#39; should be separated from previous imports.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/util/ASTUtil.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A43" href = "#A43">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Comparator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/util/ASTUtil.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/util/SourceLineVisitor.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A44" href = "#A44">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.eclipse.jdt.core.dom.ASTNode&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/eclipsePlugin/src/edu/umd/cs/findbugs/plugin/eclipse/quickfix/util/SourceLineVisitor.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/BugLoader.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A45" href = "#A45">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.awt.Dimension&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/BugLoader.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/CloudCommentsPane.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A46" href = "#A46">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.awt.BorderLayout&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/CloudCommentsPane.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/MainFrameMenu.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A47" href = "#A47">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.awt.Cursor&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/gui/edu/umd/cs/findbugs/gui2/MainFrameMenu.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/BugInstance.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A48" href = "#A48">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/BugInstance.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/Project.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A49" href = "#A49">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;java.util.Objects.requireNonNull&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/Project.java.html#L28">28</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A50" href = "#A50">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.BufferedInputStream&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/Project.java.html#L30">30</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/SAXBugCollectionHandler.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A51" href = "#A51">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/SAXBugCollectionHandler.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/AnalysisContext.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A52" href = "#A52">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/AnalysisContext.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/Frame.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A53" href = "#A53">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/Frame.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/Hierarchy2.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A54" href = "#A54">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collections&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/ba/Hierarchy2.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/classfile/engine/bcel/ValueRangeAnalysisFactory.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A55" href = "#A55">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/classfile/engine/bcel/ValueRangeAnalysisFactory.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/classfile/impl/AnalysisCache.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A56" href = "#A56">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collection&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/classfile/impl/AnalysisCache.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/CheckRelaxingNullnessAnnotation.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A57" href = "#A57">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.objectweb.asm.Opcodes.ACC_STATIC&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/CheckRelaxingNullnessAnnotation.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A58" href = "#A58">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/CheckRelaxingNullnessAnnotation.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/FindSelfComparison2.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A59" href = "#A59">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.BitSet&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/FindSelfComparison2.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/FindUselessObjects.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A60" href = "#A60">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.BitSet&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/FindUselessObjects.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/TestASM.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A61" href = "#A61">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.objectweb.asm.FieldVisitor&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/java/edu/umd/cs/findbugs/detect/TestASM.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/DetectorsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A62" href = "#A62">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/DetectorsTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/IntAnnotationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A63" href = "#A63">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/IntAnnotationTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/ba/jsr305/ValidationSecurityManagerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A64" href = "#A64">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/ba/jsr305/ValidationSecurityManagerTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/classfile/TestClassDescriptor.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A65" href = "#A65">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/classfile/TestClassDescriptor.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/filter/NotMatcherTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A66" href = "#A66">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.ByteArrayOutputStream&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/filter/NotMatcherTest.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/filter/SourceMatcherTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A67" href = "#A67">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.ByteArrayOutputStream&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/filter/SourceMatcherTest.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/gui2/FilterFactoryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A68" href = "#A68">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>&#39;junit.framework.Assert.*&#39; should be separated from previous imports.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/gui2/FilterFactoryTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A69" href = "#A69">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugs/src/junit/edu/umd/cs/findbugs/gui2/FilterFactoryTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/NonNull.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A70" href = "#A70">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.annotation.Documented&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/NonNull.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/NonNullByDefault.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A71" href = "#A71">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.annotation.Documented&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/NonNullByDefault.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/Nullable.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A72" href = "#A72">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.annotation.Documented&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/fakeAnnotations/org/eclipse/jdt/annotation/Nullable.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPositiveCase1.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A73" href = "#A73">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;com.google.common.base.Preconditions&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPositiveCase1.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPrimitiveNegativeCases.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A74" href = "#A74">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;com.google.common.base.Preconditions&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPrimitiveNegativeCases.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPrimitivePositiveCases.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A75" href = "#A75">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;com.google.common.base.Preconditions&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsCheckNotNullPrimitivePositiveCases.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsTooManyArgsNegativeCase1.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A76" href = "#A76">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;com.google.common.base.Preconditions&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsTooManyArgsNegativeCase1.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsTooManyArgsPositiveCase1.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A77" href = "#A77">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;com.google.common.base.Preconditions&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/com/google/errorprone/bugpatterns/PreconditionsTooManyArgsPositiveCase1.java.html#L21">21</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/gcUnrelatedTypes/Ideas_2011_06_30.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A78" href = "#A78">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collection&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/findbugsTestCases/src/java/gcUnrelatedTypes/Ideas_2011_06_30.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/googlecode/src/junit/edu/umd/cs/findbugs/cloud/appEngine/GoogleCodeBugFilingTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A79" href = "#A79">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.mockito.Mockito.doAnswer&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/googlecode/src/junit/edu/umd/cs/findbugs/cloud/appEngine/GoogleCodeBugFilingTest.java.html#L37">37</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/jira/src/junit/edu/umd/cs/findbugs/cloud/appEngine/BugFilingTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A80" href = "#A80">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;edu.umd.cs.findbugs.cloud.appEngine.JiraBugFiler.processJiraDashboardUrl&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/jira/src/junit/edu/umd/cs/findbugs/cloud/appEngine/BugFilingTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudAuthTests.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A81" href = "#A81">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;edu.umd.cs.findbugs.cloud.Cloud.SigninState.UNAUTHENTICATED&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudAuthTests.java.html#L14">14</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A82" href = "#A82">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.mockito.Mockito.mock&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudAuthTests.java.html#L15">15</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudIssueSyncTests.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A83" href = "#A83">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;edu.umd.cs.findbugs.cloud.Cloud.SigninState.UNAUTHENTICATED&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudIssueSyncTests.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A84" href = "#A84">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.mockito.Matchers.anyString&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudIssueSyncTests.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudMiscTests.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A85" href = "#A85">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;edu.umd.cs.findbugs.cloud.appEngine.protobuf.WebCloudProtoUtil.normalizeHash&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/findbugs-with-excldues/plugins/webCloudClient/src/junit/edu/umd/cs/findbugs/cloud/appEngine/WebCloudMiscTests.java.html#L12">12</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

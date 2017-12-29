@@ -1,0 +1,2520 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										<td class="b">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="a">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												separatedStaticImports
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">340</td>
+							<td id="totalBase">262</td>
+							
+								<td id="warningSeverityNumBase">262</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">340</td>
+							<td id="totalPatch">217</td>
+							
+								<td id="warningSeverityNumPatch">217</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">63</td>
+							<td id="totalDiff">81</td>
+							
+								<td id="warningSeverityNumDiff">81</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">63</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">18</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/BaseCheckTestSupport.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>&#39;org.junit.Assert.assertEquals&#39; should be separated from previous imports.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/BaseCheckTestSupport.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.BufferedReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/BaseCheckTestSupport.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/UtilsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/UtilsTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/UtilsTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/ForbidAnnotationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/ForbidAnnotationCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/ForbidAnnotationElementValueCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/ForbidAnnotationElementValueCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/RequiredParameterForAnnotationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/annotation/RequiredParameterForAnnotationCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidConstantAsFirstOperandInConditionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidConstantAsFirstOperandInConditionCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidDefaultSerializableInInnerClassesCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidDefaultSerializableInInnerClassesCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidHidingCauseExceptionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidHidingCauseExceptionCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidModifiersForTypesCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A11" href = "#A11">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidModifiersForTypesCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A12" href = "#A12">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidModifiersForTypesCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidNotShortCircuitOperatorsForBooleanCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A13" href = "#A13">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/AvoidNotShortCircuitOperatorsForBooleanCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ConfusingConditionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A14" href = "#A14">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ConfusingConditionCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/CustomDeclarationOrderCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A15" href = "#A15">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/CustomDeclarationOrderCheckTest.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/DiamondOperatorForVariableDefinitionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A16" href = "#A16">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/DiamondOperatorForVariableDefinitionCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/EitherLogOrThrowCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A17" href = "#A17">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/EitherLogOrThrowCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/EmptyPublicCtorInClassCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A18" href = "#A18">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/EmptyPublicCtorInClassCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A19" href = "#A19">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/EmptyPublicCtorInClassCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/FinalizeImplementationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A20" href = "#A20">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/FinalizeImplementationCheckTest.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidCCommentsInMethodsCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A21" href = "#A21">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidCCommentsInMethodsCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidCertainImportsCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A22" href = "#A22">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidCertainImportsCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A23" href = "#A23">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidCertainImportsCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidInstantiationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A24" href = "#A24">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidInstantiationCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A25" href = "#A25">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidInstantiationCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidReturnInFinallyBlockCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A26" href = "#A26">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidReturnInFinallyBlockCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidThrowAnonymousExceptionsCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A27" href = "#A27">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ForbidThrowAnonymousExceptionsCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/IllegalCatchExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A28" href = "#A28">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/IllegalCatchExtendedCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/LogicConditionNeedOptimizationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A29" href = "#A29">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/LogicConditionNeedOptimizationCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MapIterationInForEachLoopCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A30" href = "#A30">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MapIterationInForEachLoopCheckTest.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MoveVariableInsideIfCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A31" href = "#A31">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MoveVariableInsideIfCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MultipleStringLiteralsExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A32" href = "#A32">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MultipleStringLiteralsExtendedCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MultipleVariableDeclarationsExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A33" href = "#A33">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/MultipleVariableDeclarationsExtendedCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/NoNullForCollectionReturnCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A34" href = "#A34">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/NoNullForCollectionReturnCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/NumericLiteralNeedsUnderscoreCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A35" href = "#A35">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/NumericLiteralNeedsUnderscoreCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A36" href = "#A36">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/NumericLiteralNeedsUnderscoreCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/OverridableMethodInConstructorCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A37" href = "#A37">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/OverridableMethodInConstructorCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RedundantReturnCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A38" href = "#A38">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RedundantReturnCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A39" href = "#A39">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RedundantReturnCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RequireFailForTryCatchInJunitCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A40" href = "#A40">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RequireFailForTryCatchInJunitCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A41" href = "#A41">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/RequireFailForTryCatchInJunitCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnBooleanFromTernaryCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A42" href = "#A42">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnBooleanFromTernaryCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnCountExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A43" href = "#A43">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnCountExtendedCheckTest.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnNullInsteadOfBooleanCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A44" href = "#A44">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnNullInsteadOfBooleanCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A45" href = "#A45">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/ReturnNullInsteadOfBooleanCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/SimpleAccessorNameNotationCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A46" href = "#A46">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/SimpleAccessorNameNotationCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/SingleBreakOrContinueCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A47" href = "#A47">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/SingleBreakOrContinueCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/TernaryPerExpressionCountCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A48" href = "#A48">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/TernaryPerExpressionCountCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UnnecessaryParenthesesExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A49" href = "#A49">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UnnecessaryParenthesesExtendedCheckTest.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UselessSingleCatchCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A50" href = "#A50">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UselessSingleCatchCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UselessSuperCtorCallCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A51" href = "#A51">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/UselessSuperCtorCallCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/WhitespaceBeforeArrayInitializerCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A52" href = "#A52">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/coding/WhitespaceBeforeArrayInitializerCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/AvoidConditionInversionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A53" href = "#A53">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/AvoidConditionInversionCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A54" href = "#A54">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/AvoidConditionInversionCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CauseParameterInExceptionCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A55" href = "#A55">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CauseParameterInExceptionCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A56" href = "#A56">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CauseParameterInExceptionCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CheckstyleTestMakeupCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A57" href = "#A57">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CheckstyleTestMakeupCheckTest.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A58" href = "#A58">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/CheckstyleTestMakeupCheckTest.java.html#L29">29</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ChildBlockLengthCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A59" href = "#A59">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ChildBlockLengthCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ConstructorWithoutParamsCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A60" href = "#A60">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertArrayEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ConstructorWithoutParamsCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A61" href = "#A61">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ConstructorWithoutParamsCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ForbidWildcardAsReturnTypeCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A62" href = "#A62">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/ForbidWildcardAsReturnTypeCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/HideUtilityClassConstructorCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A63" href = "#A63">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/HideUtilityClassConstructorCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/InnerClassCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A64" href = "#A64">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/InnerClassCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/NestedSwitchCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A65" href = "#A65">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/NestedSwitchCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/NoMainMethodInAbstractClassCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A66" href = "#A66">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/NoMainMethodInAbstractClassCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/PublicReferenceToPrivateTypeCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A67" href = "#A67">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/PublicReferenceToPrivateTypeCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A68" href = "#A68">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/PublicReferenceToPrivateTypeCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/StaticMethodCandidateCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A69" href = "#A69">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertArrayEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/StaticMethodCandidateCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A70" href = "#A70">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/design/StaticMethodCandidateCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/naming/EnumValueNameCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A71" href = "#A71">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/naming/EnumValueNameCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/naming/UniformEnumConstantNameCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A72" href = "#A72">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/naming/UniformEnumConstantNameCheckTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/sizes/LineLengthExtendedCheckTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A73" href = "#A73">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.fail&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/sizes/LineLengthExtendedCheckTest.java.html#L23">23</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A74" href = "#A74">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Assert&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/checks/sizes/LineLengthExtendedCheckTest.java.html#L25">25</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/ChecksTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A75" href = "#A75">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.beans.PropertyDescriptor&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/ChecksTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/CheckstyleRegressionTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A76" href = "#A76">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/CheckstyleRegressionTest.java.html#L24">24</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/CommitValidationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A77" href = "#A77">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/java/com/github/sevntu/checkstyle/internal/CommitValidationTest.java.html#L26">26</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/coding/InputRequireFailForTryCatchInJunitCheck1.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A78" href = "#A78">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/coding/InputRequireFailForTryCatchInJunitCheck1.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/coding/InputRequireFailForTryCatchInJunitCheck5.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A79" href = "#A79">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.function.Consumer&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/coding/InputRequireFailForTryCatchInJunitCheck5.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/design/InputStaticMethodCandidateCheck.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A80" href = "#A80">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertTrue&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/design/InputStaticMethodCandidateCheck.java.html#L4">4</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A81" href = "#A81">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/sevntu-checkstyle/sevntu-checks/src/test/resources/com/github/sevntu/checkstyle/checks/design/InputStaticMethodCandidateCheck.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

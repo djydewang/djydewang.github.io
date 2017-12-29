@@ -1,0 +1,3744 @@
+<html>
+	<head>
+		<title>checkstyle xml difference report</title>
+		<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css"); );</style>
+		<http-equiv http-equiv="Content-Language" content="en"></http-equiv>
+	</head>
+	<body class="composite">
+		<div id="contentBox">
+			<div class="section">
+				<h2 a="Checkstyle XML difference report">Checkstyle XML difference report</h2>
+				This is symmetric difference generated from two checkstyle-result.xml reports. <br/>
+				All matching records from each XML file are deleted, then remaining records are merged into single report. <br>
+		        <a href="https://github.com/checkstyle/contribution/tree/master/patch-diff-report-tool">Utility that generated this report.</a>
+			</div>
+
+			
+				<h2 a="Checkstyle configuration report">Checkstyle configuration report</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+							<tr class="a">
+								<th>Module Name</th>
+								<th>Base properties</th>
+								<th>Patch properties</th>
+							</tr>
+							
+								
+									<tr>
+										<td class="c">Checker</td>
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												severity
+												
+													<li>warning</li>
+												
+												<br/>
+											
+												charset
+												
+													<li>UTF-8</li>
+												
+												<br/>
+											
+												haltOnException
+												
+													<li>false</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">BeforeExecutionExclusionFileFilter</td>
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="c">
+											
+												fileNamePattern
+												
+													<li>module\-info\.java$</li>
+												
+												<br/>
+											
+										</td>
+										
+									</tr>
+									
+								
+									
+										
+									<tr>
+										<td class="c">TreeWalker</td>
+										
+										<td class="c">
+											
+										</td>
+										
+										
+										<td class="c">
+											
+										</td>
+										
+									</tr>
+									
+										
+									<tr>
+										<td class="c">ImportOrder</td>
+										<td class="b">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+										<td class="a">
+											
+												ordered
+												
+													<li>true</li>
+												
+												<br/>
+											
+												separatedStaticImports
+												
+													<li>true</li>
+												
+												<br/>
+											
+												sortStaticImportsAlphabetically
+												
+													<li>false</li>
+												
+												<br/>
+											
+												groups
+												
+													<li>/^java\./,javax,org</li>
+												
+												<br/>
+											
+												separated
+												
+													<li>false</li>
+												
+												<br/>
+											
+												option
+												
+													<li>bottom</li>
+												
+												<br/>
+											
+										</td>
+										
+										
+									</tr>
+									
+								
+									
+								
+									
+								
+								
+					</table>	
+				</div>
+			
+
+			<div class="section">
+				<h2 a="Summary:">Summary:</h2>
+				<div class="section">
+					<table border="0" class="bodyTable">
+						<tr class="a">
+							<th>Report id</th>
+							<th>Files</th>
+							<th>Violations</th>
+							
+								<th>Severity-warning</th>
+							
+								<th>Severity-error</th>
+							
+						</tr>
+						<tr class="b">
+							<td>base</td>
+							<td id="filesBase">1233</td>
+							<td id="totalBase">1241</td>
+							
+								<td id="warningSeverityNumBase">1240</td>
+							
+								<td id="errorSeverityNumBase">1</td>
+							
+						</tr>
+						<tr class="a">
+							<td>patch</td>
+							<td id="filesPatch">1233</td>
+							<td id="totalPatch">1136</td>
+							
+								<td id="warningSeverityNumPatch">1135</td>
+							
+								<td id="errorSeverityNumPatch">1</td>
+							
+						</tr>
+						<tr class="d">
+							<td>difference</td>
+							<td id="filesDiff">111</td>
+							<td id="totalDiff">113</td>
+							
+								<td id="warningSeverityNumDiff">113</td>
+							
+								<td id="errorSeverityNumDiff">0</td>
+							
+						<tr>
+					</table>
+
+					<br />
+					Number of unique base messages reported below: <span id="uniqueMessagesBase">109</span><br />
+					Number of unique patch messages reported below: <span id="uniqueMessagesPatch">4</span><br />
+				</div>
+			</div>
+
+			<div class="section">
+				<h2 a="Violations:">Violations:</h2>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/main/java/net/sourceforge/pmd/build/RuleSetToDocs.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A1" href = "#A1">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/main/java/net/sourceforge/pmd/build/RuleSetToDocs.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/ant/PmdBuildTaskTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A2" href = "#A2">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/ant/PmdBuildTaskTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/build/RuleSetToDocsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A3" href = "#A3">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/build/RuleSetToDocsTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/build/RulesetFilenameFilterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A4" href = "#A4">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/maven-plugin-pmd-build/src/test/java/net/sourceforge/pmd/build/RulesetFilenameFilterTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/XPathRule.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A5" href = "#A5">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/XPathRule.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractNumericProperty.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A6" href = "#A6">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Map&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractNumericProperty.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractPackagedProperty.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A7" href = "#A7">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashSet&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractPackagedProperty.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractProperty.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A8" href = "#A8">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/AbstractProperty.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/factories/BasicPropertyDescriptorFactory.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A9" href = "#A9">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/properties/factories/BasicPropertyDescriptorFactory.java.html#L14">14</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/stat/StatisticalRuleHelper.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A10" href = "#A10">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/main/java/net/sourceforge/pmd/lang/rule/stat/StatisticalRuleHelper.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/AbstractRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A11" href = "#A11">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/AbstractRuleTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ConfigurationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A12" href = "#A12">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ConfigurationTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/FileSelectorTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A13" href = "#A13">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/FileSelectorTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ReadableDurationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A14" href = "#A14">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ReadableDurationTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ReportTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A15" href = "#A15">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ReportTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleContextTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A16" href = "#A16">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleContextTest.java.html#L13">13</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetFactoryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A17" href = "#A17">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.ByteArrayInputStream&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetFactoryTest.java.html#L13">13</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetReferenceIdTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A18" href = "#A18">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetReferenceIdTest.java.html#L16">16</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A19" href = "#A19">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetReferenceIdTest.java.html#L19">19</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A20" href = "#A20">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleSetTest.java.html#L12">12</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleViolationComparatorTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A21" href = "#A21">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/RuleViolationComparatorTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ant/FormatterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A22" href = "#A22">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/ant/FormatterTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/CSVRendererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A23" href = "#A23">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/CSVRendererTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/FileReporterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A24" href = "#A24">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.BufferedReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/FileReporterTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/LanguageFactoryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A25" href = "#A25">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/LanguageFactoryTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/MarkTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A26" href = "#A26">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/MarkTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/MatchTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A27" href = "#A27">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/MatchTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/SourceCodeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A28" href = "#A28">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/SourceCodeTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/TokenEntryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A29" href = "#A29">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/TokenEntryTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/XMLRendererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A30" href = "#A30">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.ByteArrayInputStream&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/cpd/XMLRendererTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/jaxen/AttributeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A31" href = "#A31">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.reflect.Method&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/jaxen/AttributeTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/jaxen/MatchesFunctionTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A32" href = "#A32">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/jaxen/MatchesFunctionTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/properties/AbstractPropertyDescriptorTester.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A33" href = "#A33">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Arrays&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/properties/AbstractPropertyDescriptorTester.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/properties/MethodPropertyTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A34" href = "#A34">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.reflect.Method&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/properties/MethodPropertyTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/renderers/SummaryHTMLRendererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A35" href = "#A35">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/renderers/SummaryHTMLRendererTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/stat/MetricTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A36" href = "#A36">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Random&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/stat/MetricTest.java.html#L27">27</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/stat/StatisticalRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A37" href = "#A37">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/stat/StatisticalRuleTest.java.html#L28">28</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A38" href = "#A38">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/stat/StatisticalRuleTest.java.html#L31">31</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/CompoundListTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A39" href = "#A39">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/CompoundListTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/DateTimeUtilTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A40" href = "#A40">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Collection&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/DateTimeUtilTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/StringUtilTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A41" href = "#A41">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/StringUtilTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/TypeMapTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A42" href = "#A42">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/TypeMapTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/database/DBURITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A43" href = "#A43">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.net.URI&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/database/DBURITest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/filter/RegexStringFilterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A44" href = "#A44">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-core/src/test/java/net/sourceforge/pmd/util/filter/RegexStringFilterTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cpp/src/test/java/net/sourceforge/pmd/cpd/CPPTokenizerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A45" href = "#A45">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Properties&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cpp/src/test/java/net/sourceforge/pmd/cpd/CPPTokenizerTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cpp/src/test/java/net/sourceforge/pmd/lang/cpp/ContinuationReaderTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A46" href = "#A46">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cpp/src/test/java/net/sourceforge/pmd/lang/cpp/ContinuationReaderTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cs/src/test/java/net/sourceforge/pmd/cpd/CsTokenizerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A47" href = "#A47">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-cs/src/test/java/net/sourceforge/pmd/cpd/CsTokenizerTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/ExcludeLinesTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A48" href = "#A48">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/ExcludeLinesTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A49" href = "#A49">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/RuleSetFactoryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A50" href = "#A50">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/RuleSetFactoryTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/cli/CLITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A51" href = "#A51">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/cli/CLITest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/coverage/PMDCoverageTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A52" href = "#A52">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.BufferedReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/coverage/PMDCoverageTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/cpd/MatchAlgorithmTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A53" href = "#A53">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.HashMap&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/cpd/MatchAlgorithmTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/jaxen/DocumentNavigatorTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A54" href = "#A54">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/jaxen/DocumentNavigatorTest.java.html#L11">11</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTAssignmentOperatorTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A55" href = "#A55">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTAssignmentOperatorTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTBooleanLiteralTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A56" href = "#A56">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTBooleanLiteralTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTFormalParameterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A57" href = "#A57">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTFormalParameterTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTImportDeclarationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A58" href = "#A58">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTImportDeclarationTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTLiteralTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A59" href = "#A59">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTLiteralTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTMethodDeclarationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A60" href = "#A60">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTMethodDeclarationTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTPackageDeclarationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A61" href = "#A61">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTPackageDeclarationTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTPrimarySuffixTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A62" href = "#A62">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTPrimarySuffixTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTSwitchLabelTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A63" href = "#A63">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ASTSwitchLabelTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/AccessNodeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A64" href = "#A64">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/AccessNodeTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ClassDeclTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A65" href = "#A65">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ClassDeclTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/FieldDeclTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A66" href = "#A66">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/FieldDeclTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/MethodDeclTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A67" href = "#A67">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/MethodDeclTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ParserCornersTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A68" href = "#A68">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/ParserCornersTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/SimpleNodeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A69" href = "#A69">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/ast/SimpleNodeTest.java.html#L13">13</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/AcceptanceTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A70" href = "#A70">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/AcceptanceTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/DataFlowNodeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A71" href = "#A71">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.LinkedList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/DataFlowNodeTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/GeneralFiddlingTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A72" href = "#A72">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/GeneralFiddlingTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/StructureTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A73" href = "#A73">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;net.sourceforge.pmd.lang.LanguageRegistry&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/dfa/StructureTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/JavaRuleViolationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A74" href = "#A74">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/JavaRuleViolationTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/XPathRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A75" href = "#A75">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/XPathRuleTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/comments/AbstractCommentRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A76" href = "#A76">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.Reader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/comments/AbstractCommentRuleTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/strings/AvoidDuplicateLiteralsRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A77" href = "#A77">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Set&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/rule/strings/AvoidDuplicateLiteralsRuleTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/AcceptanceTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A78" href = "#A78">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/AcceptanceTest.java.html#L11">11</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ApplierTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A79" href = "#A79">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ApplierTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ClassScopeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A80" href = "#A80">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ClassScopeTest.java.html#L11">11</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/GlobalScopeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A81" href = "#A81">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Map&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/GlobalScopeTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ImageFinderFunctionTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A82" href = "#A82">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/ImageFinderFunctionTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/LocalScopeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A83" href = "#A83">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/LocalScopeTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/MethodNameDeclarationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A84" href = "#A84">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/MethodNameDeclarationTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/MethodScopeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A85" href = "#A85">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/MethodScopeTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/NameOccurrencesTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A86" href = "#A86">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/NameOccurrencesTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/SourceFileScopeTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A87" href = "#A87">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Iterator&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/SourceFileScopeTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/VariableNameDeclarationTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A88" href = "#A88">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/VariableNameDeclarationTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/VariableUsageFinderFunctionTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A89" href = "#A89">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/lang/java/symboltable/VariableUsageFinderFunctionTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/typeresolution/PMDASMClassLoaderTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A90" href = "#A90">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.Map&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-java/src/test/java/net/sourceforge/pmd/typeresolution/PMDASMClassLoaderTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/cli/CLITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A91" href = "#A91">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/cli/CLITest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/cpd/EcmascriptTokenizerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A92" href = "#A92">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/cpd/EcmascriptTokenizerTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/EcmascriptParserOptionsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A93" href = "#A93">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/EcmascriptParserOptionsTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/ast/EcmascriptParserTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A94" href = "#A94">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.Reader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/ast/EcmascriptParserTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/ast/SourceCodePositionerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A95" href = "#A95">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Test&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-javascript/src/test/java/net/sourceforge/pmd/lang/ecmascript/ast/SourceCodePositionerTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A96" href = "#A96">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/AbstractJspNodesTst.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A97" href = "#A97">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/AbstractJspNodesTst.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/JspDocStyleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A98" href = "#A98">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/JspDocStyleTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/JspPageStyleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A99" href = "#A99">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.ArrayList&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/JspPageStyleTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/OpenTagRegisterTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A100" href = "#A100">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;org.junit.Before&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/OpenTagRegisterTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/XPathJspRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A101" href = "#A101">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-jsp/src/test/java/net/sourceforge/pmd/lang/jsp/ast/XPathJspRuleTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-plsql/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A102" href = "#A102">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-plsql/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-plsql/src/test/java/net/sourceforge/pmd/lang/plsql/dfa/StatementAndBraceFinderTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A103" href = "#A103">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.util.List&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-plsql/src/test/java/net/sourceforge/pmd/lang/plsql/dfa/StatementAndBraceFinderTest.java.html#L6">6</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-python/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A104" href = "#A104">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-python/src/test/java/net/sourceforge/pmd/LanguageVersionDiscovererTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/AbstractRuleSetFactoryTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A105" href = "#A105">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.BufferedReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/AbstractRuleSetFactoryTest.java.html#L10">10</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/ant/AbstractAntTestHelper.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A106" href = "#A106">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/ant/AbstractAntTestHelper.java.html#L5">5</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/cli/BaseCLITest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A107" href = "#A107">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.File&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/cli/BaseCLITest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/testframework/AbstractTokenizerTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A108" href = "#A108">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/testframework/AbstractTokenizerTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/testframework/RuleTst.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A109" href = "#A109">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.IOException&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-test/src/main/java/net/sourceforge/pmd/testframework/RuleTst.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/main/java/net/sourceforge/pmd/lang/xml/ast/XmlNodeInvocationHandler.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A110" href = "#A110">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.lang.reflect.InvocationHandler&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/main/java/net/sourceforge/pmd/lang/xml/ast/XmlNodeInvocationHandler.java.html#L11">11</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/XmlParserOptionsTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="a">
+							
+								<td><a name="A111" href = "#A111">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Wrong order for &#39;org.junit.Assert.assertEquals&#39; import.</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/XmlParserOptionsTest.java.html#L7">7</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/rule/AbstractDomXmlRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A112" href = "#A112">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/rule/AbstractDomXmlRuleTest.java.html#L9">9</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+				<div class="section">
+					<h3>/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/rule/AbstractXmlRuleTest.java</h3>
+					<tr class="b">
+					<table border="0" class="bodyTable">
+					        <th></th>
+							<th>Severity</th>
+							<th>Rule</th>
+							<th>Message</th>
+							<th>Line</th>
+							<th>Col</th>
+						</tr>
+						
+							
+								<tr class="b">
+								
+								<td><a name="A113" href = "#A113">#</a></td>
+								<td>warning</td>
+								<td>ImportOrder</td>
+								<td>Extra separation in import group before &#39;java.io.StringReader&#39;</td>
+								
+									
+									<td><a href = "xref/home/bbg/project/contribution/checkstyle-tester/repositories/pmd/pmd-xml/src/test/java/net/sourceforge/pmd/lang/xml/rule/AbstractXmlRuleTest.java.html#L8">8</a></td>
+								
+								
+									<td> </td>
+									
+								
+							</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
