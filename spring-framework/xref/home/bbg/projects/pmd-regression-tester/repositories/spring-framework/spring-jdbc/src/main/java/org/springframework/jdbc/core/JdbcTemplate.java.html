@@ -1,0 +1,1574 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2017 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.jdbc.core;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.lang.reflect.InvocationHandler;
+</p><p><a href="#L20">20</a>import java.lang.reflect.InvocationTargetException;
+</p><p><a href="#L21">21</a>import java.lang.reflect.Method;
+</p><p><a href="#L22">22</a>import java.lang.reflect.Proxy;
+</p><p><a href="#L23">23</a>import java.sql.BatchUpdateException;
+</p><p><a href="#L24">24</a>import java.sql.CallableStatement;
+</p><p><a href="#L25">25</a>import java.sql.Connection;
+</p><p><a href="#L26">26</a>import java.sql.PreparedStatement;
+</p><p><a href="#L27">27</a>import java.sql.ResultSet;
+</p><p><a href="#L28">28</a>import java.sql.SQLException;
+</p><p><a href="#L29">29</a>import java.sql.SQLWarning;
+</p><p><a href="#L30">30</a>import java.sql.Statement;
+</p><p><a href="#L31">31</a>import java.util.ArrayList;
+</p><p><a href="#L32">32</a>import java.util.Collection;
+</p><p><a href="#L33">33</a>import java.util.Collections;
+</p><p><a href="#L34">34</a>import java.util.HashMap;
+</p><p><a href="#L35">35</a>import java.util.LinkedHashMap;
+</p><p><a href="#L36">36</a>import java.util.List;
+</p><p><a href="#L37">37</a>import java.util.Map;
+</p><p><a href="#L38">38</a>import javax.sql.DataSource;
+</p><p><a href="#L39">39</a>
+</p><p><a href="#L40">40</a>import org.springframework.dao.DataAccessException;
+</p><p><a href="#L41">41</a>import org.springframework.dao.InvalidDataAccessApiUsageException;
+</p><p><a href="#L42">42</a>import org.springframework.dao.support.DataAccessUtils;
+</p><p><a href="#L43">43</a>import org.springframework.jdbc.SQLWarningException;
+</p><p><a href="#L44">44</a>import org.springframework.jdbc.UncategorizedSQLException;
+</p><p><a href="#L45">45</a>import org.springframework.jdbc.datasource.ConnectionProxy;
+</p><p><a href="#L46">46</a>import org.springframework.jdbc.datasource.DataSourceUtils;
+</p><p><a href="#L47">47</a>import org.springframework.jdbc.support.JdbcAccessor;
+</p><p><a href="#L48">48</a>import org.springframework.jdbc.support.JdbcUtils;
+</p><p><a href="#L49">49</a>import org.springframework.jdbc.support.KeyHolder;
+</p><p><a href="#L50">50</a>import org.springframework.jdbc.support.rowset.SqlRowSet;
+</p><p><a href="#L51">51</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L52">52</a>import org.springframework.util.Assert;
+</p><p><a href="#L53">53</a>import org.springframework.util.LinkedCaseInsensitiveMap;
+</p><p><a href="#L54">54</a>import org.springframework.util.StringUtils;
+</p><p><a href="#L55">55</a>
+</p><p><a href="#L56">56</a>/**
+</p><p><a href="#L57">57</a> * &lt;b&gt;This is the central class in the JDBC core package.&lt;/b&gt;
+</p><p><a href="#L58">58</a> * It simplifies the use of JDBC and helps to avoid common errors.
+</p><p><a href="#L59">59</a> * It executes core JDBC workflow, leaving application code to provide SQL
+</p><p><a href="#L60">60</a> * and extract results. This class executes SQL queries or updates, initiating
+</p><p><a href="#L61">61</a> * iteration over ResultSets and catching JDBC exceptions and translating
+</p><p><a href="#L62">62</a> * them to the generic, more informative exception hierarchy defined in the
+</p><p><a href="#L63">63</a> * {@code org.springframework.dao} package.
+</p><p><a href="#L64">64</a> *
+</p><p><a href="#L65">65</a> * &lt;p&gt;Code using this class need only implement callback interfaces, giving
+</p><p><a href="#L66">66</a> * them a clearly defined contract. The {@link PreparedStatementCreator} callback
+</p><p><a href="#L67">67</a> * interface creates a prepared statement given a Connection, providing SQL and
+</p><p><a href="#L68">68</a> * any necessary parameters. The {@link ResultSetExtractor} interface extracts
+</p><p><a href="#L69">69</a> * values from a ResultSet. See also {@link PreparedStatementSetter} and
+</p><p><a href="#L70">70</a> * {@link RowMapper} for two popular alternative callback interfaces.
+</p><p><a href="#L71">71</a> *
+</p><p><a href="#L72">72</a> * &lt;p&gt;Can be used within a service implementation via direct instantiation
+</p><p><a href="#L73">73</a> * with a DataSource reference, or get prepared in an application context
+</p><p><a href="#L74">74</a> * and given to services as bean reference. Note: The DataSource should
+</p><p><a href="#L75">75</a> * always be configured as a bean in the application context, in the first case
+</p><p><a href="#L76">76</a> * given to the service directly, in the second case to the prepared template.
+</p><p><a href="#L77">77</a> *
+</p><p><a href="#L78">78</a> * &lt;p&gt;Because this class is parameterizable by the callback interfaces and
+</p><p><a href="#L79">79</a> * the {@link org.springframework.jdbc.support.SQLExceptionTranslator}
+</p><p><a href="#L80">80</a> * interface, there should be no need to subclass it.
+</p><p><a href="#L81">81</a> *
+</p><p><a href="#L82">82</a> * &lt;p&gt;All SQL operations performed by this class are logged at debug level,
+</p><p><a href="#L83">83</a> * using "org.springframework.jdbc.core.JdbcTemplate" as log category.
+</p><p><a href="#L84">84</a> *
+</p><p><a href="#L85">85</a> * &lt;p&gt;&lt;b&gt;NOTE: An instance of this class is thread-safe once configured.&lt;/b&gt;
+</p><p><a href="#L86">86</a> *
+</p><p><a href="#L87">87</a> * @author Rod Johnson
+</p><p><a href="#L88">88</a> * @author Juergen Hoeller
+</p><p><a href="#L89">89</a> * @author Thomas Risberg
+</p><p><a href="#L90">90</a> * @since May 3, 2001
+</p><p><a href="#L91">91</a> * @see PreparedStatementCreator
+</p><p><a href="#L92">92</a> * @see PreparedStatementSetter
+</p><p><a href="#L93">93</a> * @see CallableStatementCreator
+</p><p><a href="#L94">94</a> * @see PreparedStatementCallback
+</p><p><a href="#L95">95</a> * @see CallableStatementCallback
+</p><p><a href="#L96">96</a> * @see ResultSetExtractor
+</p><p><a href="#L97">97</a> * @see RowCallbackHandler
+</p><p><a href="#L98">98</a> * @see RowMapper
+</p><p><a href="#L99">99</a> * @see org.springframework.jdbc.support.SQLExceptionTranslator
+</p><p><a href="#L100">100</a> */
+</p><p><a href="#L101">101</a>public class JdbcTemplate extends JdbcAccessor implements JdbcOperations {
+</p><p><a href="#L102">102</a>
+</p><p><a href="#L103">103</a>	private static final String RETURN_RESULT_SET_PREFIX = "#result-set-";
+</p><p><a href="#L104">104</a>
+</p><p><a href="#L105">105</a>	private static final String RETURN_UPDATE_COUNT_PREFIX = "#update-count-";
+</p><p><a href="#L106">106</a>
+</p><p><a href="#L107">107</a>
+</p><p><a href="#L108">108</a>	/** If this variable is false, we will throw exceptions on SQL warnings */
+</p><p><a href="#L109">109</a>	private boolean ignoreWarnings = true;
+</p><p><a href="#L110">110</a>
+</p><p><a href="#L111">111</a>	/**
+</p><p><a href="#L112">112</a>	 * If this variable is set to a non-negative value, it will be used for setting the
+</p><p><a href="#L113">113</a>	 * fetchSize property on statements used for query processing.
+</p><p><a href="#L114">114</a>	 */
+</p><p><a href="#L115">115</a>	private int fetchSize = -1;
+</p><p><a href="#L116">116</a>
+</p><p><a href="#L117">117</a>	/**
+</p><p><a href="#L118">118</a>	 * If this variable is set to a non-negative value, it will be used for setting the
+</p><p><a href="#L119">119</a>	 * maxRows property on statements used for query processing.
+</p><p><a href="#L120">120</a>	 */
+</p><p><a href="#L121">121</a>	private int maxRows = -1;
+</p><p><a href="#L122">122</a>
+</p><p><a href="#L123">123</a>	/**
+</p><p><a href="#L124">124</a>	 * If this variable is set to a non-negative value, it will be used for setting the
+</p><p><a href="#L125">125</a>	 * queryTimeout property on statements used for query processing.
+</p><p><a href="#L126">126</a>	 */
+</p><p><a href="#L127">127</a>	private int queryTimeout = -1;
+</p><p><a href="#L128">128</a>
+</p><p><a href="#L129">129</a>	/**
+</p><p><a href="#L130">130</a>	 * If this variable is set to true, then all results checking will be bypassed for any
+</p><p><a href="#L131">131</a>	 * callable statement processing. This can be used to avoid a bug in some older Oracle
+</p><p><a href="#L132">132</a>	 * JDBC drivers like 10.1.0.2.
+</p><p><a href="#L133">133</a>	 */
+</p><p><a href="#L134">134</a>	private boolean skipResultsProcessing = false;
+</p><p><a href="#L135">135</a>
+</p><p><a href="#L136">136</a>	/**
+</p><p><a href="#L137">137</a>	 * If this variable is set to true then all results from a stored procedure call
+</p><p><a href="#L138">138</a>	 * that don't have a corresponding SqlOutParameter declaration will be bypassed.
+</p><p><a href="#L139">139</a>	 * All other results processing will be take place unless the variable
+</p><p><a href="#L140">140</a>	 * {@code skipResultsProcessing} is set to {@code true}.
+</p><p><a href="#L141">141</a>	 */
+</p><p><a href="#L142">142</a>	private boolean skipUndeclaredResults = false;
+</p><p><a href="#L143">143</a>
+</p><p><a href="#L144">144</a>	/**
+</p><p><a href="#L145">145</a>	 * If this variable is set to true then execution of a CallableStatement will return
+</p><p><a href="#L146">146</a>	 * the results in a Map that uses case insensitive names for the parameters.
+</p><p><a href="#L147">147</a>	 */
+</p><p><a href="#L148">148</a>	private boolean resultsMapCaseInsensitive = false;
+</p><p><a href="#L149">149</a>
+</p><p><a href="#L150">150</a>
+</p><p><a href="#L151">151</a>	/**
+</p><p><a href="#L152">152</a>	 * Construct a new JdbcTemplate for bean usage.
+</p><p><a href="#L153">153</a>	 * &lt;p&gt;Note: The DataSource has to be set before using the instance.
+</p><p><a href="#L154">154</a>	 * @see #setDataSource
+</p><p><a href="#L155">155</a>	 */
+</p><p><a href="#L156">156</a>	public JdbcTemplate() {
+</p><p><a href="#L157">157</a>	}
+</p><p><a href="#L158">158</a>
+</p><p><a href="#L159">159</a>	/**
+</p><p><a href="#L160">160</a>	 * Construct a new JdbcTemplate, given a DataSource to obtain connections from.
+</p><p><a href="#L161">161</a>	 * &lt;p&gt;Note: This will not trigger initialization of the exception translator.
+</p><p><a href="#L162">162</a>	 * @param dataSource the JDBC DataSource to obtain connections from
+</p><p><a href="#L163">163</a>	 */
+</p><p><a href="#L164">164</a>	public JdbcTemplate(DataSource dataSource) {
+</p><p><a href="#L165">165</a>		setDataSource(dataSource);
+</p><p><a href="#L166">166</a>		afterPropertiesSet();
+</p><p><a href="#L167">167</a>	}
+</p><p><a href="#L168">168</a>
+</p><p><a href="#L169">169</a>	/**
+</p><p><a href="#L170">170</a>	 * Construct a new JdbcTemplate, given a DataSource to obtain connections from.
+</p><p><a href="#L171">171</a>	 * &lt;p&gt;Note: Depending on the "lazyInit" flag, initialization of the exception translator
+</p><p><a href="#L172">172</a>	 * will be triggered.
+</p><p><a href="#L173">173</a>	 * @param dataSource the JDBC DataSource to obtain connections from
+</p><p><a href="#L174">174</a>	 * @param lazyInit whether to lazily initialize the SQLExceptionTranslator
+</p><p><a href="#L175">175</a>	 */
+</p><p><a href="#L176">176</a>	public JdbcTemplate(DataSource dataSource, boolean lazyInit) {
+</p><p><a href="#L177">177</a>		setDataSource(dataSource);
+</p><p><a href="#L178">178</a>		setLazyInit(lazyInit);
+</p><p><a href="#L179">179</a>		afterPropertiesSet();
+</p><p><a href="#L180">180</a>	}
+</p><p><a href="#L181">181</a>
+</p><p><a href="#L182">182</a>
+</p><p><a href="#L183">183</a>	/**
+</p><p><a href="#L184">184</a>	 * Set whether or not we want to ignore SQLWarnings.
+</p><p><a href="#L185">185</a>	 * &lt;p&gt;Default is "true", swallowing and logging all warnings. Switch this flag
+</p><p><a href="#L186">186</a>	 * to "false" to make the JdbcTemplate throw a SQLWarningException instead.
+</p><p><a href="#L187">187</a>	 * @see java.sql.SQLWarning
+</p><p><a href="#L188">188</a>	 * @see org.springframework.jdbc.SQLWarningException
+</p><p><a href="#L189">189</a>	 * @see #handleWarnings
+</p><p><a href="#L190">190</a>	 */
+</p><p><a href="#L191">191</a>	public void setIgnoreWarnings(boolean ignoreWarnings) {
+</p><p><a href="#L192">192</a>		this.ignoreWarnings = ignoreWarnings;
+</p><p><a href="#L193">193</a>	}
+</p><p><a href="#L194">194</a>
+</p><p><a href="#L195">195</a>	/**
+</p><p><a href="#L196">196</a>	 * Return whether or not we ignore SQLWarnings.
+</p><p><a href="#L197">197</a>	 */
+</p><p><a href="#L198">198</a>	public boolean isIgnoreWarnings() {
+</p><p><a href="#L199">199</a>		return this.ignoreWarnings;
+</p><p><a href="#L200">200</a>	}
+</p><p><a href="#L201">201</a>
+</p><p><a href="#L202">202</a>	/**
+</p><p><a href="#L203">203</a>	 * Set the fetch size for this JdbcTemplate. This is important for processing large
+</p><p><a href="#L204">204</a>	 * result sets: Setting this higher than the default value will increase processing
+</p><p><a href="#L205">205</a>	 * speed at the cost of memory consumption; setting this lower can avoid transferring
+</p><p><a href="#L206">206</a>	 * row data that will never be read by the application.
+</p><p><a href="#L207">207</a>	 * &lt;p&gt;Default is -1, indicating to use the JDBC driver's default configuration
+</p><p><a href="#L208">208</a>	 * (i.e. to not pass a specific fetch size setting on to the driver).
+</p><p><a href="#L209">209</a>	 * &lt;p&gt;Note: As of 4.3, negative values other than -1 will get passed on to the
+</p><p><a href="#L210">210</a>	 * driver, since e.g. MySQL supports special behavior for {@code Integer.MIN_VALUE}.
+</p><p><a href="#L211">211</a>	 * @see java.sql.Statement#setFetchSize
+</p><p><a href="#L212">212</a>	 */
+</p><p><a href="#L213">213</a>	public void setFetchSize(int fetchSize) {
+</p><p><a href="#L214">214</a>		this.fetchSize = fetchSize;
+</p><p><a href="#L215">215</a>	}
+</p><p><a href="#L216">216</a>
+</p><p><a href="#L217">217</a>	/**
+</p><p><a href="#L218">218</a>	 * Return the fetch size specified for this JdbcTemplate.
+</p><p><a href="#L219">219</a>	 */
+</p><p><a href="#L220">220</a>	public int getFetchSize() {
+</p><p><a href="#L221">221</a>		return this.fetchSize;
+</p><p><a href="#L222">222</a>	}
+</p><p><a href="#L223">223</a>
+</p><p><a href="#L224">224</a>	/**
+</p><p><a href="#L225">225</a>	 * Set the maximum number of rows for this JdbcTemplate. This is important for
+</p><p><a href="#L226">226</a>	 * processing subsets of large result sets, avoiding to read and hold the entire
+</p><p><a href="#L227">227</a>	 * result set in the database or in the JDBC driver if we're never interested in
+</p><p><a href="#L228">228</a>	 * the entire result in the first place (for example, when performing searches
+</p><p><a href="#L229">229</a>	 * that might return a large number of matches).
+</p><p><a href="#L230">230</a>	 * &lt;p&gt;Default is -1, indicating to use the JDBC driver's default configuration
+</p><p><a href="#L231">231</a>	 * (i.e. to not pass a specific max rows setting on to the driver).
+</p><p><a href="#L232">232</a>	 * &lt;p&gt;Note: As of 4.3, negative values other than -1 will get passed on to the
+</p><p><a href="#L233">233</a>	 * driver, in sync with {@link #setFetchSize}'s support for special MySQL values.
+</p><p><a href="#L234">234</a>	 * @see java.sql.Statement#setMaxRows
+</p><p><a href="#L235">235</a>	 */
+</p><p><a href="#L236">236</a>	public void setMaxRows(int maxRows) {
+</p><p><a href="#L237">237</a>		this.maxRows = maxRows;
+</p><p><a href="#L238">238</a>	}
+</p><p><a href="#L239">239</a>
+</p><p><a href="#L240">240</a>	/**
+</p><p><a href="#L241">241</a>	 * Return the maximum number of rows specified for this JdbcTemplate.
+</p><p><a href="#L242">242</a>	 */
+</p><p><a href="#L243">243</a>	public int getMaxRows() {
+</p><p><a href="#L244">244</a>		return this.maxRows;
+</p><p><a href="#L245">245</a>	}
+</p><p><a href="#L246">246</a>
+</p><p><a href="#L247">247</a>	/**
+</p><p><a href="#L248">248</a>	 * Set the query timeout for statements that this JdbcTemplate executes.
+</p><p><a href="#L249">249</a>	 * &lt;p&gt;Default is -1, indicating to use the JDBC driver's default
+</p><p><a href="#L250">250</a>	 * (i.e. to not pass a specific query timeout setting on the driver).
+</p><p><a href="#L251">251</a>	 * &lt;p&gt;Note: Any timeout specified here will be overridden by the remaining
+</p><p><a href="#L252">252</a>	 * transaction timeout when executing within a transaction that has a
+</p><p><a href="#L253">253</a>	 * timeout specified at the transaction level.
+</p><p><a href="#L254">254</a>	 * @see java.sql.Statement#setQueryTimeout
+</p><p><a href="#L255">255</a>	 */
+</p><p><a href="#L256">256</a>	public void setQueryTimeout(int queryTimeout) {
+</p><p><a href="#L257">257</a>		this.queryTimeout = queryTimeout;
+</p><p><a href="#L258">258</a>	}
+</p><p><a href="#L259">259</a>
+</p><p><a href="#L260">260</a>	/**
+</p><p><a href="#L261">261</a>	 * Return the query timeout for statements that this JdbcTemplate executes.
+</p><p><a href="#L262">262</a>	 */
+</p><p><a href="#L263">263</a>	public int getQueryTimeout() {
+</p><p><a href="#L264">264</a>		return this.queryTimeout;
+</p><p><a href="#L265">265</a>	}
+</p><p><a href="#L266">266</a>
+</p><p><a href="#L267">267</a>	/**
+</p><p><a href="#L268">268</a>	 * Set whether results processing should be skipped. Can be used to optimize callable
+</p><p><a href="#L269">269</a>	 * statement processing when we know that no results are being passed back - the processing
+</p><p><a href="#L270">270</a>	 * of out parameter will still take place. This can be used to avoid a bug in some older
+</p><p><a href="#L271">271</a>	 * Oracle JDBC drivers like 10.1.0.2.
+</p><p><a href="#L272">272</a>	 */
+</p><p><a href="#L273">273</a>	public void setSkipResultsProcessing(boolean skipResultsProcessing) {
+</p><p><a href="#L274">274</a>		this.skipResultsProcessing = skipResultsProcessing;
+</p><p><a href="#L275">275</a>	}
+</p><p><a href="#L276">276</a>
+</p><p><a href="#L277">277</a>	/**
+</p><p><a href="#L278">278</a>	 * Return whether results processing should be skipped.
+</p><p><a href="#L279">279</a>	 */
+</p><p><a href="#L280">280</a>	public boolean isSkipResultsProcessing() {
+</p><p><a href="#L281">281</a>		return this.skipResultsProcessing;
+</p><p><a href="#L282">282</a>	}
+</p><p><a href="#L283">283</a>
+</p><p><a href="#L284">284</a>	/**
+</p><p><a href="#L285">285</a>	 * Set whether undeclared results should be skipped.
+</p><p><a href="#L286">286</a>	 */
+</p><p><a href="#L287">287</a>	public void setSkipUndeclaredResults(boolean skipUndeclaredResults) {
+</p><p><a href="#L288">288</a>		this.skipUndeclaredResults = skipUndeclaredResults;
+</p><p><a href="#L289">289</a>	}
+</p><p><a href="#L290">290</a>
+</p><p><a href="#L291">291</a>	/**
+</p><p><a href="#L292">292</a>	 * Return whether undeclared results should be skipped.
+</p><p><a href="#L293">293</a>	 */
+</p><p><a href="#L294">294</a>	public boolean isSkipUndeclaredResults() {
+</p><p><a href="#L295">295</a>		return this.skipUndeclaredResults;
+</p><p><a href="#L296">296</a>	}
+</p><p><a href="#L297">297</a>
+</p><p><a href="#L298">298</a>	/**
+</p><p><a href="#L299">299</a>	 * Set whether execution of a CallableStatement will return the results in a Map
+</p><p><a href="#L300">300</a>	 * that uses case insensitive names for the parameters.
+</p><p><a href="#L301">301</a>	 */
+</p><p><a href="#L302">302</a>	public void setResultsMapCaseInsensitive(boolean resultsMapCaseInsensitive) {
+</p><p><a href="#L303">303</a>		this.resultsMapCaseInsensitive = resultsMapCaseInsensitive;
+</p><p><a href="#L304">304</a>	}
+</p><p><a href="#L305">305</a>
+</p><p><a href="#L306">306</a>	/**
+</p><p><a href="#L307">307</a>	 * Return whether execution of a CallableStatement will return the results in a Map
+</p><p><a href="#L308">308</a>	 * that uses case insensitive names for the parameters.
+</p><p><a href="#L309">309</a>	 */
+</p><p><a href="#L310">310</a>	public boolean isResultsMapCaseInsensitive() {
+</p><p><a href="#L311">311</a>		return this.resultsMapCaseInsensitive;
+</p><p><a href="#L312">312</a>	}
+</p><p><a href="#L313">313</a>
+</p><p><a href="#L314">314</a>
+</p><p><a href="#L315">315</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L316">316</a>	// Methods dealing with a plain java.sql.Connection
+</p><p><a href="#L317">317</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L318">318</a>
+</p><p><a href="#L319">319</a>	@Override
+</p><p><a href="#L320">320</a>	@Nullable
+</p><p><a href="#L321">321</a>	public &lt;T&gt; T execute(ConnectionCallback&lt;T&gt; action) throws DataAccessException {
+</p><p><a href="#L322">322</a>		Assert.notNull(action, "Callback object must not be null");
+</p><p><a href="#L323">323</a>
+</p><p><a href="#L324">324</a>		Connection con = DataSourceUtils.getConnection(obtainDataSource());
+</p><p><a href="#L325">325</a>		try {
+</p><p><a href="#L326">326</a>			// Create close-suppressing Connection proxy, also preparing returned Statements.
+</p><p><a href="#L327">327</a>			Connection conToUse = createConnectionProxy(con);
+</p><p><a href="#L328">328</a>			return action.doInConnection(conToUse);
+</p><p><a href="#L329">329</a>		}
+</p><p><a href="#L330">330</a>		catch (SQLException ex) {
+</p><p><a href="#L331">331</a>			// Release Connection early, to avoid potential connection pool deadlock
+</p><p><a href="#L332">332</a>			// in the case when the exception translator hasn't been initialized yet.
+</p><p><a href="#L333">333</a>			String sql = getSql(action);
+</p><p><a href="#L334">334</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L335">335</a>			con = null;
+</p><p><a href="#L336">336</a>			throw translateException("ConnectionCallback", sql, ex);
+</p><p><a href="#L337">337</a>		}
+</p><p><a href="#L338">338</a>		finally {
+</p><p><a href="#L339">339</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L340">340</a>		}
+</p><p><a href="#L341">341</a>	}
+</p><p><a href="#L342">342</a>
+</p><p><a href="#L343">343</a>	/**
+</p><p><a href="#L344">344</a>	 * Create a close-suppressing proxy for the given JDBC Connection.
+</p><p><a href="#L345">345</a>	 * Called by the {@code execute} method.
+</p><p><a href="#L346">346</a>	 * &lt;p&gt;The proxy also prepares returned JDBC Statements, applying
+</p><p><a href="#L347">347</a>	 * statement settings such as fetch size, max rows, and query timeout.
+</p><p><a href="#L348">348</a>	 * @param con the JDBC Connection to create a proxy for
+</p><p><a href="#L349">349</a>	 * @return the Connection proxy
+</p><p><a href="#L350">350</a>	 * @see java.sql.Connection#close()
+</p><p><a href="#L351">351</a>	 * @see #execute(ConnectionCallback)
+</p><p><a href="#L352">352</a>	 * @see #applyStatementSettings
+</p><p><a href="#L353">353</a>	 */
+</p><p><a href="#L354">354</a>	protected Connection createConnectionProxy(Connection con) {
+</p><p><a href="#L355">355</a>		return (Connection) Proxy.newProxyInstance(
+</p><p><a href="#L356">356</a>				ConnectionProxy.class.getClassLoader(),
+</p><p><a href="#L357">357</a>				new Class&lt;?&gt;[] {ConnectionProxy.class},
+</p><p><a href="#L358">358</a>				new CloseSuppressingInvocationHandler(con));
+</p><p><a href="#L359">359</a>	}
+</p><p><a href="#L360">360</a>
+</p><p><a href="#L361">361</a>
+</p><p><a href="#L362">362</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L363">363</a>	// Methods dealing with static SQL (java.sql.Statement)
+</p><p><a href="#L364">364</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L365">365</a>
+</p><p><a href="#L366">366</a>	@Override
+</p><p><a href="#L367">367</a>	@Nullable
+</p><p><a href="#L368">368</a>	public &lt;T&gt; T execute(StatementCallback&lt;T&gt; action) throws DataAccessException {
+</p><p><a href="#L369">369</a>		Assert.notNull(action, "Callback object must not be null");
+</p><p><a href="#L370">370</a>
+</p><p><a href="#L371">371</a>		Connection con = DataSourceUtils.getConnection(obtainDataSource());
+</p><p><a href="#L372">372</a>		Statement stmt = null;
+</p><p><a href="#L373">373</a>		try {
+</p><p><a href="#L374">374</a>			stmt = con.createStatement();
+</p><p><a href="#L375">375</a>			applyStatementSettings(stmt);
+</p><p><a href="#L376">376</a>			T result = action.doInStatement(stmt);
+</p><p><a href="#L377">377</a>			handleWarnings(stmt);
+</p><p><a href="#L378">378</a>			return result;
+</p><p><a href="#L379">379</a>		}
+</p><p><a href="#L380">380</a>		catch (SQLException ex) {
+</p><p><a href="#L381">381</a>			// Release Connection early, to avoid potential connection pool deadlock
+</p><p><a href="#L382">382</a>			// in the case when the exception translator hasn't been initialized yet.
+</p><p><a href="#L383">383</a>			String sql = getSql(action);
+</p><p><a href="#L384">384</a>			JdbcUtils.closeStatement(stmt);
+</p><p><a href="#L385">385</a>			stmt = null;
+</p><p><a href="#L386">386</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L387">387</a>			con = null;
+</p><p><a href="#L388">388</a>			throw translateException("StatementCallback", sql, ex);
+</p><p><a href="#L389">389</a>		}
+</p><p><a href="#L390">390</a>		finally {
+</p><p><a href="#L391">391</a>			JdbcUtils.closeStatement(stmt);
+</p><p><a href="#L392">392</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L393">393</a>		}
+</p><p><a href="#L394">394</a>	}
+</p><p><a href="#L395">395</a>
+</p><p><a href="#L396">396</a>	@Override
+</p><p><a href="#L397">397</a>	public void execute(final String sql) throws DataAccessException {
+</p><p><a href="#L398">398</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L399">399</a>			logger.debug("Executing SQL statement [" + sql + "]");
+</p><p><a href="#L400">400</a>		}
+</p><p><a href="#L401">401</a>
+</p><p><a href="#L402">402</a>		class ExecuteStatementCallback implements StatementCallback&lt;Object&gt;, SqlProvider {
+</p><p><a href="#L403">403</a>			@Override
+</p><p><a href="#L404">404</a>			@Nullable
+</p><p><a href="#L405">405</a>			public Object doInStatement(Statement stmt) throws SQLException {
+</p><p><a href="#L406">406</a>				stmt.execute(sql);
+</p><p><a href="#L407">407</a>				return null;
+</p><p><a href="#L408">408</a>			}
+</p><p><a href="#L409">409</a>			@Override
+</p><p><a href="#L410">410</a>			public String getSql() {
+</p><p><a href="#L411">411</a>				return sql;
+</p><p><a href="#L412">412</a>			}
+</p><p><a href="#L413">413</a>		}
+</p><p><a href="#L414">414</a>
+</p><p><a href="#L415">415</a>		execute(new ExecuteStatementCallback());
+</p><p><a href="#L416">416</a>	}
+</p><p><a href="#L417">417</a>
+</p><p><a href="#L418">418</a>	@Override
+</p><p><a href="#L419">419</a>	@Nullable
+</p><p><a href="#L420">420</a>	public &lt;T&gt; T query(final String sql, final ResultSetExtractor&lt;T&gt; rse) throws DataAccessException {
+</p><p><a href="#L421">421</a>		Assert.notNull(sql, "SQL must not be null");
+</p><p><a href="#L422">422</a>		Assert.notNull(rse, "ResultSetExtractor must not be null");
+</p><p><a href="#L423">423</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L424">424</a>			logger.debug("Executing SQL query [" + sql + "]");
+</p><p><a href="#L425">425</a>		}
+</p><p><a href="#L426">426</a>
+</p><p><a href="#L427">427</a>		class QueryStatementCallback implements StatementCallback&lt;T&gt;, SqlProvider {
+</p><p><a href="#L428">428</a>			@Override
+</p><p><a href="#L429">429</a>			@Nullable
+</p><p><a href="#L430">430</a>			public T doInStatement(Statement stmt) throws SQLException {
+</p><p><a href="#L431">431</a>				ResultSet rs = null;
+</p><p><a href="#L432">432</a>				try {
+</p><p><a href="#L433">433</a>					rs = stmt.executeQuery(sql);
+</p><p><a href="#L434">434</a>					return rse.extractData(rs);
+</p><p><a href="#L435">435</a>				}
+</p><p><a href="#L436">436</a>				finally {
+</p><p><a href="#L437">437</a>					JdbcUtils.closeResultSet(rs);
+</p><p><a href="#L438">438</a>				}
+</p><p><a href="#L439">439</a>			}
+</p><p><a href="#L440">440</a>			@Override
+</p><p><a href="#L441">441</a>			public String getSql() {
+</p><p><a href="#L442">442</a>				return sql;
+</p><p><a href="#L443">443</a>			}
+</p><p><a href="#L444">444</a>		}
+</p><p><a href="#L445">445</a>
+</p><p><a href="#L446">446</a>		return execute(new QueryStatementCallback());
+</p><p><a href="#L447">447</a>	}
+</p><p><a href="#L448">448</a>
+</p><p><a href="#L449">449</a>	@Override
+</p><p><a href="#L450">450</a>	public void query(String sql, RowCallbackHandler rch) throws DataAccessException {
+</p><p><a href="#L451">451</a>		query(sql, new RowCallbackHandlerResultSetExtractor(rch));
+</p><p><a href="#L452">452</a>	}
+</p><p><a href="#L453">453</a>
+</p><p><a href="#L454">454</a>	@Override
+</p><p><a href="#L455">455</a>	public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L456">456</a>		return result(query(sql, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L457">457</a>	}
+</p><p><a href="#L458">458</a>
+</p><p><a href="#L459">459</a>	@Override
+</p><p><a href="#L460">460</a>	public Map&lt;String, Object&gt; queryForMap(String sql) throws DataAccessException {
+</p><p><a href="#L461">461</a>		return result(queryForObject(sql, getColumnMapRowMapper()));
+</p><p><a href="#L462">462</a>	}
+</p><p><a href="#L463">463</a>
+</p><p><a href="#L464">464</a>	@Override
+</p><p><a href="#L465">465</a>	@Nullable
+</p><p><a href="#L466">466</a>	public &lt;T&gt; T queryForObject(String sql, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L467">467</a>		List&lt;T&gt; results = query(sql, rowMapper);
+</p><p><a href="#L468">468</a>		return DataAccessUtils.nullableSingleResult(results);
+</p><p><a href="#L469">469</a>	}
+</p><p><a href="#L470">470</a>
+</p><p><a href="#L471">471</a>	@Override
+</p><p><a href="#L472">472</a>	@Nullable
+</p><p><a href="#L473">473</a>	public &lt;T&gt; T queryForObject(String sql, Class&lt;T&gt; requiredType) throws DataAccessException {
+</p><p><a href="#L474">474</a>		return queryForObject(sql, getSingleColumnRowMapper(requiredType));
+</p><p><a href="#L475">475</a>	}
+</p><p><a href="#L476">476</a>
+</p><p><a href="#L477">477</a>	@Override
+</p><p><a href="#L478">478</a>	public &lt;T&gt; List&lt;T&gt; queryForList(String sql, Class&lt;T&gt; elementType) throws DataAccessException {
+</p><p><a href="#L479">479</a>		return query(sql, getSingleColumnRowMapper(elementType));
+</p><p><a href="#L480">480</a>	}
+</p><p><a href="#L481">481</a>
+</p><p><a href="#L482">482</a>	@Override
+</p><p><a href="#L483">483</a>	public List&lt;Map&lt;String, Object&gt;&gt; queryForList(String sql) throws DataAccessException {
+</p><p><a href="#L484">484</a>		return query(sql, getColumnMapRowMapper());
+</p><p><a href="#L485">485</a>	}
+</p><p><a href="#L486">486</a>
+</p><p><a href="#L487">487</a>	@Override
+</p><p><a href="#L488">488</a>	public SqlRowSet queryForRowSet(String sql) throws DataAccessException {
+</p><p><a href="#L489">489</a>		return result(query(sql, new SqlRowSetResultSetExtractor()));
+</p><p><a href="#L490">490</a>	}
+</p><p><a href="#L491">491</a>
+</p><p><a href="#L492">492</a>	@Override
+</p><p><a href="#L493">493</a>	public int update(final String sql) throws DataAccessException {
+</p><p><a href="#L494">494</a>		Assert.notNull(sql, "SQL must not be null");
+</p><p><a href="#L495">495</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L496">496</a>			logger.debug("Executing SQL update [" + sql + "]");
+</p><p><a href="#L497">497</a>		}
+</p><p><a href="#L498">498</a>
+</p><p><a href="#L499">499</a>		class UpdateStatementCallback implements StatementCallback&lt;Integer&gt;, SqlProvider {
+</p><p><a href="#L500">500</a>			@Override
+</p><p><a href="#L501">501</a>			public Integer doInStatement(Statement stmt) throws SQLException {
+</p><p><a href="#L502">502</a>				int rows = stmt.executeUpdate(sql);
+</p><p><a href="#L503">503</a>				if (logger.isDebugEnabled()) {
+</p><p><a href="#L504">504</a>					logger.debug("SQL update affected " + rows + " rows");
+</p><p><a href="#L505">505</a>				}
+</p><p><a href="#L506">506</a>				return rows;
+</p><p><a href="#L507">507</a>			}
+</p><p><a href="#L508">508</a>			@Override
+</p><p><a href="#L509">509</a>			public String getSql() {
+</p><p><a href="#L510">510</a>				return sql;
+</p><p><a href="#L511">511</a>			}
+</p><p><a href="#L512">512</a>		}
+</p><p><a href="#L513">513</a>
+</p><p><a href="#L514">514</a>		return updateCount(execute(new UpdateStatementCallback()));
+</p><p><a href="#L515">515</a>	}
+</p><p><a href="#L516">516</a>
+</p><p><a href="#L517">517</a>	@Override
+</p><p><a href="#L518">518</a>	public int[] batchUpdate(final String... sql) throws DataAccessException {
+</p><p><a href="#L519">519</a>		Assert.notEmpty(sql, "SQL array must not be empty");
+</p><p><a href="#L520">520</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L521">521</a>			logger.debug("Executing SQL batch update of " + sql.length + " statements");
+</p><p><a href="#L522">522</a>		}
+</p><p><a href="#L523">523</a>
+</p><p><a href="#L524">524</a>		class BatchUpdateStatementCallback implements StatementCallback&lt;int[]&gt;, SqlProvider {
+</p><p><a href="#L525">525</a>
+</p><p><a href="#L526">526</a>			@Nullable
+</p><p><a href="#L527">527</a>			private String currSql;
+</p><p><a href="#L528">528</a>
+</p><p><a href="#L529">529</a>			@Override
+</p><p><a href="#L530">530</a>			public int[] doInStatement(Statement stmt) throws SQLException, DataAccessException {
+</p><p><a href="#L531">531</a>				int[] rowsAffected = new int[sql.length];
+</p><p><a href="#L532">532</a>				if (JdbcUtils.supportsBatchUpdates(stmt.getConnection())) {
+</p><p><a href="#L533">533</a>					for (String sqlStmt : sql) {
+</p><p><a href="#L534">534</a>						this.currSql = appendSql(this.currSql, sqlStmt);
+</p><p><a href="#L535">535</a>						stmt.addBatch(sqlStmt);
+</p><p><a href="#L536">536</a>					}
+</p><p><a href="#L537">537</a>					try {
+</p><p><a href="#L538">538</a>						rowsAffected = stmt.executeBatch();
+</p><p><a href="#L539">539</a>					}
+</p><p><a href="#L540">540</a>					catch (BatchUpdateException ex) {
+</p><p><a href="#L541">541</a>						String batchExceptionSql = null;
+</p><p><a href="#L542">542</a>						for (int i = 0; i &lt; ex.getUpdateCounts().length; i++) {
+</p><p><a href="#L543">543</a>							if (ex.getUpdateCounts()[i] == Statement.EXECUTE_FAILED) {
+</p><p><a href="#L544">544</a>								batchExceptionSql = appendSql(batchExceptionSql, sql[i]);
+</p><p><a href="#L545">545</a>							}
+</p><p><a href="#L546">546</a>						}
+</p><p><a href="#L547">547</a>						if (StringUtils.hasLength(batchExceptionSql)) {
+</p><p><a href="#L548">548</a>							this.currSql = batchExceptionSql;
+</p><p><a href="#L549">549</a>						}
+</p><p><a href="#L550">550</a>						throw ex;
+</p><p><a href="#L551">551</a>					}
+</p><p><a href="#L552">552</a>				}
+</p><p><a href="#L553">553</a>				else {
+</p><p><a href="#L554">554</a>					for (int i = 0; i &lt; sql.length; i++) {
+</p><p><a href="#L555">555</a>						this.currSql = sql[i];
+</p><p><a href="#L556">556</a>						if (!stmt.execute(sql[i])) {
+</p><p><a href="#L557">557</a>							rowsAffected[i] = stmt.getUpdateCount();
+</p><p><a href="#L558">558</a>						}
+</p><p><a href="#L559">559</a>						else {
+</p><p><a href="#L560">560</a>							throw new InvalidDataAccessApiUsageException("Invalid batch SQL statement: " + sql[i]);
+</p><p><a href="#L561">561</a>						}
+</p><p><a href="#L562">562</a>					}
+</p><p><a href="#L563">563</a>				}
+</p><p><a href="#L564">564</a>				return rowsAffected;
+</p><p><a href="#L565">565</a>			}
+</p><p><a href="#L566">566</a>
+</p><p><a href="#L567">567</a>			private String appendSql(@Nullable String sql, String statement) {
+</p><p><a href="#L568">568</a>				return (StringUtils.isEmpty(sql) ? statement : sql + "; " + statement);
+</p><p><a href="#L569">569</a>			}
+</p><p><a href="#L570">570</a>
+</p><p><a href="#L571">571</a>			@Override
+</p><p><a href="#L572">572</a>			@Nullable
+</p><p><a href="#L573">573</a>			public String getSql() {
+</p><p><a href="#L574">574</a>				return this.currSql;
+</p><p><a href="#L575">575</a>			}
+</p><p><a href="#L576">576</a>		}
+</p><p><a href="#L577">577</a>
+</p><p><a href="#L578">578</a>		int[] result = execute(new BatchUpdateStatementCallback());
+</p><p><a href="#L579">579</a>		Assert.state(result != null, "No update counts");
+</p><p><a href="#L580">580</a>		return result;
+</p><p><a href="#L581">581</a>	}
+</p><p><a href="#L582">582</a>
+</p><p><a href="#L583">583</a>
+</p><p><a href="#L584">584</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L585">585</a>	// Methods dealing with prepared statements
+</p><p><a href="#L586">586</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L587">587</a>
+</p><p><a href="#L588">588</a>	@Override
+</p><p><a href="#L589">589</a>	@Nullable
+</p><p><a href="#L590">590</a>	public &lt;T&gt; T execute(PreparedStatementCreator psc, PreparedStatementCallback&lt;T&gt; action)
+</p><p><a href="#L591">591</a>			throws DataAccessException {
+</p><p><a href="#L592">592</a>
+</p><p><a href="#L593">593</a>		Assert.notNull(psc, "PreparedStatementCreator must not be null");
+</p><p><a href="#L594">594</a>		Assert.notNull(action, "Callback object must not be null");
+</p><p><a href="#L595">595</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L596">596</a>			String sql = getSql(psc);
+</p><p><a href="#L597">597</a>			logger.debug("Executing prepared SQL statement" + (sql != null ? " [" + sql + "]" : ""));
+</p><p><a href="#L598">598</a>		}
+</p><p><a href="#L599">599</a>
+</p><p><a href="#L600">600</a>		Connection con = DataSourceUtils.getConnection(obtainDataSource());
+</p><p><a href="#L601">601</a>		PreparedStatement ps = null;
+</p><p><a href="#L602">602</a>		try {
+</p><p><a href="#L603">603</a>			ps = psc.createPreparedStatement(con);
+</p><p><a href="#L604">604</a>			applyStatementSettings(ps);
+</p><p><a href="#L605">605</a>			T result = action.doInPreparedStatement(ps);
+</p><p><a href="#L606">606</a>			handleWarnings(ps);
+</p><p><a href="#L607">607</a>			return result;
+</p><p><a href="#L608">608</a>		}
+</p><p><a href="#L609">609</a>		catch (SQLException ex) {
+</p><p><a href="#L610">610</a>			// Release Connection early, to avoid potential connection pool deadlock
+</p><p><a href="#L611">611</a>			// in the case when the exception translator hasn't been initialized yet.
+</p><p><a href="#L612">612</a>			if (psc instanceof ParameterDisposer) {
+</p><p><a href="#L613">613</a>				((ParameterDisposer) psc).cleanupParameters();
+</p><p><a href="#L614">614</a>			}
+</p><p><a href="#L615">615</a>			String sql = getSql(psc);
+</p><p><a href="#L616">616</a>			JdbcUtils.closeStatement(ps);
+</p><p><a href="#L617">617</a>			ps = null;
+</p><p><a href="#L618">618</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L619">619</a>			con = null;
+</p><p><a href="#L620">620</a>			throw translateException("PreparedStatementCallback", sql, ex);
+</p><p><a href="#L621">621</a>		}
+</p><p><a href="#L622">622</a>		finally {
+</p><p><a href="#L623">623</a>			if (psc instanceof ParameterDisposer) {
+</p><p><a href="#L624">624</a>				((ParameterDisposer) psc).cleanupParameters();
+</p><p><a href="#L625">625</a>			}
+</p><p><a href="#L626">626</a>			JdbcUtils.closeStatement(ps);
+</p><p><a href="#L627">627</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L628">628</a>		}
+</p><p><a href="#L629">629</a>	}
+</p><p><a href="#L630">630</a>
+</p><p><a href="#L631">631</a>	@Override
+</p><p><a href="#L632">632</a>	@Nullable
+</p><p><a href="#L633">633</a>	public &lt;T&gt; T execute(String sql, PreparedStatementCallback&lt;T&gt; action) throws DataAccessException {
+</p><p><a href="#L634">634</a>		return execute(new SimplePreparedStatementCreator(sql), action);
+</p><p><a href="#L635">635</a>	}
+</p><p><a href="#L636">636</a>
+</p><p><a href="#L637">637</a>	/**
+</p><p><a href="#L638">638</a>	 * Query using a prepared statement, allowing for a PreparedStatementCreator
+</p><p><a href="#L639">639</a>	 * and a PreparedStatementSetter. Most other query methods use this method,
+</p><p><a href="#L640">640</a>	 * but application code will always work with either a creator or a setter.
+</p><p><a href="#L641">641</a>	 * @param psc Callback handler that can create a PreparedStatement given a
+</p><p><a href="#L642">642</a>	 * Connection
+</p><p><a href="#L643">643</a>	 * @param pss object that knows how to set values on the prepared statement.
+</p><p><a href="#L644">644</a>	 * If this is null, the SQL will be assumed to contain no bind parameters.
+</p><p><a href="#L645">645</a>	 * @param rse object that will extract results.
+</p><p><a href="#L646">646</a>	 * @return an arbitrary result object, as returned by the ResultSetExtractor
+</p><p><a href="#L647">647</a>	 * @throws DataAccessException if there is any problem
+</p><p><a href="#L648">648</a>	 */
+</p><p><a href="#L649">649</a>	@Nullable
+</p><p><a href="#L650">650</a>	public &lt;T&gt; T query(
+</p><p><a href="#L651">651</a>			PreparedStatementCreator psc, @Nullable final PreparedStatementSetter pss, final ResultSetExtractor&lt;T&gt; rse)
+</p><p><a href="#L652">652</a>			throws DataAccessException {
+</p><p><a href="#L653">653</a>
+</p><p><a href="#L654">654</a>		Assert.notNull(rse, "ResultSetExtractor must not be null");
+</p><p><a href="#L655">655</a>		logger.debug("Executing prepared SQL query");
+</p><p><a href="#L656">656</a>
+</p><p><a href="#L657">657</a>		return execute(psc, new PreparedStatementCallback&lt;T&gt;() {
+</p><p><a href="#L658">658</a>			@Override
+</p><p><a href="#L659">659</a>			@Nullable
+</p><p><a href="#L660">660</a>			public T doInPreparedStatement(PreparedStatement ps) throws SQLException {
+</p><p><a href="#L661">661</a>				ResultSet rs = null;
+</p><p><a href="#L662">662</a>				try {
+</p><p><a href="#L663">663</a>					if (pss != null) {
+</p><p><a href="#L664">664</a>						pss.setValues(ps);
+</p><p><a href="#L665">665</a>					}
+</p><p><a href="#L666">666</a>					rs = ps.executeQuery();
+</p><p><a href="#L667">667</a>					return rse.extractData(rs);
+</p><p><a href="#L668">668</a>				}
+</p><p><a href="#L669">669</a>				finally {
+</p><p><a href="#L670">670</a>					JdbcUtils.closeResultSet(rs);
+</p><p><a href="#L671">671</a>					if (pss instanceof ParameterDisposer) {
+</p><p><a href="#L672">672</a>						((ParameterDisposer) pss).cleanupParameters();
+</p><p><a href="#L673">673</a>					}
+</p><p><a href="#L674">674</a>				}
+</p><p><a href="#L675">675</a>			}
+</p><p><a href="#L676">676</a>		});
+</p><p><a href="#L677">677</a>	}
+</p><p><a href="#L678">678</a>
+</p><p><a href="#L679">679</a>	@Override
+</p><p><a href="#L680">680</a>	@Nullable
+</p><p><a href="#L681">681</a>	public &lt;T&gt; T query(PreparedStatementCreator psc, ResultSetExtractor&lt;T&gt; rse) throws DataAccessException {
+</p><p><a href="#L682">682</a>		return query(psc, null, rse);
+</p><p><a href="#L683">683</a>	}
+</p><p><a href="#L684">684</a>
+</p><p><a href="#L685">685</a>	@Override
+</p><p><a href="#L686">686</a>	@Nullable
+</p><p><a href="#L687">687</a>	public &lt;T&gt; T query(String sql, @Nullable PreparedStatementSetter pss, ResultSetExtractor&lt;T&gt; rse) throws DataAccessException {
+</p><p><a href="#L688">688</a>		return query(new SimplePreparedStatementCreator(sql), pss, rse);
+</p><p><a href="#L689">689</a>	}
+</p><p><a href="#L690">690</a>
+</p><p><a href="#L691">691</a>	@Override
+</p><p><a href="#L692">692</a>	@Nullable
+</p><p><a href="#L693">693</a>	public &lt;T&gt; T query(String sql, Object[] args, int[] argTypes, ResultSetExtractor&lt;T&gt; rse) throws DataAccessException {
+</p><p><a href="#L694">694</a>		return query(sql, newArgTypePreparedStatementSetter(args, argTypes), rse);
+</p><p><a href="#L695">695</a>	}
+</p><p><a href="#L696">696</a>
+</p><p><a href="#L697">697</a>	@Override
+</p><p><a href="#L698">698</a>	@Nullable
+</p><p><a href="#L699">699</a>	public &lt;T&gt; T query(String sql, @Nullable Object[] args, ResultSetExtractor&lt;T&gt; rse) throws DataAccessException {
+</p><p><a href="#L700">700</a>		return query(sql, newArgPreparedStatementSetter(args), rse);
+</p><p><a href="#L701">701</a>	}
+</p><p><a href="#L702">702</a>
+</p><p><a href="#L703">703</a>	@Override
+</p><p><a href="#L704">704</a>	@Nullable
+</p><p><a href="#L705">705</a>	public &lt;T&gt; T query(String sql, ResultSetExtractor&lt;T&gt; rse, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L706">706</a>		return query(sql, newArgPreparedStatementSetter(args), rse);
+</p><p><a href="#L707">707</a>	}
+</p><p><a href="#L708">708</a>
+</p><p><a href="#L709">709</a>	@Override
+</p><p><a href="#L710">710</a>	public void query(PreparedStatementCreator psc, RowCallbackHandler rch) throws DataAccessException {
+</p><p><a href="#L711">711</a>		query(psc, new RowCallbackHandlerResultSetExtractor(rch));
+</p><p><a href="#L712">712</a>	}
+</p><p><a href="#L713">713</a>
+</p><p><a href="#L714">714</a>	@Override
+</p><p><a href="#L715">715</a>	public void query(String sql, @Nullable PreparedStatementSetter pss, RowCallbackHandler rch) throws DataAccessException {
+</p><p><a href="#L716">716</a>		query(sql, pss, new RowCallbackHandlerResultSetExtractor(rch));
+</p><p><a href="#L717">717</a>	}
+</p><p><a href="#L718">718</a>
+</p><p><a href="#L719">719</a>	@Override
+</p><p><a href="#L720">720</a>	public void query(String sql, Object[] args, int[] argTypes, RowCallbackHandler rch) throws DataAccessException {
+</p><p><a href="#L721">721</a>		query(sql, newArgTypePreparedStatementSetter(args, argTypes), rch);
+</p><p><a href="#L722">722</a>	}
+</p><p><a href="#L723">723</a>
+</p><p><a href="#L724">724</a>	@Override
+</p><p><a href="#L725">725</a>	public void query(String sql, Object[] args, RowCallbackHandler rch) throws DataAccessException {
+</p><p><a href="#L726">726</a>		query(sql, newArgPreparedStatementSetter(args), rch);
+</p><p><a href="#L727">727</a>	}
+</p><p><a href="#L728">728</a>
+</p><p><a href="#L729">729</a>	@Override
+</p><p><a href="#L730">730</a>	public void query(String sql, RowCallbackHandler rch, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L731">731</a>		query(sql, newArgPreparedStatementSetter(args), rch);
+</p><p><a href="#L732">732</a>	}
+</p><p><a href="#L733">733</a>
+</p><p><a href="#L734">734</a>	@Override
+</p><p><a href="#L735">735</a>	public &lt;T&gt; List&lt;T&gt; query(PreparedStatementCreator psc, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L736">736</a>		return result(query(psc, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L737">737</a>	}
+</p><p><a href="#L738">738</a>
+</p><p><a href="#L739">739</a>	@Override
+</p><p><a href="#L740">740</a>	public &lt;T&gt; List&lt;T&gt; query(String sql, @Nullable PreparedStatementSetter pss, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L741">741</a>		return result(query(sql, pss, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L742">742</a>	}
+</p><p><a href="#L743">743</a>
+</p><p><a href="#L744">744</a>	@Override
+</p><p><a href="#L745">745</a>	public &lt;T&gt; List&lt;T&gt; query(String sql, Object[] args, int[] argTypes, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L746">746</a>		return result(query(sql, args, argTypes, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L747">747</a>	}
+</p><p><a href="#L748">748</a>
+</p><p><a href="#L749">749</a>	@Override
+</p><p><a href="#L750">750</a>	public &lt;T&gt; List&lt;T&gt; query(String sql, @Nullable Object[] args, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L751">751</a>		return result(query(sql, args, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L752">752</a>	}
+</p><p><a href="#L753">753</a>
+</p><p><a href="#L754">754</a>	@Override
+</p><p><a href="#L755">755</a>	public &lt;T&gt; List&lt;T&gt; query(String sql, RowMapper&lt;T&gt; rowMapper, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L756">756</a>		return result(query(sql, args, new RowMapperResultSetExtractor&lt;&gt;(rowMapper)));
+</p><p><a href="#L757">757</a>	}
+</p><p><a href="#L758">758</a>
+</p><p><a href="#L759">759</a>	@Override
+</p><p><a href="#L760">760</a>	@Nullable
+</p><p><a href="#L761">761</a>	public &lt;T&gt; T queryForObject(String sql, Object[] args, int[] argTypes, RowMapper&lt;T&gt; rowMapper)
+</p><p><a href="#L762">762</a>			throws DataAccessException {
+</p><p><a href="#L763">763</a>
+</p><p><a href="#L764">764</a>		List&lt;T&gt; results = query(sql, args, argTypes, new RowMapperResultSetExtractor&lt;&gt;(rowMapper, 1));
+</p><p><a href="#L765">765</a>		return DataAccessUtils.nullableSingleResult(results);
+</p><p><a href="#L766">766</a>	}
+</p><p><a href="#L767">767</a>
+</p><p><a href="#L768">768</a>	@Override
+</p><p><a href="#L769">769</a>	@Nullable
+</p><p><a href="#L770">770</a>	public &lt;T&gt; T queryForObject(String sql, @Nullable Object[] args, RowMapper&lt;T&gt; rowMapper) throws DataAccessException {
+</p><p><a href="#L771">771</a>		List&lt;T&gt; results = query(sql, args, new RowMapperResultSetExtractor&lt;&gt;(rowMapper, 1));
+</p><p><a href="#L772">772</a>		return DataAccessUtils.nullableSingleResult(results);
+</p><p><a href="#L773">773</a>	}
+</p><p><a href="#L774">774</a>
+</p><p><a href="#L775">775</a>	@Override
+</p><p><a href="#L776">776</a>	@Nullable
+</p><p><a href="#L777">777</a>	public &lt;T&gt; T queryForObject(String sql, RowMapper&lt;T&gt; rowMapper, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L778">778</a>		List&lt;T&gt; results = query(sql, args, new RowMapperResultSetExtractor&lt;&gt;(rowMapper, 1));
+</p><p><a href="#L779">779</a>		return DataAccessUtils.nullableSingleResult(results);
+</p><p><a href="#L780">780</a>	}
+</p><p><a href="#L781">781</a>
+</p><p><a href="#L782">782</a>	@Override
+</p><p><a href="#L783">783</a>	@Nullable
+</p><p><a href="#L784">784</a>	public &lt;T&gt; T queryForObject(String sql, Object[] args, int[] argTypes, Class&lt;T&gt; requiredType)
+</p><p><a href="#L785">785</a>			throws DataAccessException {
+</p><p><a href="#L786">786</a>
+</p><p><a href="#L787">787</a>		return queryForObject(sql, args, argTypes, getSingleColumnRowMapper(requiredType));
+</p><p><a href="#L788">788</a>	}
+</p><p><a href="#L789">789</a>
+</p><p><a href="#L790">790</a>	@Override
+</p><p><a href="#L791">791</a>	public &lt;T&gt; T queryForObject(String sql, Object[] args, Class&lt;T&gt; requiredType) throws DataAccessException {
+</p><p><a href="#L792">792</a>		return queryForObject(sql, args, getSingleColumnRowMapper(requiredType));
+</p><p><a href="#L793">793</a>	}
+</p><p><a href="#L794">794</a>
+</p><p><a href="#L795">795</a>	@Override
+</p><p><a href="#L796">796</a>	public &lt;T&gt; T queryForObject(String sql, Class&lt;T&gt; requiredType, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L797">797</a>		return queryForObject(sql, args, getSingleColumnRowMapper(requiredType));
+</p><p><a href="#L798">798</a>	}
+</p><p><a href="#L799">799</a>
+</p><p><a href="#L800">800</a>	@Override
+</p><p><a href="#L801">801</a>	public Map&lt;String, Object&gt; queryForMap(String sql, Object[] args, int[] argTypes) throws DataAccessException {
+</p><p><a href="#L802">802</a>		return result(queryForObject(sql, args, argTypes, getColumnMapRowMapper()));
+</p><p><a href="#L803">803</a>	}
+</p><p><a href="#L804">804</a>
+</p><p><a href="#L805">805</a>	@Override
+</p><p><a href="#L806">806</a>	public Map&lt;String, Object&gt; queryForMap(String sql, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L807">807</a>		return result(queryForObject(sql, args, getColumnMapRowMapper()));
+</p><p><a href="#L808">808</a>	}
+</p><p><a href="#L809">809</a>
+</p><p><a href="#L810">810</a>	@Override
+</p><p><a href="#L811">811</a>	public &lt;T&gt; List&lt;T&gt; queryForList(String sql, Object[] args, int[] argTypes, Class&lt;T&gt; elementType) throws DataAccessException {
+</p><p><a href="#L812">812</a>		return query(sql, args, argTypes, getSingleColumnRowMapper(elementType));
+</p><p><a href="#L813">813</a>	}
+</p><p><a href="#L814">814</a>
+</p><p><a href="#L815">815</a>	@Override
+</p><p><a href="#L816">816</a>	public &lt;T&gt; List&lt;T&gt; queryForList(String sql, Object[] args, Class&lt;T&gt; elementType) throws DataAccessException {
+</p><p><a href="#L817">817</a>		return query(sql, args, getSingleColumnRowMapper(elementType));
+</p><p><a href="#L818">818</a>	}
+</p><p><a href="#L819">819</a>
+</p><p><a href="#L820">820</a>	@Override
+</p><p><a href="#L821">821</a>	public &lt;T&gt; List&lt;T&gt; queryForList(String sql, Class&lt;T&gt; elementType, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L822">822</a>		return query(sql, args, getSingleColumnRowMapper(elementType));
+</p><p><a href="#L823">823</a>	}
+</p><p><a href="#L824">824</a>
+</p><p><a href="#L825">825</a>	@Override
+</p><p><a href="#L826">826</a>	public List&lt;Map&lt;String, Object&gt;&gt; queryForList(String sql, Object[] args, int[] argTypes) throws DataAccessException {
+</p><p><a href="#L827">827</a>		return query(sql, args, argTypes, getColumnMapRowMapper());
+</p><p><a href="#L828">828</a>	}
+</p><p><a href="#L829">829</a>
+</p><p><a href="#L830">830</a>	@Override
+</p><p><a href="#L831">831</a>	public List&lt;Map&lt;String, Object&gt;&gt; queryForList(String sql, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L832">832</a>		return query(sql, args, getColumnMapRowMapper());
+</p><p><a href="#L833">833</a>	}
+</p><p><a href="#L834">834</a>
+</p><p><a href="#L835">835</a>	@Override
+</p><p><a href="#L836">836</a>	public SqlRowSet queryForRowSet(String sql, Object[] args, int[] argTypes) throws DataAccessException {
+</p><p><a href="#L837">837</a>		return result(query(sql, args, argTypes, new SqlRowSetResultSetExtractor()));
+</p><p><a href="#L838">838</a>	}
+</p><p><a href="#L839">839</a>
+</p><p><a href="#L840">840</a>	@Override
+</p><p><a href="#L841">841</a>	public SqlRowSet queryForRowSet(String sql, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L842">842</a>		return result(query(sql, args, new SqlRowSetResultSetExtractor()));
+</p><p><a href="#L843">843</a>	}
+</p><p><a href="#L844">844</a>
+</p><p><a href="#L845">845</a>	protected int update(final PreparedStatementCreator psc, @Nullable final PreparedStatementSetter pss)
+</p><p><a href="#L846">846</a>			throws DataAccessException {
+</p><p><a href="#L847">847</a>
+</p><p><a href="#L848">848</a>		logger.debug("Executing prepared SQL update");
+</p><p><a href="#L849">849</a>
+</p><p><a href="#L850">850</a>		return updateCount(execute(psc, ps -&gt; {
+</p><p><a href="#L851">851</a>			try {
+</p><p><a href="#L852">852</a>				if (pss != null) {
+</p><p><a href="#L853">853</a>					pss.setValues(ps);
+</p><p><a href="#L854">854</a>				}
+</p><p><a href="#L855">855</a>				int rows = ps.executeUpdate();
+</p><p><a href="#L856">856</a>				if (logger.isDebugEnabled()) {
+</p><p><a href="#L857">857</a>					logger.debug("SQL update affected " + rows + " rows");
+</p><p><a href="#L858">858</a>				}
+</p><p><a href="#L859">859</a>				return rows;
+</p><p><a href="#L860">860</a>			}
+</p><p><a href="#L861">861</a>			finally {
+</p><p><a href="#L862">862</a>				if (pss instanceof ParameterDisposer) {
+</p><p><a href="#L863">863</a>					((ParameterDisposer) pss).cleanupParameters();
+</p><p><a href="#L864">864</a>				}
+</p><p><a href="#L865">865</a>			}
+</p><p><a href="#L866">866</a>		}));
+</p><p><a href="#L867">867</a>	}
+</p><p><a href="#L868">868</a>
+</p><p><a href="#L869">869</a>	@Override
+</p><p><a href="#L870">870</a>	public int update(PreparedStatementCreator psc) throws DataAccessException {
+</p><p><a href="#L871">871</a>		return update(psc, (PreparedStatementSetter) null);
+</p><p><a href="#L872">872</a>	}
+</p><p><a href="#L873">873</a>
+</p><p><a href="#L874">874</a>	@Override
+</p><p><a href="#L875">875</a>	public int update(final PreparedStatementCreator psc, final KeyHolder generatedKeyHolder)
+</p><p><a href="#L876">876</a>			throws DataAccessException {
+</p><p><a href="#L877">877</a>
+</p><p><a href="#L878">878</a>		Assert.notNull(generatedKeyHolder, "KeyHolder must not be null");
+</p><p><a href="#L879">879</a>		logger.debug("Executing SQL update and returning generated keys");
+</p><p><a href="#L880">880</a>
+</p><p><a href="#L881">881</a>		return updateCount(execute(psc, ps -&gt; {
+</p><p><a href="#L882">882</a>			int rows = ps.executeUpdate();
+</p><p><a href="#L883">883</a>			List&lt;Map&lt;String, Object&gt;&gt; generatedKeys = generatedKeyHolder.getKeyList();
+</p><p><a href="#L884">884</a>			generatedKeys.clear();
+</p><p><a href="#L885">885</a>			ResultSet keys = ps.getGeneratedKeys();
+</p><p><a href="#L886">886</a>			if (keys != null) {
+</p><p><a href="#L887">887</a>				try {
+</p><p><a href="#L888">888</a>					RowMapperResultSetExtractor&lt;Map&lt;String, Object&gt;&gt; rse =
+</p><p><a href="#L889">889</a>							new RowMapperResultSetExtractor&lt;&gt;(getColumnMapRowMapper(), 1);
+</p><p><a href="#L890">890</a>					generatedKeys.addAll(result(rse.extractData(keys)));
+</p><p><a href="#L891">891</a>				}
+</p><p><a href="#L892">892</a>				finally {
+</p><p><a href="#L893">893</a>					JdbcUtils.closeResultSet(keys);
+</p><p><a href="#L894">894</a>				}
+</p><p><a href="#L895">895</a>			}
+</p><p><a href="#L896">896</a>			if (logger.isDebugEnabled()) {
+</p><p><a href="#L897">897</a>				logger.debug("SQL update affected " + rows + " rows and returned " + generatedKeys.size() + " keys");
+</p><p><a href="#L898">898</a>			}
+</p><p><a href="#L899">899</a>			return rows;
+</p><p><a href="#L900">900</a>		}));
+</p><p><a href="#L901">901</a>	}
+</p><p><a href="#L902">902</a>
+</p><p><a href="#L903">903</a>	@Override
+</p><p><a href="#L904">904</a>	public int update(String sql, @Nullable PreparedStatementSetter pss) throws DataAccessException {
+</p><p><a href="#L905">905</a>		return update(new SimplePreparedStatementCreator(sql), pss);
+</p><p><a href="#L906">906</a>	}
+</p><p><a href="#L907">907</a>
+</p><p><a href="#L908">908</a>	@Override
+</p><p><a href="#L909">909</a>	public int update(String sql, Object[] args, int[] argTypes) throws DataAccessException {
+</p><p><a href="#L910">910</a>		return update(sql, newArgTypePreparedStatementSetter(args, argTypes));
+</p><p><a href="#L911">911</a>	}
+</p><p><a href="#L912">912</a>
+</p><p><a href="#L913">913</a>	@Override
+</p><p><a href="#L914">914</a>	public int update(String sql, @Nullable Object... args) throws DataAccessException {
+</p><p><a href="#L915">915</a>		return update(sql, newArgPreparedStatementSetter(args));
+</p><p><a href="#L916">916</a>	}
+</p><p><a href="#L917">917</a>
+</p><p><a href="#L918">918</a>	@Override
+</p><p><a href="#L919">919</a>	public int[] batchUpdate(String sql, final BatchPreparedStatementSetter pss) throws DataAccessException {
+</p><p><a href="#L920">920</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L921">921</a>			logger.debug("Executing SQL batch update [" + sql + "]");
+</p><p><a href="#L922">922</a>		}
+</p><p><a href="#L923">923</a>
+</p><p><a href="#L924">924</a>		int[] result = execute(sql, (PreparedStatementCallback&lt;int[]&gt;) ps -&gt; {
+</p><p><a href="#L925">925</a>			try {
+</p><p><a href="#L926">926</a>				int batchSize = pss.getBatchSize();
+</p><p><a href="#L927">927</a>				InterruptibleBatchPreparedStatementSetter ipss =
+</p><p><a href="#L928">928</a>						(pss instanceof InterruptibleBatchPreparedStatementSetter ?
+</p><p><a href="#L929">929</a>						(InterruptibleBatchPreparedStatementSetter) pss : null);
+</p><p><a href="#L930">930</a>				if (JdbcUtils.supportsBatchUpdates(ps.getConnection())) {
+</p><p><a href="#L931">931</a>					for (int i = 0; i &lt; batchSize; i++) {
+</p><p><a href="#L932">932</a>						pss.setValues(ps, i);
+</p><p><a href="#L933">933</a>						if (ipss != null &amp;&amp; ipss.isBatchExhausted(i)) {
+</p><p><a href="#L934">934</a>							break;
+</p><p><a href="#L935">935</a>						}
+</p><p><a href="#L936">936</a>						ps.addBatch();
+</p><p><a href="#L937">937</a>					}
+</p><p><a href="#L938">938</a>					return ps.executeBatch();
+</p><p><a href="#L939">939</a>				}
+</p><p><a href="#L940">940</a>				else {
+</p><p><a href="#L941">941</a>					List&lt;Integer&gt; rowsAffected = new ArrayList&lt;&gt;();
+</p><p><a href="#L942">942</a>					for (int i = 0; i &lt; batchSize; i++) {
+</p><p><a href="#L943">943</a>						pss.setValues(ps, i);
+</p><p><a href="#L944">944</a>						if (ipss != null &amp;&amp; ipss.isBatchExhausted(i)) {
+</p><p><a href="#L945">945</a>							break;
+</p><p><a href="#L946">946</a>						}
+</p><p><a href="#L947">947</a>						rowsAffected.add(ps.executeUpdate());
+</p><p><a href="#L948">948</a>					}
+</p><p><a href="#L949">949</a>					int[] rowsAffectedArray = new int[rowsAffected.size()];
+</p><p><a href="#L950">950</a>					for (int i = 0; i &lt; rowsAffectedArray.length; i++) {
+</p><p><a href="#L951">951</a>						rowsAffectedArray[i] = rowsAffected.get(i);
+</p><p><a href="#L952">952</a>					}
+</p><p><a href="#L953">953</a>					return rowsAffectedArray;
+</p><p><a href="#L954">954</a>				}
+</p><p><a href="#L955">955</a>			}
+</p><p><a href="#L956">956</a>			finally {
+</p><p><a href="#L957">957</a>				if (pss instanceof ParameterDisposer) {
+</p><p><a href="#L958">958</a>					((ParameterDisposer) pss).cleanupParameters();
+</p><p><a href="#L959">959</a>				}
+</p><p><a href="#L960">960</a>			}
+</p><p><a href="#L961">961</a>		});
+</p><p><a href="#L962">962</a>
+</p><p><a href="#L963">963</a>		Assert.state(result != null, "No result array");
+</p><p><a href="#L964">964</a>		return result;
+</p><p><a href="#L965">965</a>	}
+</p><p><a href="#L966">966</a>
+</p><p><a href="#L967">967</a>	@Override
+</p><p><a href="#L968">968</a>	public int[] batchUpdate(String sql, List&lt;Object[]&gt; batchArgs) throws DataAccessException {
+</p><p><a href="#L969">969</a>		return batchUpdate(sql, batchArgs, new int[0]);
+</p><p><a href="#L970">970</a>	}
+</p><p><a href="#L971">971</a>
+</p><p><a href="#L972">972</a>	@Override
+</p><p><a href="#L973">973</a>	public int[] batchUpdate(String sql, List&lt;Object[]&gt; batchArgs, int[] argTypes) throws DataAccessException {
+</p><p><a href="#L974">974</a>		return BatchUpdateUtils.executeBatchUpdate(sql, batchArgs, argTypes, this);
+</p><p><a href="#L975">975</a>	}
+</p><p><a href="#L976">976</a>
+</p><p><a href="#L977">977</a>	@Override
+</p><p><a href="#L978">978</a>	public &lt;T&gt; int[][] batchUpdate(String sql, final Collection&lt;T&gt; batchArgs, final int batchSize,
+</p><p><a href="#L979">979</a>			final ParameterizedPreparedStatementSetter&lt;T&gt; pss) throws DataAccessException {
+</p><p><a href="#L980">980</a>
+</p><p><a href="#L981">981</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L982">982</a>			logger.debug("Executing SQL batch update [" + sql + "] with a batch size of " + batchSize);
+</p><p><a href="#L983">983</a>		}
+</p><p><a href="#L984">984</a>		int[][] result = execute(sql, (PreparedStatementCallback&lt;int[][]&gt;) ps -&gt; {
+</p><p><a href="#L985">985</a>			List&lt;int[]&gt; rowsAffected = new ArrayList&lt;&gt;();
+</p><p><a href="#L986">986</a>			try {
+</p><p><a href="#L987">987</a>				boolean batchSupported = true;
+</p><p><a href="#L988">988</a>				if (!JdbcUtils.supportsBatchUpdates(ps.getConnection())) {
+</p><p><a href="#L989">989</a>					batchSupported = false;
+</p><p><a href="#L990">990</a>					logger.warn("JDBC Driver does not support Batch updates; resorting to single statement execution");
+</p><p><a href="#L991">991</a>				}
+</p><p><a href="#L992">992</a>				int n = 0;
+</p><p><a href="#L993">993</a>				for (T obj : batchArgs) {
+</p><p><a href="#L994">994</a>					pss.setValues(ps, obj);
+</p><p><a href="#L995">995</a>					n++;
+</p><p><a href="#L996">996</a>					if (batchSupported) {
+</p><p><a href="#L997">997</a>						ps.addBatch();
+</p><p><a href="#L998">998</a>						if (n % batchSize == 0 || n == batchArgs.size()) {
+</p><p><a href="#L999">999</a>							if (logger.isDebugEnabled()) {
+</p><p><a href="#L1000">1000</a>								int batchIdx = (n % batchSize == 0) ? n / batchSize : (n / batchSize) + 1;
+</p><p><a href="#L1001">1001</a>								int items = n - ((n % batchSize == 0) ? n / batchSize - 1 : (n / batchSize)) * batchSize;
+</p><p><a href="#L1002">1002</a>								logger.debug("Sending SQL batch update #" + batchIdx + " with " + items + " items");
+</p><p><a href="#L1003">1003</a>							}
+</p><p><a href="#L1004">1004</a>							rowsAffected.add(ps.executeBatch());
+</p><p><a href="#L1005">1005</a>						}
+</p><p><a href="#L1006">1006</a>					}
+</p><p><a href="#L1007">1007</a>					else {
+</p><p><a href="#L1008">1008</a>						int i = ps.executeUpdate();
+</p><p><a href="#L1009">1009</a>						rowsAffected.add(new int[] {i});
+</p><p><a href="#L1010">1010</a>					}
+</p><p><a href="#L1011">1011</a>				}
+</p><p><a href="#L1012">1012</a>				int[][] result1 = new int[rowsAffected.size()][];
+</p><p><a href="#L1013">1013</a>				for (int i = 0; i &lt; result1.length; i++) {
+</p><p><a href="#L1014">1014</a>					result1[i] = rowsAffected.get(i);
+</p><p><a href="#L1015">1015</a>				}
+</p><p><a href="#L1016">1016</a>				return result1;
+</p><p><a href="#L1017">1017</a>			}
+</p><p><a href="#L1018">1018</a>			finally {
+</p><p><a href="#L1019">1019</a>				if (pss instanceof ParameterDisposer) {
+</p><p><a href="#L1020">1020</a>					((ParameterDisposer) pss).cleanupParameters();
+</p><p><a href="#L1021">1021</a>				}
+</p><p><a href="#L1022">1022</a>			}
+</p><p><a href="#L1023">1023</a>		});
+</p><p><a href="#L1024">1024</a>
+</p><p><a href="#L1025">1025</a>		Assert.state(result != null, "No result array");
+</p><p><a href="#L1026">1026</a>		return result;
+</p><p><a href="#L1027">1027</a>	}
+</p><p><a href="#L1028">1028</a>
+</p><p><a href="#L1029">1029</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L1030">1030</a>	// Methods dealing with callable statements
+</p><p><a href="#L1031">1031</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L1032">1032</a>
+</p><p><a href="#L1033">1033</a>	@Override
+</p><p><a href="#L1034">1034</a>	@Nullable
+</p><p><a href="#L1035">1035</a>	public &lt;T&gt; T execute(CallableStatementCreator csc, CallableStatementCallback&lt;T&gt; action)
+</p><p><a href="#L1036">1036</a>			throws DataAccessException {
+</p><p><a href="#L1037">1037</a>
+</p><p><a href="#L1038">1038</a>		Assert.notNull(csc, "CallableStatementCreator must not be null");
+</p><p><a href="#L1039">1039</a>		Assert.notNull(action, "Callback object must not be null");
+</p><p><a href="#L1040">1040</a>		if (logger.isDebugEnabled()) {
+</p><p><a href="#L1041">1041</a>			String sql = getSql(csc);
+</p><p><a href="#L1042">1042</a>			logger.debug("Calling stored procedure" + (sql != null ? " [" + sql  + "]" : ""));
+</p><p><a href="#L1043">1043</a>		}
+</p><p><a href="#L1044">1044</a>
+</p><p><a href="#L1045">1045</a>		Connection con = DataSourceUtils.getConnection(obtainDataSource());
+</p><p><a href="#L1046">1046</a>		CallableStatement cs = null;
+</p><p><a href="#L1047">1047</a>		try {
+</p><p><a href="#L1048">1048</a>			cs = csc.createCallableStatement(con);
+</p><p><a href="#L1049">1049</a>			applyStatementSettings(cs);
+</p><p><a href="#L1050">1050</a>			T result = action.doInCallableStatement(cs);
+</p><p><a href="#L1051">1051</a>			handleWarnings(cs);
+</p><p><a href="#L1052">1052</a>			return result;
+</p><p><a href="#L1053">1053</a>		}
+</p><p><a href="#L1054">1054</a>		catch (SQLException ex) {
+</p><p><a href="#L1055">1055</a>			// Release Connection early, to avoid potential connection pool deadlock
+</p><p><a href="#L1056">1056</a>			// in the case when the exception translator hasn't been initialized yet.
+</p><p><a href="#L1057">1057</a>			if (csc instanceof ParameterDisposer) {
+</p><p><a href="#L1058">1058</a>				((ParameterDisposer) csc).cleanupParameters();
+</p><p><a href="#L1059">1059</a>			}
+</p><p><a href="#L1060">1060</a>			String sql = getSql(csc);
+</p><p><a href="#L1061">1061</a>			JdbcUtils.closeStatement(cs);
+</p><p><a href="#L1062">1062</a>			cs = null;
+</p><p><a href="#L1063">1063</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L1064">1064</a>			con = null;
+</p><p><a href="#L1065">1065</a>			throw translateException("CallableStatementCallback", sql, ex);
+</p><p><a href="#L1066">1066</a>		}
+</p><p><a href="#L1067">1067</a>		finally {
+</p><p><a href="#L1068">1068</a>			if (csc instanceof ParameterDisposer) {
+</p><p><a href="#L1069">1069</a>				((ParameterDisposer) csc).cleanupParameters();
+</p><p><a href="#L1070">1070</a>			}
+</p><p><a href="#L1071">1071</a>			JdbcUtils.closeStatement(cs);
+</p><p><a href="#L1072">1072</a>			DataSourceUtils.releaseConnection(con, getDataSource());
+</p><p><a href="#L1073">1073</a>		}
+</p><p><a href="#L1074">1074</a>	}
+</p><p><a href="#L1075">1075</a>
+</p><p><a href="#L1076">1076</a>	@Override
+</p><p><a href="#L1077">1077</a>	@Nullable
+</p><p><a href="#L1078">1078</a>	public &lt;T&gt; T execute(String callString, CallableStatementCallback&lt;T&gt; action) throws DataAccessException {
+</p><p><a href="#L1079">1079</a>		return execute(new SimpleCallableStatementCreator(callString), action);
+</p><p><a href="#L1080">1080</a>	}
+</p><p><a href="#L1081">1081</a>
+</p><p><a href="#L1082">1082</a>	@Override
+</p><p><a href="#L1083">1083</a>	public Map&lt;String, Object&gt; call(CallableStatementCreator csc, List&lt;SqlParameter&gt; declaredParameters)
+</p><p><a href="#L1084">1084</a>			throws DataAccessException {
+</p><p><a href="#L1085">1085</a>
+</p><p><a href="#L1086">1086</a>		final List&lt;SqlParameter&gt; updateCountParameters = new ArrayList&lt;&gt;();
+</p><p><a href="#L1087">1087</a>		final List&lt;SqlParameter&gt; resultSetParameters = new ArrayList&lt;&gt;();
+</p><p><a href="#L1088">1088</a>		final List&lt;SqlParameter&gt; callParameters = new ArrayList&lt;&gt;();
+</p><p><a href="#L1089">1089</a>
+</p><p><a href="#L1090">1090</a>		for (SqlParameter parameter : declaredParameters) {
+</p><p><a href="#L1091">1091</a>			if (parameter.isResultsParameter()) {
+</p><p><a href="#L1092">1092</a>				if (parameter instanceof SqlReturnResultSet) {
+</p><p><a href="#L1093">1093</a>					resultSetParameters.add(parameter);
+</p><p><a href="#L1094">1094</a>				}
+</p><p><a href="#L1095">1095</a>				else {
+</p><p><a href="#L1096">1096</a>					updateCountParameters.add(parameter);
+</p><p><a href="#L1097">1097</a>				}
+</p><p><a href="#L1098">1098</a>			}
+</p><p><a href="#L1099">1099</a>			else {
+</p><p><a href="#L1100">1100</a>				callParameters.add(parameter);
+</p><p><a href="#L1101">1101</a>			}
+</p><p><a href="#L1102">1102</a>		}
+</p><p><a href="#L1103">1103</a>
+</p><p><a href="#L1104">1104</a>		Map&lt;String, Object&gt; result = execute(csc, cs -&gt; {
+</p><p><a href="#L1105">1105</a>			boolean retVal = cs.execute();
+</p><p><a href="#L1106">1106</a>			int updateCount = cs.getUpdateCount();
+</p><p><a href="#L1107">1107</a>			if (logger.isDebugEnabled()) {
+</p><p><a href="#L1108">1108</a>				logger.debug("CallableStatement.execute() returned '" + retVal + "'");
+</p><p><a href="#L1109">1109</a>				logger.debug("CallableStatement.getUpdateCount() returned " + updateCount);
+</p><p><a href="#L1110">1110</a>			}
+</p><p><a href="#L1111">1111</a>			Map&lt;String, Object&gt; returnedResults = createResultsMap();
+</p><p><a href="#L1112">1112</a>			if (retVal || updateCount != -1) {
+</p><p><a href="#L1113">1113</a>				returnedResults.putAll(extractReturnedResults(cs, updateCountParameters, resultSetParameters, updateCount));
+</p><p><a href="#L1114">1114</a>			}
+</p><p><a href="#L1115">1115</a>			returnedResults.putAll(extractOutputParameters(cs, callParameters));
+</p><p><a href="#L1116">1116</a>			return returnedResults;
+</p><p><a href="#L1117">1117</a>		});
+</p><p><a href="#L1118">1118</a>
+</p><p><a href="#L1119">1119</a>		Assert.state(result != null, "No result map");
+</p><p><a href="#L1120">1120</a>		return result;
+</p><p><a href="#L1121">1121</a>	}
+</p><p><a href="#L1122">1122</a>
+</p><p><a href="#L1123">1123</a>	/**
+</p><p><a href="#L1124">1124</a>	 * Extract returned ResultSets from the completed stored procedure.
+</p><p><a href="#L1125">1125</a>	 * @param cs JDBC wrapper for the stored procedure
+</p><p><a href="#L1126">1126</a>	 * @param updateCountParameters Parameter list of declared update count parameters for the stored procedure
+</p><p><a href="#L1127">1127</a>	 * @param resultSetParameters Parameter list of declared resultSet parameters for the stored procedure
+</p><p><a href="#L1128">1128</a>	 * @return Map that contains returned results
+</p><p><a href="#L1129">1129</a>	 */
+</p><p><a href="#L1130">1130</a>	protected Map&lt;String, Object&gt; extractReturnedResults(CallableStatement cs,
+</p><p><a href="#L1131">1131</a>			@Nullable List&lt;SqlParameter&gt; updateCountParameters, @Nullable List&lt;SqlParameter&gt; resultSetParameters,
+</p><p><a href="#L1132">1132</a>			int updateCount) throws SQLException {
+</p><p><a href="#L1133">1133</a>
+</p><p><a href="#L1134">1134</a>		Map&lt;String, Object&gt; returnedResults = new HashMap&lt;&gt;();
+</p><p><a href="#L1135">1135</a>		int rsIndex = 0;
+</p><p><a href="#L1136">1136</a>		int updateIndex = 0;
+</p><p><a href="#L1137">1137</a>		boolean moreResults;
+</p><p><a href="#L1138">1138</a>		if (!this.skipResultsProcessing) {
+</p><p><a href="#L1139">1139</a>			do {
+</p><p><a href="#L1140">1140</a>				if (updateCount == -1) {
+</p><p><a href="#L1141">1141</a>					if (resultSetParameters != null &amp;&amp; resultSetParameters.size() &gt; rsIndex) {
+</p><p><a href="#L1142">1142</a>						SqlReturnResultSet declaredRsParam = (SqlReturnResultSet) resultSetParameters.get(rsIndex);
+</p><p><a href="#L1143">1143</a>						returnedResults.putAll(processResultSet(cs.getResultSet(), declaredRsParam));
+</p><p><a href="#L1144">1144</a>						rsIndex++;
+</p><p><a href="#L1145">1145</a>					}
+</p><p><a href="#L1146">1146</a>					else {
+</p><p><a href="#L1147">1147</a>						if (!this.skipUndeclaredResults) {
+</p><p><a href="#L1148">1148</a>							String rsName = RETURN_RESULT_SET_PREFIX + (rsIndex + 1);
+</p><p><a href="#L1149">1149</a>							SqlReturnResultSet undeclaredRsParam = new SqlReturnResultSet(rsName, getColumnMapRowMapper());
+</p><p><a href="#L1150">1150</a>							if (logger.isDebugEnabled()) {
+</p><p><a href="#L1151">1151</a>								logger.debug("Added default SqlReturnResultSet parameter named '" + rsName + "'");
+</p><p><a href="#L1152">1152</a>							}
+</p><p><a href="#L1153">1153</a>							returnedResults.putAll(processResultSet(cs.getResultSet(), undeclaredRsParam));
+</p><p><a href="#L1154">1154</a>							rsIndex++;
+</p><p><a href="#L1155">1155</a>						}
+</p><p><a href="#L1156">1156</a>					}
+</p><p><a href="#L1157">1157</a>				}
+</p><p><a href="#L1158">1158</a>				else {
+</p><p><a href="#L1159">1159</a>					if (updateCountParameters != null &amp;&amp; updateCountParameters.size() &gt; updateIndex) {
+</p><p><a href="#L1160">1160</a>						SqlReturnUpdateCount ucParam = (SqlReturnUpdateCount) updateCountParameters.get(updateIndex);
+</p><p><a href="#L1161">1161</a>						String declaredUcName = ucParam.getName();
+</p><p><a href="#L1162">1162</a>						returnedResults.put(declaredUcName, updateCount);
+</p><p><a href="#L1163">1163</a>						updateIndex++;
+</p><p><a href="#L1164">1164</a>					}
+</p><p><a href="#L1165">1165</a>					else {
+</p><p><a href="#L1166">1166</a>						if (!this.skipUndeclaredResults) {
+</p><p><a href="#L1167">1167</a>							String undeclaredName = RETURN_UPDATE_COUNT_PREFIX + (updateIndex + 1);
+</p><p><a href="#L1168">1168</a>							if (logger.isDebugEnabled()) {
+</p><p><a href="#L1169">1169</a>								logger.debug("Added default SqlReturnUpdateCount parameter named '" + undeclaredName + "'");
+</p><p><a href="#L1170">1170</a>							}
+</p><p><a href="#L1171">1171</a>							returnedResults.put(undeclaredName, updateCount);
+</p><p><a href="#L1172">1172</a>							updateIndex++;
+</p><p><a href="#L1173">1173</a>						}
+</p><p><a href="#L1174">1174</a>					}
+</p><p><a href="#L1175">1175</a>				}
+</p><p><a href="#L1176">1176</a>				moreResults = cs.getMoreResults();
+</p><p><a href="#L1177">1177</a>				updateCount = cs.getUpdateCount();
+</p><p><a href="#L1178">1178</a>				if (logger.isDebugEnabled()) {
+</p><p><a href="#L1179">1179</a>					logger.debug("CallableStatement.getUpdateCount() returned " + updateCount);
+</p><p><a href="#L1180">1180</a>				}
+</p><p><a href="#L1181">1181</a>			}
+</p><p><a href="#L1182">1182</a>			while (moreResults || updateCount != -1);
+</p><p><a href="#L1183">1183</a>		}
+</p><p><a href="#L1184">1184</a>		return returnedResults;
+</p><p><a href="#L1185">1185</a>	}
+</p><p><a href="#L1186">1186</a>
+</p><p><a href="#L1187">1187</a>	/**
+</p><p><a href="#L1188">1188</a>	 * Extract output parameters from the completed stored procedure.
+</p><p><a href="#L1189">1189</a>	 * @param cs JDBC wrapper for the stored procedure
+</p><p><a href="#L1190">1190</a>	 * @param parameters parameter list for the stored procedure
+</p><p><a href="#L1191">1191</a>	 * @return Map that contains returned results
+</p><p><a href="#L1192">1192</a>	 */
+</p><p><a href="#L1193">1193</a>	protected Map&lt;String, Object&gt; extractOutputParameters(CallableStatement cs, List&lt;SqlParameter&gt; parameters)
+</p><p><a href="#L1194">1194</a>			throws SQLException {
+</p><p><a href="#L1195">1195</a>
+</p><p><a href="#L1196">1196</a>		Map&lt;String, Object&gt; returnedResults = new HashMap&lt;&gt;();
+</p><p><a href="#L1197">1197</a>		int sqlColIndex = 1;
+</p><p><a href="#L1198">1198</a>		for (SqlParameter param : parameters) {
+</p><p><a href="#L1199">1199</a>			if (param instanceof SqlOutParameter) {
+</p><p><a href="#L1200">1200</a>				SqlOutParameter outParam = (SqlOutParameter) param;
+</p><p><a href="#L1201">1201</a>				Assert.state(outParam.getName() != null, "Anonymous parameters not allowed");
+</p><p><a href="#L1202">1202</a>				SqlReturnType returnType = outParam.getSqlReturnType();
+</p><p><a href="#L1203">1203</a>				if (returnType != null) {
+</p><p><a href="#L1204">1204</a>					Object out = returnType.getTypeValue(cs, sqlColIndex, outParam.getSqlType(), outParam.getTypeName());
+</p><p><a href="#L1205">1205</a>					returnedResults.put(outParam.getName(), out);
+</p><p><a href="#L1206">1206</a>				}
+</p><p><a href="#L1207">1207</a>				else {
+</p><p><a href="#L1208">1208</a>					Object out = cs.getObject(sqlColIndex);
+</p><p><a href="#L1209">1209</a>					if (out instanceof ResultSet) {
+</p><p><a href="#L1210">1210</a>						if (outParam.isResultSetSupported()) {
+</p><p><a href="#L1211">1211</a>							returnedResults.putAll(processResultSet((ResultSet) out, outParam));
+</p><p><a href="#L1212">1212</a>						}
+</p><p><a href="#L1213">1213</a>						else {
+</p><p><a href="#L1214">1214</a>							String rsName = outParam.getName();
+</p><p><a href="#L1215">1215</a>							SqlReturnResultSet rsParam = new SqlReturnResultSet(rsName, getColumnMapRowMapper());
+</p><p><a href="#L1216">1216</a>							returnedResults.putAll(processResultSet((ResultSet) out, rsParam));
+</p><p><a href="#L1217">1217</a>							if (logger.isDebugEnabled()) {
+</p><p><a href="#L1218">1218</a>								logger.debug("Added default SqlReturnResultSet parameter named '" + rsName + "'");
+</p><p><a href="#L1219">1219</a>							}
+</p><p><a href="#L1220">1220</a>						}
+</p><p><a href="#L1221">1221</a>					}
+</p><p><a href="#L1222">1222</a>					else {
+</p><p><a href="#L1223">1223</a>						returnedResults.put(outParam.getName(), out);
+</p><p><a href="#L1224">1224</a>					}
+</p><p><a href="#L1225">1225</a>				}
+</p><p><a href="#L1226">1226</a>			}
+</p><p><a href="#L1227">1227</a>			if (!(param.isResultsParameter())) {
+</p><p><a href="#L1228">1228</a>				sqlColIndex++;
+</p><p><a href="#L1229">1229</a>			}
+</p><p><a href="#L1230">1230</a>		}
+</p><p><a href="#L1231">1231</a>		return returnedResults;
+</p><p><a href="#L1232">1232</a>	}
+</p><p><a href="#L1233">1233</a>
+</p><p><a href="#L1234">1234</a>	/**
+</p><p><a href="#L1235">1235</a>	 * Process the given ResultSet from a stored procedure.
+</p><p><a href="#L1236">1236</a>	 * @param rs the ResultSet to process
+</p><p><a href="#L1237">1237</a>	 * @param param the corresponding stored procedure parameter
+</p><p><a href="#L1238">1238</a>	 * @return Map that contains returned results
+</p><p><a href="#L1239">1239</a>	 */
+</p><p><a href="#L1240">1240</a>	protected Map&lt;String, Object&gt; processResultSet(
+</p><p><a href="#L1241">1241</a>			@Nullable ResultSet rs, ResultSetSupportingSqlParameter param) throws SQLException {
+</p><p><a href="#L1242">1242</a>
+</p><p><a href="#L1243">1243</a>		if (rs == null) {
+</p><p><a href="#L1244">1244</a>			return Collections.emptyMap();
+</p><p><a href="#L1245">1245</a>		}
+</p><p><a href="#L1246">1246</a>
+</p><p><a href="#L1247">1247</a>		Map&lt;String, Object&gt; returnedResults = new HashMap&lt;&gt;();
+</p><p><a href="#L1248">1248</a>		try {
+</p><p><a href="#L1249">1249</a>			if (param.getRowMapper() != null) {
+</p><p><a href="#L1250">1250</a>				RowMapper&lt;?&gt; rowMapper = param.getRowMapper();
+</p><p><a href="#L1251">1251</a>				Object result = (new RowMapperResultSetExtractor&lt;&gt;(rowMapper)).extractData(rs);
+</p><p><a href="#L1252">1252</a>				returnedResults.put(param.getName(), result);
+</p><p><a href="#L1253">1253</a>			}
+</p><p><a href="#L1254">1254</a>			else if (param.getRowCallbackHandler() != null) {
+</p><p><a href="#L1255">1255</a>				RowCallbackHandler rch = param.getRowCallbackHandler();
+</p><p><a href="#L1256">1256</a>				(new RowCallbackHandlerResultSetExtractor(rch)).extractData(rs);
+</p><p><a href="#L1257">1257</a>				returnedResults.put(param.getName(), "ResultSet returned from stored procedure was processed");
+</p><p><a href="#L1258">1258</a>			}
+</p><p><a href="#L1259">1259</a>			else if (param.getResultSetExtractor() != null) {
+</p><p><a href="#L1260">1260</a>				Object result = param.getResultSetExtractor().extractData(rs);
+</p><p><a href="#L1261">1261</a>				returnedResults.put(param.getName(), result);
+</p><p><a href="#L1262">1262</a>			}
+</p><p><a href="#L1263">1263</a>		}
+</p><p><a href="#L1264">1264</a>		finally {
+</p><p><a href="#L1265">1265</a>			JdbcUtils.closeResultSet(rs);
+</p><p><a href="#L1266">1266</a>		}
+</p><p><a href="#L1267">1267</a>		return returnedResults;
+</p><p><a href="#L1268">1268</a>	}
+</p><p><a href="#L1269">1269</a>
+</p><p><a href="#L1270">1270</a>
+</p><p><a href="#L1271">1271</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L1272">1272</a>	// Implementation hooks and helper methods
+</p><p><a href="#L1273">1273</a>	//-------------------------------------------------------------------------
+</p><p><a href="#L1274">1274</a>
+</p><p><a href="#L1275">1275</a>	/**
+</p><p><a href="#L1276">1276</a>	 * Create a new RowMapper for reading columns as key-value pairs.
+</p><p><a href="#L1277">1277</a>	 * @return the RowMapper to use
+</p><p><a href="#L1278">1278</a>	 * @see ColumnMapRowMapper
+</p><p><a href="#L1279">1279</a>	 */
+</p><p><a href="#L1280">1280</a>	protected RowMapper&lt;Map&lt;String, Object&gt;&gt; getColumnMapRowMapper() {
+</p><p><a href="#L1281">1281</a>		return new ColumnMapRowMapper();
+</p><p><a href="#L1282">1282</a>	}
+</p><p><a href="#L1283">1283</a>
+</p><p><a href="#L1284">1284</a>	/**
+</p><p><a href="#L1285">1285</a>	 * Create a new RowMapper for reading result objects from a single column.
+</p><p><a href="#L1286">1286</a>	 * @param requiredType the type that each result object is expected to match
+</p><p><a href="#L1287">1287</a>	 * @return the RowMapper to use
+</p><p><a href="#L1288">1288</a>	 * @see SingleColumnRowMapper
+</p><p><a href="#L1289">1289</a>	 */
+</p><p><a href="#L1290">1290</a>	protected &lt;T&gt; RowMapper&lt;T&gt; getSingleColumnRowMapper(Class&lt;T&gt; requiredType) {
+</p><p><a href="#L1291">1291</a>		return new SingleColumnRowMapper&lt;&gt;(requiredType);
+</p><p><a href="#L1292">1292</a>	}
+</p><p><a href="#L1293">1293</a>
+</p><p><a href="#L1294">1294</a>	/**
+</p><p><a href="#L1295">1295</a>	 * Create a Map instance to be used as the results map.
+</p><p><a href="#L1296">1296</a>	 * &lt;p&gt;If {@link #resultsMapCaseInsensitive} has been set to true,
+</p><p><a href="#L1297">1297</a>	 * a {@link LinkedCaseInsensitiveMap} will be created; otherwise, a
+</p><p><a href="#L1298">1298</a>	 * {@link LinkedHashMap} will be created.
+</p><p><a href="#L1299">1299</a>	 * @return the results Map instance
+</p><p><a href="#L1300">1300</a>	 * @see #setResultsMapCaseInsensitive
+</p><p><a href="#L1301">1301</a>	 * @see #isResultsMapCaseInsensitive
+</p><p><a href="#L1302">1302</a>	 */
+</p><p><a href="#L1303">1303</a>	protected Map&lt;String, Object&gt; createResultsMap() {
+</p><p><a href="#L1304">1304</a>		if (isResultsMapCaseInsensitive()) {
+</p><p><a href="#L1305">1305</a>			return new LinkedCaseInsensitiveMap&lt;&gt;();
+</p><p><a href="#L1306">1306</a>		}
+</p><p><a href="#L1307">1307</a>		else {
+</p><p><a href="#L1308">1308</a>			return new LinkedHashMap&lt;&gt;();
+</p><p><a href="#L1309">1309</a>		}
+</p><p><a href="#L1310">1310</a>	}
+</p><p><a href="#L1311">1311</a>
+</p><p><a href="#L1312">1312</a>	/**
+</p><p><a href="#L1313">1313</a>	 * Prepare the given JDBC Statement (or PreparedStatement or CallableStatement),
+</p><p><a href="#L1314">1314</a>	 * applying statement settings such as fetch size, max rows, and query timeout.
+</p><p><a href="#L1315">1315</a>	 * @param stmt the JDBC Statement to prepare
+</p><p><a href="#L1316">1316</a>	 * @throws SQLException if thrown by JDBC API
+</p><p><a href="#L1317">1317</a>	 * @see #setFetchSize
+</p><p><a href="#L1318">1318</a>	 * @see #setMaxRows
+</p><p><a href="#L1319">1319</a>	 * @see #setQueryTimeout
+</p><p><a href="#L1320">1320</a>	 * @see org.springframework.jdbc.datasource.DataSourceUtils#applyTransactionTimeout
+</p><p><a href="#L1321">1321</a>	 */
+</p><p><a href="#L1322">1322</a>	protected void applyStatementSettings(Statement stmt) throws SQLException {
+</p><p><a href="#L1323">1323</a>		int fetchSize = getFetchSize();
+</p><p><a href="#L1324">1324</a>		if (fetchSize != -1) {
+</p><p><a href="#L1325">1325</a>			stmt.setFetchSize(fetchSize);
+</p><p><a href="#L1326">1326</a>		}
+</p><p><a href="#L1327">1327</a>		int maxRows = getMaxRows();
+</p><p><a href="#L1328">1328</a>		if (maxRows != -1) {
+</p><p><a href="#L1329">1329</a>			stmt.setMaxRows(maxRows);
+</p><p><a href="#L1330">1330</a>		}
+</p><p><a href="#L1331">1331</a>		DataSourceUtils.applyTimeout(stmt, getDataSource(), getQueryTimeout());
+</p><p><a href="#L1332">1332</a>	}
+</p><p><a href="#L1333">1333</a>
+</p><p><a href="#L1334">1334</a>	/**
+</p><p><a href="#L1335">1335</a>	 * Create a new arg-based PreparedStatementSetter using the args passed in.
+</p><p><a href="#L1336">1336</a>	 * &lt;p&gt;By default, we'll create an {@link ArgumentPreparedStatementSetter}.
+</p><p><a href="#L1337">1337</a>	 * This method allows for the creation to be overridden by subclasses.
+</p><p><a href="#L1338">1338</a>	 * @param args object array with arguments
+</p><p><a href="#L1339">1339</a>	 * @return the new PreparedStatementSetter to use
+</p><p><a href="#L1340">1340</a>	 */
+</p><p><a href="#L1341">1341</a>	protected PreparedStatementSetter newArgPreparedStatementSetter(@Nullable Object[] args) {
+</p><p><a href="#L1342">1342</a>		return new ArgumentPreparedStatementSetter(args);
+</p><p><a href="#L1343">1343</a>	}
+</p><p><a href="#L1344">1344</a>
+</p><p><a href="#L1345">1345</a>	/**
+</p><p><a href="#L1346">1346</a>	 * Create a new arg-type-based PreparedStatementSetter using the args and types passed in.
+</p><p><a href="#L1347">1347</a>	 * &lt;p&gt;By default, we'll create an {@link ArgumentTypePreparedStatementSetter}.
+</p><p><a href="#L1348">1348</a>	 * This method allows for the creation to be overridden by subclasses.
+</p><p><a href="#L1349">1349</a>	 * @param args object array with arguments
+</p><p><a href="#L1350">1350</a>	 * @param argTypes int array of SQLTypes for the associated arguments
+</p><p><a href="#L1351">1351</a>	 * @return the new PreparedStatementSetter to use
+</p><p><a href="#L1352">1352</a>	 */
+</p><p><a href="#L1353">1353</a>	protected PreparedStatementSetter newArgTypePreparedStatementSetter(Object[] args, int[] argTypes) {
+</p><p><a href="#L1354">1354</a>		return new ArgumentTypePreparedStatementSetter(args, argTypes);
+</p><p><a href="#L1355">1355</a>	}
+</p><p><a href="#L1356">1356</a>
+</p><p><a href="#L1357">1357</a>	/**
+</p><p><a href="#L1358">1358</a>	 * Throw an SQLWarningException if we're not ignoring warnings,
+</p><p><a href="#L1359">1359</a>	 * else log the warnings (at debug level).
+</p><p><a href="#L1360">1360</a>	 * @param stmt the current JDBC statement
+</p><p><a href="#L1361">1361</a>	 * @throws SQLWarningException if not ignoring warnings
+</p><p><a href="#L1362">1362</a>	 * @see org.springframework.jdbc.SQLWarningException
+</p><p><a href="#L1363">1363</a>	 */
+</p><p><a href="#L1364">1364</a>	protected void handleWarnings(Statement stmt) throws SQLException {
+</p><p><a href="#L1365">1365</a>		if (isIgnoreWarnings()) {
+</p><p><a href="#L1366">1366</a>			if (logger.isDebugEnabled()) {
+</p><p><a href="#L1367">1367</a>				SQLWarning warningToLog = stmt.getWarnings();
+</p><p><a href="#L1368">1368</a>				while (warningToLog != null) {
+</p><p><a href="#L1369">1369</a>					logger.debug("SQLWarning ignored: SQL state '" + warningToLog.getSQLState() + "', error code '" +
+</p><p><a href="#L1370">1370</a>							warningToLog.getErrorCode() + "', message [" + warningToLog.getMessage() + "]");
+</p><p><a href="#L1371">1371</a>					warningToLog = warningToLog.getNextWarning();
+</p><p><a href="#L1372">1372</a>				}
+</p><p><a href="#L1373">1373</a>			}
+</p><p><a href="#L1374">1374</a>		}
+</p><p><a href="#L1375">1375</a>		else {
+</p><p><a href="#L1376">1376</a>			handleWarnings(stmt.getWarnings());
+</p><p><a href="#L1377">1377</a>		}
+</p><p><a href="#L1378">1378</a>	}
+</p><p><a href="#L1379">1379</a>
+</p><p><a href="#L1380">1380</a>	/**
+</p><p><a href="#L1381">1381</a>	 * Throw an SQLWarningException if encountering an actual warning.
+</p><p><a href="#L1382">1382</a>	 * @param warning the warnings object from the current statement.
+</p><p><a href="#L1383">1383</a>	 * May be {@code null}, in which case this method does nothing.
+</p><p><a href="#L1384">1384</a>	 * @throws SQLWarningException in case of an actual warning to be raised
+</p><p><a href="#L1385">1385</a>	 */
+</p><p><a href="#L1386">1386</a>	protected void handleWarnings(@Nullable SQLWarning warning) throws SQLWarningException {
+</p><p><a href="#L1387">1387</a>		if (warning != null) {
+</p><p><a href="#L1388">1388</a>			throw new SQLWarningException("Warning not ignored", warning);
+</p><p><a href="#L1389">1389</a>		}
+</p><p><a href="#L1390">1390</a>	}
+</p><p><a href="#L1391">1391</a>
+</p><p><a href="#L1392">1392</a>	/**
+</p><p><a href="#L1393">1393</a>	 * Translate the given {@link SQLException} into a generic {@link DataAccessException}.
+</p><p><a href="#L1394">1394</a>	 * @param task readable text describing the task being attempted
+</p><p><a href="#L1395">1395</a>	 * @param sql SQL query or update that caused the problem (may be {@code null})
+</p><p><a href="#L1396">1396</a>	 * @param ex the offending {@code SQLException}
+</p><p><a href="#L1397">1397</a>	 * @return a DataAccessException wrapping the {@code SQLException} (never {@code null})
+</p><p><a href="#L1398">1398</a>	 * @since 5.0
+</p><p><a href="#L1399">1399</a>	 * @see #getExceptionTranslator()
+</p><p><a href="#L1400">1400</a>	 */
+</p><p><a href="#L1401">1401</a>	protected DataAccessException translateException(String task, @Nullable String sql, SQLException ex) {
+</p><p><a href="#L1402">1402</a>		DataAccessException dae = getExceptionTranslator().translate(task, sql, ex);
+</p><p><a href="#L1403">1403</a>		return (dae != null ? dae : new UncategorizedSQLException(task, sql, ex));
+</p><p><a href="#L1404">1404</a>	}
+</p><p><a href="#L1405">1405</a>
+</p><p><a href="#L1406">1406</a>
+</p><p><a href="#L1407">1407</a>	/**
+</p><p><a href="#L1408">1408</a>	 * Determine SQL from potential provider object.
+</p><p><a href="#L1409">1409</a>	 * @param sqlProvider object that's potentially a SqlProvider
+</p><p><a href="#L1410">1410</a>	 * @return the SQL string, or {@code null}
+</p><p><a href="#L1411">1411</a>	 * @see SqlProvider
+</p><p><a href="#L1412">1412</a>	 */
+</p><p><a href="#L1413">1413</a>	@Nullable
+</p><p><a href="#L1414">1414</a>	private static String getSql(Object sqlProvider) {
+</p><p><a href="#L1415">1415</a>		if (sqlProvider instanceof SqlProvider) {
+</p><p><a href="#L1416">1416</a>			return ((SqlProvider) sqlProvider).getSql();
+</p><p><a href="#L1417">1417</a>		}
+</p><p><a href="#L1418">1418</a>		else {
+</p><p><a href="#L1419">1419</a>			return null;
+</p><p><a href="#L1420">1420</a>		}
+</p><p><a href="#L1421">1421</a>	}
+</p><p><a href="#L1422">1422</a>
+</p><p><a href="#L1423">1423</a>	private static &lt;T&gt; T result(@Nullable T result) {
+</p><p><a href="#L1424">1424</a>		Assert.state(result != null, "No result");
+</p><p><a href="#L1425">1425</a>		return result;
+</p><p><a href="#L1426">1426</a>	}
+</p><p><a href="#L1427">1427</a>
+</p><p><a href="#L1428">1428</a>	private static int updateCount(@Nullable Integer result) {
+</p><p><a href="#L1429">1429</a>		Assert.state(result != null, "No update count");
+</p><p><a href="#L1430">1430</a>		return result;
+</p><p><a href="#L1431">1431</a>	}
+</p><p><a href="#L1432">1432</a>
+</p><p><a href="#L1433">1433</a>
+</p><p><a href="#L1434">1434</a>	/**
+</p><p><a href="#L1435">1435</a>	 * Invocation handler that suppresses close calls on JDBC Connections.
+</p><p><a href="#L1436">1436</a>	 * Also prepares returned Statement (Prepared/CallbackStatement) objects.
+</p><p><a href="#L1437">1437</a>	 * @see java.sql.Connection#close()
+</p><p><a href="#L1438">1438</a>	 */
+</p><p><a href="#L1439">1439</a>	private class CloseSuppressingInvocationHandler implements InvocationHandler {
+</p><p><a href="#L1440">1440</a>
+</p><p><a href="#L1441">1441</a>		private final Connection target;
+</p><p><a href="#L1442">1442</a>
+</p><p><a href="#L1443">1443</a>		public CloseSuppressingInvocationHandler(Connection target) {
+</p><p><a href="#L1444">1444</a>			this.target = target;
+</p><p><a href="#L1445">1445</a>		}
+</p><p><a href="#L1446">1446</a>
+</p><p><a href="#L1447">1447</a>		@Override
+</p><p><a href="#L1448">1448</a>		@Nullable
+</p><p><a href="#L1449">1449</a>		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+</p><p><a href="#L1450">1450</a>			// Invocation on ConnectionProxy interface coming in...
+</p><p><a href="#L1451">1451</a>
+</p><p><a href="#L1452">1452</a>			if (method.getName().equals("equals")) {
+</p><p><a href="#L1453">1453</a>				// Only consider equal when proxies are identical.
+</p><p><a href="#L1454">1454</a>				return (proxy == args[0]);
+</p><p><a href="#L1455">1455</a>			}
+</p><p><a href="#L1456">1456</a>			else if (method.getName().equals("hashCode")) {
+</p><p><a href="#L1457">1457</a>				// Use hashCode of PersistenceManager proxy.
+</p><p><a href="#L1458">1458</a>				return System.identityHashCode(proxy);
+</p><p><a href="#L1459">1459</a>			}
+</p><p><a href="#L1460">1460</a>			else if (method.getName().equals("unwrap")) {
+</p><p><a href="#L1461">1461</a>				if (((Class&lt;?&gt;) args[0]).isInstance(proxy)) {
+</p><p><a href="#L1462">1462</a>					return proxy;
+</p><p><a href="#L1463">1463</a>				}
+</p><p><a href="#L1464">1464</a>			}
+</p><p><a href="#L1465">1465</a>			else if (method.getName().equals("isWrapperFor")) {
+</p><p><a href="#L1466">1466</a>				if (((Class&lt;?&gt;) args[0]).isInstance(proxy)) {
+</p><p><a href="#L1467">1467</a>					return true;
+</p><p><a href="#L1468">1468</a>				}
+</p><p><a href="#L1469">1469</a>			}
+</p><p><a href="#L1470">1470</a>			else if (method.getName().equals("close")) {
+</p><p><a href="#L1471">1471</a>				// Handle close method: suppress, not valid.
+</p><p><a href="#L1472">1472</a>				return null;
+</p><p><a href="#L1473">1473</a>			}
+</p><p><a href="#L1474">1474</a>			else if (method.getName().equals("isClosed")) {
+</p><p><a href="#L1475">1475</a>				return false;
+</p><p><a href="#L1476">1476</a>			}
+</p><p><a href="#L1477">1477</a>			else if (method.getName().equals("getTargetConnection")) {
+</p><p><a href="#L1478">1478</a>				// Handle getTargetConnection method: return underlying Connection.
+</p><p><a href="#L1479">1479</a>				return this.target;
+</p><p><a href="#L1480">1480</a>			}
+</p><p><a href="#L1481">1481</a>
+</p><p><a href="#L1482">1482</a>			// Invoke method on target Connection.
+</p><p><a href="#L1483">1483</a>			try {
+</p><p><a href="#L1484">1484</a>				Object retVal = method.invoke(this.target, args);
+</p><p><a href="#L1485">1485</a>
+</p><p><a href="#L1486">1486</a>				// If return value is a JDBC Statement, apply statement settings
+</p><p><a href="#L1487">1487</a>				// (fetch size, max rows, transaction timeout).
+</p><p><a href="#L1488">1488</a>				if (retVal instanceof Statement) {
+</p><p><a href="#L1489">1489</a>					applyStatementSettings(((Statement) retVal));
+</p><p><a href="#L1490">1490</a>				}
+</p><p><a href="#L1491">1491</a>
+</p><p><a href="#L1492">1492</a>				return retVal;
+</p><p><a href="#L1493">1493</a>			}
+</p><p><a href="#L1494">1494</a>			catch (InvocationTargetException ex) {
+</p><p><a href="#L1495">1495</a>				throw ex.getTargetException();
+</p><p><a href="#L1496">1496</a>			}
+</p><p><a href="#L1497">1497</a>		}
+</p><p><a href="#L1498">1498</a>	}
+</p><p><a href="#L1499">1499</a>
+</p><p><a href="#L1500">1500</a>
+</p><p><a href="#L1501">1501</a>	/**
+</p><p><a href="#L1502">1502</a>	 * Simple adapter for PreparedStatementCreator, allowing to use a plain SQL statement.
+</p><p><a href="#L1503">1503</a>	 */
+</p><p><a href="#L1504">1504</a>	private static class SimplePreparedStatementCreator implements PreparedStatementCreator, SqlProvider {
+</p><p><a href="#L1505">1505</a>
+</p><p><a href="#L1506">1506</a>		private final String sql;
+</p><p><a href="#L1507">1507</a>
+</p><p><a href="#L1508">1508</a>		public SimplePreparedStatementCreator(String sql) {
+</p><p><a href="#L1509">1509</a>			Assert.notNull(sql, "SQL must not be null");
+</p><p><a href="#L1510">1510</a>			this.sql = sql;
+</p><p><a href="#L1511">1511</a>		}
+</p><p><a href="#L1512">1512</a>
+</p><p><a href="#L1513">1513</a>		@Override
+</p><p><a href="#L1514">1514</a>		public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+</p><p><a href="#L1515">1515</a>			return con.prepareStatement(this.sql);
+</p><p><a href="#L1516">1516</a>		}
+</p><p><a href="#L1517">1517</a>
+</p><p><a href="#L1518">1518</a>		@Override
+</p><p><a href="#L1519">1519</a>		public String getSql() {
+</p><p><a href="#L1520">1520</a>			return this.sql;
+</p><p><a href="#L1521">1521</a>		}
+</p><p><a href="#L1522">1522</a>	}
+</p><p><a href="#L1523">1523</a>
+</p><p><a href="#L1524">1524</a>
+</p><p><a href="#L1525">1525</a>	/**
+</p><p><a href="#L1526">1526</a>	 * Simple adapter for CallableStatementCreator, allowing to use a plain SQL statement.
+</p><p><a href="#L1527">1527</a>	 */
+</p><p><a href="#L1528">1528</a>	private static class SimpleCallableStatementCreator implements CallableStatementCreator, SqlProvider {
+</p><p><a href="#L1529">1529</a>
+</p><p><a href="#L1530">1530</a>		private final String callString;
+</p><p><a href="#L1531">1531</a>
+</p><p><a href="#L1532">1532</a>		public SimpleCallableStatementCreator(String callString) {
+</p><p><a href="#L1533">1533</a>			Assert.notNull(callString, "Call string must not be null");
+</p><p><a href="#L1534">1534</a>			this.callString = callString;
+</p><p><a href="#L1535">1535</a>		}
+</p><p><a href="#L1536">1536</a>
+</p><p><a href="#L1537">1537</a>		@Override
+</p><p><a href="#L1538">1538</a>		public CallableStatement createCallableStatement(Connection con) throws SQLException {
+</p><p><a href="#L1539">1539</a>			return con.prepareCall(this.callString);
+</p><p><a href="#L1540">1540</a>		}
+</p><p><a href="#L1541">1541</a>
+</p><p><a href="#L1542">1542</a>		@Override
+</p><p><a href="#L1543">1543</a>		public String getSql() {
+</p><p><a href="#L1544">1544</a>			return this.callString;
+</p><p><a href="#L1545">1545</a>		}
+</p><p><a href="#L1546">1546</a>	}
+</p><p><a href="#L1547">1547</a>
+</p><p><a href="#L1548">1548</a>
+</p><p><a href="#L1549">1549</a>	/**
+</p><p><a href="#L1550">1550</a>	 * Adapter to enable use of a RowCallbackHandler inside a ResultSetExtractor.
+</p><p><a href="#L1551">1551</a>	 * &lt;p&gt;Uses a regular ResultSet, so we have to be careful when using it:
+</p><p><a href="#L1552">1552</a>	 * We don't use it for navigating since this could lead to unpredictable consequences.
+</p><p><a href="#L1553">1553</a>	 */
+</p><p><a href="#L1554">1554</a>	private static class RowCallbackHandlerResultSetExtractor implements ResultSetExtractor&lt;Object&gt; {
+</p><p><a href="#L1555">1555</a>
+</p><p><a href="#L1556">1556</a>		private final RowCallbackHandler rch;
+</p><p><a href="#L1557">1557</a>
+</p><p><a href="#L1558">1558</a>		public RowCallbackHandlerResultSetExtractor(RowCallbackHandler rch) {
+</p><p><a href="#L1559">1559</a>			this.rch = rch;
+</p><p><a href="#L1560">1560</a>		}
+</p><p><a href="#L1561">1561</a>
+</p><p><a href="#L1562">1562</a>		@Override
+</p><p><a href="#L1563">1563</a>		@Nullable
+</p><p><a href="#L1564">1564</a>		public Object extractData(ResultSet rs) throws SQLException {
+</p><p><a href="#L1565">1565</a>			while (rs.next()) {
+</p><p><a href="#L1566">1566</a>				this.rch.processRow(rs);
+</p><p><a href="#L1567">1567</a>			}
+</p><p><a href="#L1568">1568</a>			return null;
+</p><p><a href="#L1569">1569</a>		}
+</p><p><a href="#L1570">1570</a>	}
+</p><p><a href="#L1571">1571</a>
+</p><p><a href="#L1572">1572</a>}
+</p></pre></body></html>

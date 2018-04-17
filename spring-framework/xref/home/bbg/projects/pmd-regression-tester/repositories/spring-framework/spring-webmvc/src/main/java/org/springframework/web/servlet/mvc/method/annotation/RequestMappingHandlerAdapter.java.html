@@ -1,0 +1,1021 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2018 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.web.servlet.mvc.method.annotation;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.lang.reflect.Method;
+</p><p><a href="#L20">20</a>import java.util.ArrayList;
+</p><p><a href="#L21">21</a>import java.util.LinkedHashMap;
+</p><p><a href="#L22">22</a>import java.util.List;
+</p><p><a href="#L23">23</a>import java.util.Map;
+</p><p><a href="#L24">24</a>import java.util.Set;
+</p><p><a href="#L25">25</a>import java.util.concurrent.Callable;
+</p><p><a href="#L26">26</a>import java.util.concurrent.ConcurrentHashMap;
+</p><p><a href="#L27">27</a>import javax.servlet.http.HttpServletRequest;
+</p><p><a href="#L28">28</a>import javax.servlet.http.HttpServletResponse;
+</p><p><a href="#L29">29</a>import javax.servlet.http.HttpSession;
+</p><p><a href="#L30">30</a>
+</p><p><a href="#L31">31</a>import org.springframework.beans.factory.BeanFactory;
+</p><p><a href="#L32">32</a>import org.springframework.beans.factory.BeanFactoryAware;
+</p><p><a href="#L33">33</a>import org.springframework.beans.factory.InitializingBean;
+</p><p><a href="#L34">34</a>import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+</p><p><a href="#L35">35</a>import org.springframework.core.DefaultParameterNameDiscoverer;
+</p><p><a href="#L36">36</a>import org.springframework.core.MethodIntrospector;
+</p><p><a href="#L37">37</a>import org.springframework.core.ParameterNameDiscoverer;
+</p><p><a href="#L38">38</a>import org.springframework.core.ReactiveAdapterRegistry;
+</p><p><a href="#L39">39</a>import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+</p><p><a href="#L40">40</a>import org.springframework.core.annotation.AnnotationUtils;
+</p><p><a href="#L41">41</a>import org.springframework.core.task.AsyncTaskExecutor;
+</p><p><a href="#L42">42</a>import org.springframework.core.task.SimpleAsyncTaskExecutor;
+</p><p><a href="#L43">43</a>import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+</p><p><a href="#L44">44</a>import org.springframework.http.converter.HttpMessageConverter;
+</p><p><a href="#L45">45</a>import org.springframework.http.converter.StringHttpMessageConverter;
+</p><p><a href="#L46">46</a>import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+</p><p><a href="#L47">47</a>import org.springframework.http.converter.xml.SourceHttpMessageConverter;
+</p><p><a href="#L48">48</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L49">49</a>import org.springframework.ui.ModelMap;
+</p><p><a href="#L50">50</a>import org.springframework.util.CollectionUtils;
+</p><p><a href="#L51">51</a>import org.springframework.util.ReflectionUtils.MethodFilter;
+</p><p><a href="#L52">52</a>import org.springframework.web.accept.ContentNegotiationManager;
+</p><p><a href="#L53">53</a>import org.springframework.web.bind.annotation.InitBinder;
+</p><p><a href="#L54">54</a>import org.springframework.web.bind.annotation.ModelAttribute;
+</p><p><a href="#L55">55</a>import org.springframework.web.bind.annotation.RequestMapping;
+</p><p><a href="#L56">56</a>import org.springframework.web.bind.support.DefaultDataBinderFactory;
+</p><p><a href="#L57">57</a>import org.springframework.web.bind.support.DefaultSessionAttributeStore;
+</p><p><a href="#L58">58</a>import org.springframework.web.bind.support.SessionAttributeStore;
+</p><p><a href="#L59">59</a>import org.springframework.web.bind.support.WebBindingInitializer;
+</p><p><a href="#L60">60</a>import org.springframework.web.bind.support.WebDataBinderFactory;
+</p><p><a href="#L61">61</a>import org.springframework.web.context.request.NativeWebRequest;
+</p><p><a href="#L62">62</a>import org.springframework.web.context.request.ServletWebRequest;
+</p><p><a href="#L63">63</a>import org.springframework.web.context.request.WebRequest;
+</p><p><a href="#L64">64</a>import org.springframework.web.context.request.async.AsyncWebRequest;
+</p><p><a href="#L65">65</a>import org.springframework.web.context.request.async.CallableProcessingInterceptor;
+</p><p><a href="#L66">66</a>import org.springframework.web.context.request.async.DeferredResultProcessingInterceptor;
+</p><p><a href="#L67">67</a>import org.springframework.web.context.request.async.WebAsyncManager;
+</p><p><a href="#L68">68</a>import org.springframework.web.context.request.async.WebAsyncTask;
+</p><p><a href="#L69">69</a>import org.springframework.web.context.request.async.WebAsyncUtils;
+</p><p><a href="#L70">70</a>import org.springframework.web.method.ControllerAdviceBean;
+</p><p><a href="#L71">71</a>import org.springframework.web.method.HandlerMethod;
+</p><p><a href="#L72">72</a>import org.springframework.web.method.annotation.ErrorsMethodArgumentResolver;
+</p><p><a href="#L73">73</a>import org.springframework.web.method.annotation.ExpressionValueMethodArgumentResolver;
+</p><p><a href="#L74">74</a>import org.springframework.web.method.annotation.InitBinderDataBinderFactory;
+</p><p><a href="#L75">75</a>import org.springframework.web.method.annotation.MapMethodProcessor;
+</p><p><a href="#L76">76</a>import org.springframework.web.method.annotation.ModelAttributeMethodProcessor;
+</p><p><a href="#L77">77</a>import org.springframework.web.method.annotation.ModelFactory;
+</p><p><a href="#L78">78</a>import org.springframework.web.method.annotation.ModelMethodProcessor;
+</p><p><a href="#L79">79</a>import org.springframework.web.method.annotation.RequestHeaderMapMethodArgumentResolver;
+</p><p><a href="#L80">80</a>import org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver;
+</p><p><a href="#L81">81</a>import org.springframework.web.method.annotation.RequestParamMapMethodArgumentResolver;
+</p><p><a href="#L82">82</a>import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
+</p><p><a href="#L83">83</a>import org.springframework.web.method.annotation.SessionAttributesHandler;
+</p><p><a href="#L84">84</a>import org.springframework.web.method.annotation.SessionStatusMethodArgumentResolver;
+</p><p><a href="#L85">85</a>import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+</p><p><a href="#L86">86</a>import org.springframework.web.method.support.HandlerMethodArgumentResolverComposite;
+</p><p><a href="#L87">87</a>import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+</p><p><a href="#L88">88</a>import org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite;
+</p><p><a href="#L89">89</a>import org.springframework.web.method.support.InvocableHandlerMethod;
+</p><p><a href="#L90">90</a>import org.springframework.web.method.support.ModelAndViewContainer;
+</p><p><a href="#L91">91</a>import org.springframework.web.servlet.ModelAndView;
+</p><p><a href="#L92">92</a>import org.springframework.web.servlet.View;
+</p><p><a href="#L93">93</a>import org.springframework.web.servlet.mvc.annotation.ModelAndViewResolver;
+</p><p><a href="#L94">94</a>import org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter;
+</p><p><a href="#L95">95</a>import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+</p><p><a href="#L96">96</a>import org.springframework.web.servlet.support.RequestContextUtils;
+</p><p><a href="#L97">97</a>import org.springframework.web.util.WebUtils;
+</p><p><a href="#L98">98</a>
+</p><p><a href="#L99">99</a>/**
+</p><p><a href="#L100">100</a> * Extension of {@link AbstractHandlerMethodAdapter} that supports
+</p><p><a href="#L101">101</a> * {@link RequestMapping} annotated {@code HandlerMethod}s.
+</p><p><a href="#L102">102</a> *
+</p><p><a href="#L103">103</a> * &lt;p&gt;Support for custom argument and return value types can be added via
+</p><p><a href="#L104">104</a> * {@link #setCustomArgumentResolvers} and {@link #setCustomReturnValueHandlers},
+</p><p><a href="#L105">105</a> * or alternatively, to re-configure all argument and return value types,
+</p><p><a href="#L106">106</a> * use {@link #setArgumentResolvers} and {@link #setReturnValueHandlers}.
+</p><p><a href="#L107">107</a> *
+</p><p><a href="#L108">108</a> * @author Rossen Stoyanchev
+</p><p><a href="#L109">109</a> * @author Juergen Hoeller
+</p><p><a href="#L110">110</a> * @since 3.1
+</p><p><a href="#L111">111</a> * @see HandlerMethodArgumentResolver
+</p><p><a href="#L112">112</a> * @see HandlerMethodReturnValueHandler
+</p><p><a href="#L113">113</a> */
+</p><p><a href="#L114">114</a>public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
+</p><p><a href="#L115">115</a>		implements BeanFactoryAware, InitializingBean {
+</p><p><a href="#L116">116</a>
+</p><p><a href="#L117">117</a>	@Nullable
+</p><p><a href="#L118">118</a>	private List&lt;HandlerMethodArgumentResolver&gt; customArgumentResolvers;
+</p><p><a href="#L119">119</a>
+</p><p><a href="#L120">120</a>	@Nullable
+</p><p><a href="#L121">121</a>	private HandlerMethodArgumentResolverComposite argumentResolvers;
+</p><p><a href="#L122">122</a>
+</p><p><a href="#L123">123</a>	@Nullable
+</p><p><a href="#L124">124</a>	private HandlerMethodArgumentResolverComposite initBinderArgumentResolvers;
+</p><p><a href="#L125">125</a>
+</p><p><a href="#L126">126</a>	@Nullable
+</p><p><a href="#L127">127</a>	private List&lt;HandlerMethodReturnValueHandler&gt; customReturnValueHandlers;
+</p><p><a href="#L128">128</a>
+</p><p><a href="#L129">129</a>	@Nullable
+</p><p><a href="#L130">130</a>	private HandlerMethodReturnValueHandlerComposite returnValueHandlers;
+</p><p><a href="#L131">131</a>
+</p><p><a href="#L132">132</a>	@Nullable
+</p><p><a href="#L133">133</a>	private List&lt;ModelAndViewResolver&gt; modelAndViewResolvers;
+</p><p><a href="#L134">134</a>
+</p><p><a href="#L135">135</a>	private ContentNegotiationManager contentNegotiationManager = new ContentNegotiationManager();
+</p><p><a href="#L136">136</a>
+</p><p><a href="#L137">137</a>	private List&lt;HttpMessageConverter&lt;?&gt;&gt; messageConverters;
+</p><p><a href="#L138">138</a>
+</p><p><a href="#L139">139</a>	private List&lt;Object&gt; requestResponseBodyAdvice = new ArrayList&lt;&gt;();
+</p><p><a href="#L140">140</a>
+</p><p><a href="#L141">141</a>	@Nullable
+</p><p><a href="#L142">142</a>	private WebBindingInitializer webBindingInitializer;
+</p><p><a href="#L143">143</a>
+</p><p><a href="#L144">144</a>	private AsyncTaskExecutor taskExecutor = new SimpleAsyncTaskExecutor("MvcAsync");
+</p><p><a href="#L145">145</a>
+</p><p><a href="#L146">146</a>	@Nullable
+</p><p><a href="#L147">147</a>	private Long asyncRequestTimeout;
+</p><p><a href="#L148">148</a>
+</p><p><a href="#L149">149</a>	private CallableProcessingInterceptor[] callableInterceptors = new CallableProcessingInterceptor[0];
+</p><p><a href="#L150">150</a>
+</p><p><a href="#L151">151</a>	private DeferredResultProcessingInterceptor[] deferredResultInterceptors = new DeferredResultProcessingInterceptor[0];
+</p><p><a href="#L152">152</a>
+</p><p><a href="#L153">153</a>	private ReactiveAdapterRegistry reactiveAdapterRegistry = ReactiveAdapterRegistry.getSharedInstance();
+</p><p><a href="#L154">154</a>
+</p><p><a href="#L155">155</a>	private boolean ignoreDefaultModelOnRedirect = false;
+</p><p><a href="#L156">156</a>
+</p><p><a href="#L157">157</a>	private int cacheSecondsForSessionAttributeHandlers = 0;
+</p><p><a href="#L158">158</a>
+</p><p><a href="#L159">159</a>	private boolean synchronizeOnSession = false;
+</p><p><a href="#L160">160</a>
+</p><p><a href="#L161">161</a>	private SessionAttributeStore sessionAttributeStore = new DefaultSessionAttributeStore();
+</p><p><a href="#L162">162</a>
+</p><p><a href="#L163">163</a>	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+</p><p><a href="#L164">164</a>
+</p><p><a href="#L165">165</a>	@Nullable
+</p><p><a href="#L166">166</a>	private ConfigurableBeanFactory beanFactory;
+</p><p><a href="#L167">167</a>
+</p><p><a href="#L168">168</a>
+</p><p><a href="#L169">169</a>	private final Map&lt;Class&lt;?&gt;, SessionAttributesHandler&gt; sessionAttributesHandlerCache = new ConcurrentHashMap&lt;&gt;(64);
+</p><p><a href="#L170">170</a>
+</p><p><a href="#L171">171</a>	private final Map&lt;Class&lt;?&gt;, Set&lt;Method&gt;&gt; initBinderCache = new ConcurrentHashMap&lt;&gt;(64);
+</p><p><a href="#L172">172</a>
+</p><p><a href="#L173">173</a>	private final Map&lt;ControllerAdviceBean, Set&lt;Method&gt;&gt; initBinderAdviceCache = new LinkedHashMap&lt;&gt;();
+</p><p><a href="#L174">174</a>
+</p><p><a href="#L175">175</a>	private final Map&lt;Class&lt;?&gt;, Set&lt;Method&gt;&gt; modelAttributeCache = new ConcurrentHashMap&lt;&gt;(64);
+</p><p><a href="#L176">176</a>
+</p><p><a href="#L177">177</a>	private final Map&lt;ControllerAdviceBean, Set&lt;Method&gt;&gt; modelAttributeAdviceCache = new LinkedHashMap&lt;&gt;();
+</p><p><a href="#L178">178</a>
+</p><p><a href="#L179">179</a>
+</p><p><a href="#L180">180</a>	public RequestMappingHandlerAdapter() {
+</p><p><a href="#L181">181</a>		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
+</p><p><a href="#L182">182</a>		stringHttpMessageConverter.setWriteAcceptCharset(false);  // see SPR-7316
+</p><p><a href="#L183">183</a>
+</p><p><a href="#L184">184</a>		this.messageConverters = new ArrayList&lt;&gt;(4);
+</p><p><a href="#L185">185</a>		this.messageConverters.add(new ByteArrayHttpMessageConverter());
+</p><p><a href="#L186">186</a>		this.messageConverters.add(stringHttpMessageConverter);
+</p><p><a href="#L187">187</a>		this.messageConverters.add(new SourceHttpMessageConverter&lt;&gt;());
+</p><p><a href="#L188">188</a>		this.messageConverters.add(new AllEncompassingFormHttpMessageConverter());
+</p><p><a href="#L189">189</a>	}
+</p><p><a href="#L190">190</a>
+</p><p><a href="#L191">191</a>
+</p><p><a href="#L192">192</a>	/**
+</p><p><a href="#L193">193</a>	 * Provide resolvers for custom argument types. Custom resolvers are ordered
+</p><p><a href="#L194">194</a>	 * after built-in ones. To override the built-in support for argument
+</p><p><a href="#L195">195</a>	 * resolution use {@link #setArgumentResolvers} instead.
+</p><p><a href="#L196">196</a>	 */
+</p><p><a href="#L197">197</a>	public void setCustomArgumentResolvers(@Nullable List&lt;HandlerMethodArgumentResolver&gt; argumentResolvers) {
+</p><p><a href="#L198">198</a>		this.customArgumentResolvers = argumentResolvers;
+</p><p><a href="#L199">199</a>	}
+</p><p><a href="#L200">200</a>
+</p><p><a href="#L201">201</a>	/**
+</p><p><a href="#L202">202</a>	 * Return the custom argument resolvers, or {@code null}.
+</p><p><a href="#L203">203</a>	 */
+</p><p><a href="#L204">204</a>	@Nullable
+</p><p><a href="#L205">205</a>	public List&lt;HandlerMethodArgumentResolver&gt; getCustomArgumentResolvers() {
+</p><p><a href="#L206">206</a>		return this.customArgumentResolvers;
+</p><p><a href="#L207">207</a>	}
+</p><p><a href="#L208">208</a>
+</p><p><a href="#L209">209</a>	/**
+</p><p><a href="#L210">210</a>	 * Configure the complete list of supported argument types thus overriding
+</p><p><a href="#L211">211</a>	 * the resolvers that would otherwise be configured by default.
+</p><p><a href="#L212">212</a>	 */
+</p><p><a href="#L213">213</a>	public void setArgumentResolvers(@Nullable List&lt;HandlerMethodArgumentResolver&gt; argumentResolvers) {
+</p><p><a href="#L214">214</a>		if (argumentResolvers == null) {
+</p><p><a href="#L215">215</a>			this.argumentResolvers = null;
+</p><p><a href="#L216">216</a>		}
+</p><p><a href="#L217">217</a>		else {
+</p><p><a href="#L218">218</a>			this.argumentResolvers = new HandlerMethodArgumentResolverComposite();
+</p><p><a href="#L219">219</a>			this.argumentResolvers.addResolvers(argumentResolvers);
+</p><p><a href="#L220">220</a>		}
+</p><p><a href="#L221">221</a>	}
+</p><p><a href="#L222">222</a>
+</p><p><a href="#L223">223</a>	/**
+</p><p><a href="#L224">224</a>	 * Return the configured argument resolvers, or possibly {@code null} if
+</p><p><a href="#L225">225</a>	 * not initialized yet via {@link #afterPropertiesSet()}.
+</p><p><a href="#L226">226</a>	 */
+</p><p><a href="#L227">227</a>	@Nullable
+</p><p><a href="#L228">228</a>	public List&lt;HandlerMethodArgumentResolver&gt; getArgumentResolvers() {
+</p><p><a href="#L229">229</a>		return (this.argumentResolvers != null ? this.argumentResolvers.getResolvers() : null);
+</p><p><a href="#L230">230</a>	}
+</p><p><a href="#L231">231</a>
+</p><p><a href="#L232">232</a>	/**
+</p><p><a href="#L233">233</a>	 * Configure the supported argument types in {@code @InitBinder} methods.
+</p><p><a href="#L234">234</a>	 */
+</p><p><a href="#L235">235</a>	public void setInitBinderArgumentResolvers(@Nullable List&lt;HandlerMethodArgumentResolver&gt; argumentResolvers) {
+</p><p><a href="#L236">236</a>		if (argumentResolvers == null) {
+</p><p><a href="#L237">237</a>			this.initBinderArgumentResolvers = null;
+</p><p><a href="#L238">238</a>		}
+</p><p><a href="#L239">239</a>		else {
+</p><p><a href="#L240">240</a>			this.initBinderArgumentResolvers = new HandlerMethodArgumentResolverComposite();
+</p><p><a href="#L241">241</a>			this.initBinderArgumentResolvers.addResolvers(argumentResolvers);
+</p><p><a href="#L242">242</a>		}
+</p><p><a href="#L243">243</a>	}
+</p><p><a href="#L244">244</a>
+</p><p><a href="#L245">245</a>	/**
+</p><p><a href="#L246">246</a>	 * Return the argument resolvers for {@code @InitBinder} methods, or possibly
+</p><p><a href="#L247">247</a>	 * {@code null} if not initialized yet via {@link #afterPropertiesSet()}.
+</p><p><a href="#L248">248</a>	 */
+</p><p><a href="#L249">249</a>	@Nullable
+</p><p><a href="#L250">250</a>	public List&lt;HandlerMethodArgumentResolver&gt; getInitBinderArgumentResolvers() {
+</p><p><a href="#L251">251</a>		return (this.initBinderArgumentResolvers != null ? this.initBinderArgumentResolvers.getResolvers() : null);
+</p><p><a href="#L252">252</a>	}
+</p><p><a href="#L253">253</a>
+</p><p><a href="#L254">254</a>	/**
+</p><p><a href="#L255">255</a>	 * Provide handlers for custom return value types. Custom handlers are
+</p><p><a href="#L256">256</a>	 * ordered after built-in ones. To override the built-in support for
+</p><p><a href="#L257">257</a>	 * return value handling use {@link #setReturnValueHandlers}.
+</p><p><a href="#L258">258</a>	 */
+</p><p><a href="#L259">259</a>	public void setCustomReturnValueHandlers(@Nullable List&lt;HandlerMethodReturnValueHandler&gt; returnValueHandlers) {
+</p><p><a href="#L260">260</a>		this.customReturnValueHandlers = returnValueHandlers;
+</p><p><a href="#L261">261</a>	}
+</p><p><a href="#L262">262</a>
+</p><p><a href="#L263">263</a>	/**
+</p><p><a href="#L264">264</a>	 * Return the custom return value handlers, or {@code null}.
+</p><p><a href="#L265">265</a>	 */
+</p><p><a href="#L266">266</a>	@Nullable
+</p><p><a href="#L267">267</a>	public List&lt;HandlerMethodReturnValueHandler&gt; getCustomReturnValueHandlers() {
+</p><p><a href="#L268">268</a>		return this.customReturnValueHandlers;
+</p><p><a href="#L269">269</a>	}
+</p><p><a href="#L270">270</a>
+</p><p><a href="#L271">271</a>	/**
+</p><p><a href="#L272">272</a>	 * Configure the complete list of supported return value types thus
+</p><p><a href="#L273">273</a>	 * overriding handlers that would otherwise be configured by default.
+</p><p><a href="#L274">274</a>	 */
+</p><p><a href="#L275">275</a>	public void setReturnValueHandlers(@Nullable List&lt;HandlerMethodReturnValueHandler&gt; returnValueHandlers) {
+</p><p><a href="#L276">276</a>		if (returnValueHandlers == null) {
+</p><p><a href="#L277">277</a>			this.returnValueHandlers = null;
+</p><p><a href="#L278">278</a>		}
+</p><p><a href="#L279">279</a>		else {
+</p><p><a href="#L280">280</a>			this.returnValueHandlers = new HandlerMethodReturnValueHandlerComposite();
+</p><p><a href="#L281">281</a>			this.returnValueHandlers.addHandlers(returnValueHandlers);
+</p><p><a href="#L282">282</a>		}
+</p><p><a href="#L283">283</a>	}
+</p><p><a href="#L284">284</a>
+</p><p><a href="#L285">285</a>	/**
+</p><p><a href="#L286">286</a>	 * Return the configured handlers, or possibly {@code null} if not
+</p><p><a href="#L287">287</a>	 * initialized yet via {@link #afterPropertiesSet()}.
+</p><p><a href="#L288">288</a>	 */
+</p><p><a href="#L289">289</a>	@Nullable
+</p><p><a href="#L290">290</a>	public List&lt;HandlerMethodReturnValueHandler&gt; getReturnValueHandlers() {
+</p><p><a href="#L291">291</a>		return (this.returnValueHandlers != null ? this.returnValueHandlers.getHandlers() : null);
+</p><p><a href="#L292">292</a>	}
+</p><p><a href="#L293">293</a>
+</p><p><a href="#L294">294</a>	/**
+</p><p><a href="#L295">295</a>	 * Provide custom {@link ModelAndViewResolver}s.
+</p><p><a href="#L296">296</a>	 * &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; This method is available for backwards
+</p><p><a href="#L297">297</a>	 * compatibility only. However, it is recommended to re-write a
+</p><p><a href="#L298">298</a>	 * {@code ModelAndViewResolver} as {@link HandlerMethodReturnValueHandler}.
+</p><p><a href="#L299">299</a>	 * An adapter between the two interfaces is not possible since the
+</p><p><a href="#L300">300</a>	 * {@link HandlerMethodReturnValueHandler#supportsReturnType} method
+</p><p><a href="#L301">301</a>	 * cannot be implemented. Hence {@code ModelAndViewResolver}s are limited
+</p><p><a href="#L302">302</a>	 * to always being invoked at the end after all other return value
+</p><p><a href="#L303">303</a>	 * handlers have been given a chance.
+</p><p><a href="#L304">304</a>	 * &lt;p&gt;A {@code HandlerMethodReturnValueHandler} provides better access to
+</p><p><a href="#L305">305</a>	 * the return type and controller method information and can be ordered
+</p><p><a href="#L306">306</a>	 * freely relative to other return value handlers.
+</p><p><a href="#L307">307</a>	 */
+</p><p><a href="#L308">308</a>	public void setModelAndViewResolvers(@Nullable List&lt;ModelAndViewResolver&gt; modelAndViewResolvers) {
+</p><p><a href="#L309">309</a>		this.modelAndViewResolvers = modelAndViewResolvers;
+</p><p><a href="#L310">310</a>	}
+</p><p><a href="#L311">311</a>
+</p><p><a href="#L312">312</a>	/**
+</p><p><a href="#L313">313</a>	 * Return the configured {@link ModelAndViewResolver}s, or {@code null}.
+</p><p><a href="#L314">314</a>	 */
+</p><p><a href="#L315">315</a>	@Nullable
+</p><p><a href="#L316">316</a>	public List&lt;ModelAndViewResolver&gt; getModelAndViewResolvers() {
+</p><p><a href="#L317">317</a>		return this.modelAndViewResolvers;
+</p><p><a href="#L318">318</a>	}
+</p><p><a href="#L319">319</a>
+</p><p><a href="#L320">320</a>	/**
+</p><p><a href="#L321">321</a>	 * Set the {@link ContentNegotiationManager} to use to determine requested media types.
+</p><p><a href="#L322">322</a>	 * If not set, the default constructor is used.
+</p><p><a href="#L323">323</a>	 */
+</p><p><a href="#L324">324</a>	public void setContentNegotiationManager(ContentNegotiationManager contentNegotiationManager) {
+</p><p><a href="#L325">325</a>		this.contentNegotiationManager = contentNegotiationManager;
+</p><p><a href="#L326">326</a>	}
+</p><p><a href="#L327">327</a>
+</p><p><a href="#L328">328</a>	/**
+</p><p><a href="#L329">329</a>	 * Provide the converters to use in argument resolvers and return value
+</p><p><a href="#L330">330</a>	 * handlers that support reading and/or writing to the body of the
+</p><p><a href="#L331">331</a>	 * request and response.
+</p><p><a href="#L332">332</a>	 */
+</p><p><a href="#L333">333</a>	public void setMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; messageConverters) {
+</p><p><a href="#L334">334</a>		this.messageConverters = messageConverters;
+</p><p><a href="#L335">335</a>	}
+</p><p><a href="#L336">336</a>
+</p><p><a href="#L337">337</a>	/**
+</p><p><a href="#L338">338</a>	 * Return the configured message body converters.
+</p><p><a href="#L339">339</a>	 */
+</p><p><a href="#L340">340</a>	public List&lt;HttpMessageConverter&lt;?&gt;&gt; getMessageConverters() {
+</p><p><a href="#L341">341</a>		return this.messageConverters;
+</p><p><a href="#L342">342</a>	}
+</p><p><a href="#L343">343</a>
+</p><p><a href="#L344">344</a>	/**
+</p><p><a href="#L345">345</a>	 * Add one or more {@code RequestBodyAdvice} instances to intercept the
+</p><p><a href="#L346">346</a>	 * request before it is read and converted for {@code @RequestBody} and
+</p><p><a href="#L347">347</a>	 * {@code HttpEntity} method arguments.
+</p><p><a href="#L348">348</a>	 */
+</p><p><a href="#L349">349</a>	public void setRequestBodyAdvice(@Nullable List&lt;RequestBodyAdvice&gt; requestBodyAdvice) {
+</p><p><a href="#L350">350</a>		if (requestBodyAdvice != null) {
+</p><p><a href="#L351">351</a>			this.requestResponseBodyAdvice.addAll(requestBodyAdvice);
+</p><p><a href="#L352">352</a>		}
+</p><p><a href="#L353">353</a>	}
+</p><p><a href="#L354">354</a>
+</p><p><a href="#L355">355</a>	/**
+</p><p><a href="#L356">356</a>	 * Add one or more {@code ResponseBodyAdvice} instances to intercept the
+</p><p><a href="#L357">357</a>	 * response before {@code @ResponseBody} or {@code ResponseEntity} return
+</p><p><a href="#L358">358</a>	 * values are written to the response body.
+</p><p><a href="#L359">359</a>	 */
+</p><p><a href="#L360">360</a>	public void setResponseBodyAdvice(@Nullable List&lt;ResponseBodyAdvice&lt;?&gt;&gt; responseBodyAdvice) {
+</p><p><a href="#L361">361</a>		if (responseBodyAdvice != null) {
+</p><p><a href="#L362">362</a>			this.requestResponseBodyAdvice.addAll(responseBodyAdvice);
+</p><p><a href="#L363">363</a>		}
+</p><p><a href="#L364">364</a>	}
+</p><p><a href="#L365">365</a>
+</p><p><a href="#L366">366</a>	/**
+</p><p><a href="#L367">367</a>	 * Provide a WebBindingInitializer with "global" initialization to apply
+</p><p><a href="#L368">368</a>	 * to every DataBinder instance.
+</p><p><a href="#L369">369</a>	 */
+</p><p><a href="#L370">370</a>	public void setWebBindingInitializer(@Nullable WebBindingInitializer webBindingInitializer) {
+</p><p><a href="#L371">371</a>		this.webBindingInitializer = webBindingInitializer;
+</p><p><a href="#L372">372</a>	}
+</p><p><a href="#L373">373</a>
+</p><p><a href="#L374">374</a>	/**
+</p><p><a href="#L375">375</a>	 * Return the configured WebBindingInitializer, or {@code null} if none.
+</p><p><a href="#L376">376</a>	 */
+</p><p><a href="#L377">377</a>	@Nullable
+</p><p><a href="#L378">378</a>	public WebBindingInitializer getWebBindingInitializer() {
+</p><p><a href="#L379">379</a>		return this.webBindingInitializer;
+</p><p><a href="#L380">380</a>	}
+</p><p><a href="#L381">381</a>
+</p><p><a href="#L382">382</a>	/**
+</p><p><a href="#L383">383</a>	 * Set the default {@link AsyncTaskExecutor} to use when a controller method
+</p><p><a href="#L384">384</a>	 * return a {@link Callable}. Controller methods can override this default on
+</p><p><a href="#L385">385</a>	 * a per-request basis by returning an {@link WebAsyncTask}.
+</p><p><a href="#L386">386</a>	 * &lt;p&gt;By default a {@link SimpleAsyncTaskExecutor} instance is used.
+</p><p><a href="#L387">387</a>	 * It's recommended to change that default in production as the simple executor
+</p><p><a href="#L388">388</a>	 * does not re-use threads.
+</p><p><a href="#L389">389</a>	 */
+</p><p><a href="#L390">390</a>	public void setTaskExecutor(AsyncTaskExecutor taskExecutor) {
+</p><p><a href="#L391">391</a>		this.taskExecutor = taskExecutor;
+</p><p><a href="#L392">392</a>	}
+</p><p><a href="#L393">393</a>
+</p><p><a href="#L394">394</a>	/**
+</p><p><a href="#L395">395</a>	 * Specify the amount of time, in milliseconds, before concurrent handling
+</p><p><a href="#L396">396</a>	 * should time out. In Servlet 3, the timeout begins after the main request
+</p><p><a href="#L397">397</a>	 * processing thread has exited and ends when the request is dispatched again
+</p><p><a href="#L398">398</a>	 * for further processing of the concurrently produced result.
+</p><p><a href="#L399">399</a>	 * &lt;p&gt;If this value is not set, the default timeout of the underlying
+</p><p><a href="#L400">400</a>	 * implementation is used, e.g. 10 seconds on Tomcat with Servlet 3.
+</p><p><a href="#L401">401</a>	 * @param timeout the timeout value in milliseconds
+</p><p><a href="#L402">402</a>	 */
+</p><p><a href="#L403">403</a>	public void setAsyncRequestTimeout(long timeout) {
+</p><p><a href="#L404">404</a>		this.asyncRequestTimeout = timeout;
+</p><p><a href="#L405">405</a>	}
+</p><p><a href="#L406">406</a>
+</p><p><a href="#L407">407</a>	/**
+</p><p><a href="#L408">408</a>	 * Configure {@code CallableProcessingInterceptor}'s to register on async requests.
+</p><p><a href="#L409">409</a>	 * @param interceptors the interceptors to register
+</p><p><a href="#L410">410</a>	 */
+</p><p><a href="#L411">411</a>	public void setCallableInterceptors(List&lt;CallableProcessingInterceptor&gt; interceptors) {
+</p><p><a href="#L412">412</a>		this.callableInterceptors = interceptors.toArray(new CallableProcessingInterceptor[0]);
+</p><p><a href="#L413">413</a>	}
+</p><p><a href="#L414">414</a>
+</p><p><a href="#L415">415</a>	/**
+</p><p><a href="#L416">416</a>	 * Configure {@code DeferredResultProcessingInterceptor}'s to register on async requests.
+</p><p><a href="#L417">417</a>	 * @param interceptors the interceptors to register
+</p><p><a href="#L418">418</a>	 */
+</p><p><a href="#L419">419</a>	public void setDeferredResultInterceptors(List&lt;DeferredResultProcessingInterceptor&gt; interceptors) {
+</p><p><a href="#L420">420</a>		this.deferredResultInterceptors = interceptors.toArray(new DeferredResultProcessingInterceptor[0]);
+</p><p><a href="#L421">421</a>	}
+</p><p><a href="#L422">422</a>
+</p><p><a href="#L423">423</a>	/**
+</p><p><a href="#L424">424</a>	 * Configure the registry for reactive library types to be supported as
+</p><p><a href="#L425">425</a>	 * return values from controller methods.
+</p><p><a href="#L426">426</a>	 * @since 5.0
+</p><p><a href="#L427">427</a>	 * @deprecated as of 5.0.5, in favor of {@link #setReactiveAdapterRegistry}
+</p><p><a href="#L428">428</a>	 */
+</p><p><a href="#L429">429</a>	@Deprecated
+</p><p><a href="#L430">430</a>	public void setReactiveRegistry(ReactiveAdapterRegistry reactiveRegistry) {
+</p><p><a href="#L431">431</a>		this.reactiveAdapterRegistry = reactiveRegistry;
+</p><p><a href="#L432">432</a>	}
+</p><p><a href="#L433">433</a>
+</p><p><a href="#L434">434</a>	/**
+</p><p><a href="#L435">435</a>	 * Configure the registry for reactive library types to be supported as
+</p><p><a href="#L436">436</a>	 * return values from controller methods.
+</p><p><a href="#L437">437</a>	 * @since 5.0.5
+</p><p><a href="#L438">438</a>	 */
+</p><p><a href="#L439">439</a>	public void setReactiveAdapterRegistry(ReactiveAdapterRegistry reactiveAdapterRegistry) {
+</p><p><a href="#L440">440</a>		this.reactiveAdapterRegistry = reactiveAdapterRegistry;
+</p><p><a href="#L441">441</a>	}
+</p><p><a href="#L442">442</a>
+</p><p><a href="#L443">443</a>	/**
+</p><p><a href="#L444">444</a>	 * Return the configured reactive type registry of adapters.
+</p><p><a href="#L445">445</a>	 * @since 5.0
+</p><p><a href="#L446">446</a>	 */
+</p><p><a href="#L447">447</a>	public ReactiveAdapterRegistry getReactiveAdapterRegistry() {
+</p><p><a href="#L448">448</a>		return this.reactiveAdapterRegistry;
+</p><p><a href="#L449">449</a>	}
+</p><p><a href="#L450">450</a>
+</p><p><a href="#L451">451</a>	/**
+</p><p><a href="#L452">452</a>	 * By default the content of the "default" model is used both during
+</p><p><a href="#L453">453</a>	 * rendering and redirect scenarios. Alternatively a controller method
+</p><p><a href="#L454">454</a>	 * can declare a {@link RedirectAttributes} argument and use it to provide
+</p><p><a href="#L455">455</a>	 * attributes for a redirect.
+</p><p><a href="#L456">456</a>	 * &lt;p&gt;Setting this flag to {@code true} guarantees the "default" model is
+</p><p><a href="#L457">457</a>	 * never used in a redirect scenario even if a RedirectAttributes argument
+</p><p><a href="#L458">458</a>	 * is not declared. Setting it to {@code false} means the "default" model
+</p><p><a href="#L459">459</a>	 * may be used in a redirect if the controller method doesn't declare a
+</p><p><a href="#L460">460</a>	 * RedirectAttributes argument.
+</p><p><a href="#L461">461</a>	 * &lt;p&gt;The default setting is {@code false} but new applications should
+</p><p><a href="#L462">462</a>	 * consider setting it to {@code true}.
+</p><p><a href="#L463">463</a>	 * @see RedirectAttributes
+</p><p><a href="#L464">464</a>	 */
+</p><p><a href="#L465">465</a>	public void setIgnoreDefaultModelOnRedirect(boolean ignoreDefaultModelOnRedirect) {
+</p><p><a href="#L466">466</a>		this.ignoreDefaultModelOnRedirect = ignoreDefaultModelOnRedirect;
+</p><p><a href="#L467">467</a>	}
+</p><p><a href="#L468">468</a>
+</p><p><a href="#L469">469</a>	/**
+</p><p><a href="#L470">470</a>	 * Specify the strategy to store session attributes with. The default is
+</p><p><a href="#L471">471</a>	 * {@link org.springframework.web.bind.support.DefaultSessionAttributeStore},
+</p><p><a href="#L472">472</a>	 * storing session attributes in the HttpSession with the same attribute
+</p><p><a href="#L473">473</a>	 * name as in the model.
+</p><p><a href="#L474">474</a>	 */
+</p><p><a href="#L475">475</a>	public void setSessionAttributeStore(SessionAttributeStore sessionAttributeStore) {
+</p><p><a href="#L476">476</a>		this.sessionAttributeStore = sessionAttributeStore;
+</p><p><a href="#L477">477</a>	}
+</p><p><a href="#L478">478</a>
+</p><p><a href="#L479">479</a>	/**
+</p><p><a href="#L480">480</a>	 * Cache content produced by {@code @SessionAttributes} annotated handlers
+</p><p><a href="#L481">481</a>	 * for the given number of seconds.
+</p><p><a href="#L482">482</a>	 * &lt;p&gt;Possible values are:
+</p><p><a href="#L483">483</a>	 * &lt;ul&gt;
+</p><p><a href="#L484">484</a>	 * &lt;li&gt;-1: no generation of cache-related headers&lt;/li&gt;
+</p><p><a href="#L485">485</a>	 * &lt;li&gt;0 (default value): "Cache-Control: no-store" will prevent caching&lt;/li&gt;
+</p><p><a href="#L486">486</a>	 * &lt;li&gt;1 or higher: "Cache-Control: max-age=seconds" will ask to cache content;
+</p><p><a href="#L487">487</a>	 * not advised when dealing with session attributes&lt;/li&gt;
+</p><p><a href="#L488">488</a>	 * &lt;/ul&gt;
+</p><p><a href="#L489">489</a>	 * &lt;p&gt;In contrast to the "cacheSeconds" property which will apply to all general
+</p><p><a href="#L490">490</a>	 * handlers (but not to {@code @SessionAttributes} annotated handlers),
+</p><p><a href="#L491">491</a>	 * this setting will apply to {@code @SessionAttributes} handlers only.
+</p><p><a href="#L492">492</a>	 * @see #setCacheSeconds
+</p><p><a href="#L493">493</a>	 * @see org.springframework.web.bind.annotation.SessionAttributes
+</p><p><a href="#L494">494</a>	 */
+</p><p><a href="#L495">495</a>	public void setCacheSecondsForSessionAttributeHandlers(int cacheSecondsForSessionAttributeHandlers) {
+</p><p><a href="#L496">496</a>		this.cacheSecondsForSessionAttributeHandlers = cacheSecondsForSessionAttributeHandlers;
+</p><p><a href="#L497">497</a>	}
+</p><p><a href="#L498">498</a>
+</p><p><a href="#L499">499</a>	/**
+</p><p><a href="#L500">500</a>	 * Set if controller execution should be synchronized on the session,
+</p><p><a href="#L501">501</a>	 * to serialize parallel invocations from the same client.
+</p><p><a href="#L502">502</a>	 * &lt;p&gt;More specifically, the execution of the {@code handleRequestInternal}
+</p><p><a href="#L503">503</a>	 * method will get synchronized if this flag is "true". The best available
+</p><p><a href="#L504">504</a>	 * session mutex will be used for the synchronization; ideally, this will
+</p><p><a href="#L505">505</a>	 * be a mutex exposed by HttpSessionMutexListener.
+</p><p><a href="#L506">506</a>	 * &lt;p&gt;The session mutex is guaranteed to be the same object during
+</p><p><a href="#L507">507</a>	 * the entire lifetime of the session, available under the key defined
+</p><p><a href="#L508">508</a>	 * by the {@code SESSION_MUTEX_ATTRIBUTE} constant. It serves as a
+</p><p><a href="#L509">509</a>	 * safe reference to synchronize on for locking on the current session.
+</p><p><a href="#L510">510</a>	 * &lt;p&gt;In many cases, the HttpSession reference itself is a safe mutex
+</p><p><a href="#L511">511</a>	 * as well, since it will always be the same object reference for the
+</p><p><a href="#L512">512</a>	 * same active logical session. However, this is not guaranteed across
+</p><p><a href="#L513">513</a>	 * different servlet containers; the only 100% safe way is a session mutex.
+</p><p><a href="#L514">514</a>	 * @see org.springframework.web.util.HttpSessionMutexListener
+</p><p><a href="#L515">515</a>	 * @see org.springframework.web.util.WebUtils#getSessionMutex(javax.servlet.http.HttpSession)
+</p><p><a href="#L516">516</a>	 */
+</p><p><a href="#L517">517</a>	public void setSynchronizeOnSession(boolean synchronizeOnSession) {
+</p><p><a href="#L518">518</a>		this.synchronizeOnSession = synchronizeOnSession;
+</p><p><a href="#L519">519</a>	}
+</p><p><a href="#L520">520</a>
+</p><p><a href="#L521">521</a>	/**
+</p><p><a href="#L522">522</a>	 * Set the ParameterNameDiscoverer to use for resolving method parameter names if needed
+</p><p><a href="#L523">523</a>	 * (e.g. for default attribute names).
+</p><p><a href="#L524">524</a>	 * &lt;p&gt;Default is a {@link org.springframework.core.DefaultParameterNameDiscoverer}.
+</p><p><a href="#L525">525</a>	 */
+</p><p><a href="#L526">526</a>	public void setParameterNameDiscoverer(ParameterNameDiscoverer parameterNameDiscoverer) {
+</p><p><a href="#L527">527</a>		this.parameterNameDiscoverer = parameterNameDiscoverer;
+</p><p><a href="#L528">528</a>	}
+</p><p><a href="#L529">529</a>
+</p><p><a href="#L530">530</a>	/**
+</p><p><a href="#L531">531</a>	 * A {@link ConfigurableBeanFactory} is expected for resolving expressions
+</p><p><a href="#L532">532</a>	 * in method argument default values.
+</p><p><a href="#L533">533</a>	 */
+</p><p><a href="#L534">534</a>	@Override
+</p><p><a href="#L535">535</a>	public void setBeanFactory(BeanFactory beanFactory) {
+</p><p><a href="#L536">536</a>		if (beanFactory instanceof ConfigurableBeanFactory) {
+</p><p><a href="#L537">537</a>			this.beanFactory = (ConfigurableBeanFactory) beanFactory;
+</p><p><a href="#L538">538</a>		}
+</p><p><a href="#L539">539</a>	}
+</p><p><a href="#L540">540</a>
+</p><p><a href="#L541">541</a>	/**
+</p><p><a href="#L542">542</a>	 * Return the owning factory of this bean instance, or {@code null} if none.
+</p><p><a href="#L543">543</a>	 */
+</p><p><a href="#L544">544</a>	@Nullable
+</p><p><a href="#L545">545</a>	protected ConfigurableBeanFactory getBeanFactory() {
+</p><p><a href="#L546">546</a>		return this.beanFactory;
+</p><p><a href="#L547">547</a>	}
+</p><p><a href="#L548">548</a>
+</p><p><a href="#L549">549</a>
+</p><p><a href="#L550">550</a>	@Override
+</p><p><a href="#L551">551</a>	public void afterPropertiesSet() {
+</p><p><a href="#L552">552</a>		// Do this first, it may add ResponseBody advice beans
+</p><p><a href="#L553">553</a>		initControllerAdviceCache();
+</p><p><a href="#L554">554</a>
+</p><p><a href="#L555">555</a>		if (this.argumentResolvers == null) {
+</p><p><a href="#L556">556</a>			List&lt;HandlerMethodArgumentResolver&gt; resolvers = getDefaultArgumentResolvers();
+</p><p><a href="#L557">557</a>			this.argumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
+</p><p><a href="#L558">558</a>		}
+</p><p><a href="#L559">559</a>		if (this.initBinderArgumentResolvers == null) {
+</p><p><a href="#L560">560</a>			List&lt;HandlerMethodArgumentResolver&gt; resolvers = getDefaultInitBinderArgumentResolvers();
+</p><p><a href="#L561">561</a>			this.initBinderArgumentResolvers = new HandlerMethodArgumentResolverComposite().addResolvers(resolvers);
+</p><p><a href="#L562">562</a>		}
+</p><p><a href="#L563">563</a>		if (this.returnValueHandlers == null) {
+</p><p><a href="#L564">564</a>			List&lt;HandlerMethodReturnValueHandler&gt; handlers = getDefaultReturnValueHandlers();
+</p><p><a href="#L565">565</a>			this.returnValueHandlers = new HandlerMethodReturnValueHandlerComposite().addHandlers(handlers);
+</p><p><a href="#L566">566</a>		}
+</p><p><a href="#L567">567</a>	}
+</p><p><a href="#L568">568</a>
+</p><p><a href="#L569">569</a>	private void initControllerAdviceCache() {
+</p><p><a href="#L570">570</a>		if (getApplicationContext() == null) {
+</p><p><a href="#L571">571</a>			return;
+</p><p><a href="#L572">572</a>		}
+</p><p><a href="#L573">573</a>		if (logger.isInfoEnabled()) {
+</p><p><a href="#L574">574</a>			logger.info("Looking for @ControllerAdvice: " + getApplicationContext());
+</p><p><a href="#L575">575</a>		}
+</p><p><a href="#L576">576</a>
+</p><p><a href="#L577">577</a>		List&lt;ControllerAdviceBean&gt; adviceBeans = ControllerAdviceBean.findAnnotatedBeans(getApplicationContext());
+</p><p><a href="#L578">578</a>		AnnotationAwareOrderComparator.sort(adviceBeans);
+</p><p><a href="#L579">579</a>
+</p><p><a href="#L580">580</a>		List&lt;Object&gt; requestResponseBodyAdviceBeans = new ArrayList&lt;&gt;();
+</p><p><a href="#L581">581</a>
+</p><p><a href="#L582">582</a>		for (ControllerAdviceBean adviceBean : adviceBeans) {
+</p><p><a href="#L583">583</a>			Class&lt;?&gt; beanType = adviceBean.getBeanType();
+</p><p><a href="#L584">584</a>			if (beanType == null) {
+</p><p><a href="#L585">585</a>				throw new IllegalStateException("Unresolvable type for ControllerAdviceBean: " + adviceBean);
+</p><p><a href="#L586">586</a>			}
+</p><p><a href="#L587">587</a>			Set&lt;Method&gt; attrMethods = MethodIntrospector.selectMethods(beanType, MODEL_ATTRIBUTE_METHODS);
+</p><p><a href="#L588">588</a>			if (!attrMethods.isEmpty()) {
+</p><p><a href="#L589">589</a>				this.modelAttributeAdviceCache.put(adviceBean, attrMethods);
+</p><p><a href="#L590">590</a>				if (logger.isInfoEnabled()) {
+</p><p><a href="#L591">591</a>					logger.info("Detected @ModelAttribute methods in " + adviceBean);
+</p><p><a href="#L592">592</a>				}
+</p><p><a href="#L593">593</a>			}
+</p><p><a href="#L594">594</a>			Set&lt;Method&gt; binderMethods = MethodIntrospector.selectMethods(beanType, INIT_BINDER_METHODS);
+</p><p><a href="#L595">595</a>			if (!binderMethods.isEmpty()) {
+</p><p><a href="#L596">596</a>				this.initBinderAdviceCache.put(adviceBean, binderMethods);
+</p><p><a href="#L597">597</a>				if (logger.isInfoEnabled()) {
+</p><p><a href="#L598">598</a>					logger.info("Detected @InitBinder methods in " + adviceBean);
+</p><p><a href="#L599">599</a>				}
+</p><p><a href="#L600">600</a>			}
+</p><p><a href="#L601">601</a>			if (RequestBodyAdvice.class.isAssignableFrom(beanType)) {
+</p><p><a href="#L602">602</a>				requestResponseBodyAdviceBeans.add(adviceBean);
+</p><p><a href="#L603">603</a>				if (logger.isInfoEnabled()) {
+</p><p><a href="#L604">604</a>					logger.info("Detected RequestBodyAdvice bean in " + adviceBean);
+</p><p><a href="#L605">605</a>				}
+</p><p><a href="#L606">606</a>			}
+</p><p><a href="#L607">607</a>			if (ResponseBodyAdvice.class.isAssignableFrom(beanType)) {
+</p><p><a href="#L608">608</a>				requestResponseBodyAdviceBeans.add(adviceBean);
+</p><p><a href="#L609">609</a>				if (logger.isInfoEnabled()) {
+</p><p><a href="#L610">610</a>					logger.info("Detected ResponseBodyAdvice bean in " + adviceBean);
+</p><p><a href="#L611">611</a>				}
+</p><p><a href="#L612">612</a>			}
+</p><p><a href="#L613">613</a>		}
+</p><p><a href="#L614">614</a>
+</p><p><a href="#L615">615</a>		if (!requestResponseBodyAdviceBeans.isEmpty()) {
+</p><p><a href="#L616">616</a>			this.requestResponseBodyAdvice.addAll(0, requestResponseBodyAdviceBeans);
+</p><p><a href="#L617">617</a>		}
+</p><p><a href="#L618">618</a>	}
+</p><p><a href="#L619">619</a>
+</p><p><a href="#L620">620</a>	/**
+</p><p><a href="#L621">621</a>	 * Return the list of argument resolvers to use including built-in resolvers
+</p><p><a href="#L622">622</a>	 * and custom resolvers provided via {@link #setCustomArgumentResolvers}.
+</p><p><a href="#L623">623</a>	 */
+</p><p><a href="#L624">624</a>	private List&lt;HandlerMethodArgumentResolver&gt; getDefaultArgumentResolvers() {
+</p><p><a href="#L625">625</a>		List&lt;HandlerMethodArgumentResolver&gt; resolvers = new ArrayList&lt;&gt;();
+</p><p><a href="#L626">626</a>
+</p><p><a href="#L627">627</a>		// Annotation-based argument resolution
+</p><p><a href="#L628">628</a>		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
+</p><p><a href="#L629">629</a>		resolvers.add(new RequestParamMapMethodArgumentResolver());
+</p><p><a href="#L630">630</a>		resolvers.add(new PathVariableMethodArgumentResolver());
+</p><p><a href="#L631">631</a>		resolvers.add(new PathVariableMapMethodArgumentResolver());
+</p><p><a href="#L632">632</a>		resolvers.add(new MatrixVariableMethodArgumentResolver());
+</p><p><a href="#L633">633</a>		resolvers.add(new MatrixVariableMapMethodArgumentResolver());
+</p><p><a href="#L634">634</a>		resolvers.add(new ServletModelAttributeMethodProcessor(false));
+</p><p><a href="#L635">635</a>		resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+</p><p><a href="#L636">636</a>		resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
+</p><p><a href="#L637">637</a>		resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
+</p><p><a href="#L638">638</a>		resolvers.add(new RequestHeaderMapMethodArgumentResolver());
+</p><p><a href="#L639">639</a>		resolvers.add(new ServletCookieValueMethodArgumentResolver(getBeanFactory()));
+</p><p><a href="#L640">640</a>		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
+</p><p><a href="#L641">641</a>		resolvers.add(new SessionAttributeMethodArgumentResolver());
+</p><p><a href="#L642">642</a>		resolvers.add(new RequestAttributeMethodArgumentResolver());
+</p><p><a href="#L643">643</a>
+</p><p><a href="#L644">644</a>		// Type-based argument resolution
+</p><p><a href="#L645">645</a>		resolvers.add(new ServletRequestMethodArgumentResolver());
+</p><p><a href="#L646">646</a>		resolvers.add(new ServletResponseMethodArgumentResolver());
+</p><p><a href="#L647">647</a>		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+</p><p><a href="#L648">648</a>		resolvers.add(new RedirectAttributesMethodArgumentResolver());
+</p><p><a href="#L649">649</a>		resolvers.add(new ModelMethodProcessor());
+</p><p><a href="#L650">650</a>		resolvers.add(new MapMethodProcessor());
+</p><p><a href="#L651">651</a>		resolvers.add(new ErrorsMethodArgumentResolver());
+</p><p><a href="#L652">652</a>		resolvers.add(new SessionStatusMethodArgumentResolver());
+</p><p><a href="#L653">653</a>		resolvers.add(new UriComponentsBuilderMethodArgumentResolver());
+</p><p><a href="#L654">654</a>
+</p><p><a href="#L655">655</a>		// Custom arguments
+</p><p><a href="#L656">656</a>		if (getCustomArgumentResolvers() != null) {
+</p><p><a href="#L657">657</a>			resolvers.addAll(getCustomArgumentResolvers());
+</p><p><a href="#L658">658</a>		}
+</p><p><a href="#L659">659</a>
+</p><p><a href="#L660">660</a>		// Catch-all
+</p><p><a href="#L661">661</a>		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
+</p><p><a href="#L662">662</a>		resolvers.add(new ServletModelAttributeMethodProcessor(true));
+</p><p><a href="#L663">663</a>
+</p><p><a href="#L664">664</a>		return resolvers;
+</p><p><a href="#L665">665</a>	}
+</p><p><a href="#L666">666</a>
+</p><p><a href="#L667">667</a>	/**
+</p><p><a href="#L668">668</a>	 * Return the list of argument resolvers to use for {@code @InitBinder}
+</p><p><a href="#L669">669</a>	 * methods including built-in and custom resolvers.
+</p><p><a href="#L670">670</a>	 */
+</p><p><a href="#L671">671</a>	private List&lt;HandlerMethodArgumentResolver&gt; getDefaultInitBinderArgumentResolvers() {
+</p><p><a href="#L672">672</a>		List&lt;HandlerMethodArgumentResolver&gt; resolvers = new ArrayList&lt;&gt;();
+</p><p><a href="#L673">673</a>
+</p><p><a href="#L674">674</a>		// Annotation-based argument resolution
+</p><p><a href="#L675">675</a>		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
+</p><p><a href="#L676">676</a>		resolvers.add(new RequestParamMapMethodArgumentResolver());
+</p><p><a href="#L677">677</a>		resolvers.add(new PathVariableMethodArgumentResolver());
+</p><p><a href="#L678">678</a>		resolvers.add(new PathVariableMapMethodArgumentResolver());
+</p><p><a href="#L679">679</a>		resolvers.add(new MatrixVariableMethodArgumentResolver());
+</p><p><a href="#L680">680</a>		resolvers.add(new MatrixVariableMapMethodArgumentResolver());
+</p><p><a href="#L681">681</a>		resolvers.add(new ExpressionValueMethodArgumentResolver(getBeanFactory()));
+</p><p><a href="#L682">682</a>		resolvers.add(new SessionAttributeMethodArgumentResolver());
+</p><p><a href="#L683">683</a>		resolvers.add(new RequestAttributeMethodArgumentResolver());
+</p><p><a href="#L684">684</a>
+</p><p><a href="#L685">685</a>		// Type-based argument resolution
+</p><p><a href="#L686">686</a>		resolvers.add(new ServletRequestMethodArgumentResolver());
+</p><p><a href="#L687">687</a>		resolvers.add(new ServletResponseMethodArgumentResolver());
+</p><p><a href="#L688">688</a>
+</p><p><a href="#L689">689</a>		// Custom arguments
+</p><p><a href="#L690">690</a>		if (getCustomArgumentResolvers() != null) {
+</p><p><a href="#L691">691</a>			resolvers.addAll(getCustomArgumentResolvers());
+</p><p><a href="#L692">692</a>		}
+</p><p><a href="#L693">693</a>
+</p><p><a href="#L694">694</a>		// Catch-all
+</p><p><a href="#L695">695</a>		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
+</p><p><a href="#L696">696</a>
+</p><p><a href="#L697">697</a>		return resolvers;
+</p><p><a href="#L698">698</a>	}
+</p><p><a href="#L699">699</a>
+</p><p><a href="#L700">700</a>	/**
+</p><p><a href="#L701">701</a>	 * Return the list of return value handlers to use including built-in and
+</p><p><a href="#L702">702</a>	 * custom handlers provided via {@link #setReturnValueHandlers}.
+</p><p><a href="#L703">703</a>	 */
+</p><p><a href="#L704">704</a>	private List&lt;HandlerMethodReturnValueHandler&gt; getDefaultReturnValueHandlers() {
+</p><p><a href="#L705">705</a>		List&lt;HandlerMethodReturnValueHandler&gt; handlers = new ArrayList&lt;&gt;();
+</p><p><a href="#L706">706</a>
+</p><p><a href="#L707">707</a>		// Single-purpose return value types
+</p><p><a href="#L708">708</a>		handlers.add(new ModelAndViewMethodReturnValueHandler());
+</p><p><a href="#L709">709</a>		handlers.add(new ModelMethodProcessor());
+</p><p><a href="#L710">710</a>		handlers.add(new ViewMethodReturnValueHandler());
+</p><p><a href="#L711">711</a>		handlers.add(new ResponseBodyEmitterReturnValueHandler(getMessageConverters(),
+</p><p><a href="#L712">712</a>				this.reactiveAdapterRegistry, this.taskExecutor, this.contentNegotiationManager));
+</p><p><a href="#L713">713</a>		handlers.add(new StreamingResponseBodyReturnValueHandler());
+</p><p><a href="#L714">714</a>		handlers.add(new HttpEntityMethodProcessor(getMessageConverters(),
+</p><p><a href="#L715">715</a>				this.contentNegotiationManager, this.requestResponseBodyAdvice));
+</p><p><a href="#L716">716</a>		handlers.add(new HttpHeadersReturnValueHandler());
+</p><p><a href="#L717">717</a>		handlers.add(new CallableMethodReturnValueHandler());
+</p><p><a href="#L718">718</a>		handlers.add(new DeferredResultMethodReturnValueHandler());
+</p><p><a href="#L719">719</a>		handlers.add(new AsyncTaskMethodReturnValueHandler(this.beanFactory));
+</p><p><a href="#L720">720</a>
+</p><p><a href="#L721">721</a>		// Annotation-based return value types
+</p><p><a href="#L722">722</a>		handlers.add(new ModelAttributeMethodProcessor(false));
+</p><p><a href="#L723">723</a>		handlers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(),
+</p><p><a href="#L724">724</a>				this.contentNegotiationManager, this.requestResponseBodyAdvice));
+</p><p><a href="#L725">725</a>
+</p><p><a href="#L726">726</a>		// Multi-purpose return value types
+</p><p><a href="#L727">727</a>		handlers.add(new ViewNameMethodReturnValueHandler());
+</p><p><a href="#L728">728</a>		handlers.add(new MapMethodProcessor());
+</p><p><a href="#L729">729</a>
+</p><p><a href="#L730">730</a>		// Custom return value types
+</p><p><a href="#L731">731</a>		if (getCustomReturnValueHandlers() != null) {
+</p><p><a href="#L732">732</a>			handlers.addAll(getCustomReturnValueHandlers());
+</p><p><a href="#L733">733</a>		}
+</p><p><a href="#L734">734</a>
+</p><p><a href="#L735">735</a>		// Catch-all
+</p><p><a href="#L736">736</a>		if (!CollectionUtils.isEmpty(getModelAndViewResolvers())) {
+</p><p><a href="#L737">737</a>			handlers.add(new ModelAndViewResolverMethodReturnValueHandler(getModelAndViewResolvers()));
+</p><p><a href="#L738">738</a>		}
+</p><p><a href="#L739">739</a>		else {
+</p><p><a href="#L740">740</a>			handlers.add(new ModelAttributeMethodProcessor(true));
+</p><p><a href="#L741">741</a>		}
+</p><p><a href="#L742">742</a>
+</p><p><a href="#L743">743</a>		return handlers;
+</p><p><a href="#L744">744</a>	}
+</p><p><a href="#L745">745</a>
+</p><p><a href="#L746">746</a>
+</p><p><a href="#L747">747</a>	/**
+</p><p><a href="#L748">748</a>	 * Always return {@code true} since any method argument and return value
+</p><p><a href="#L749">749</a>	 * type will be processed in some way. A method argument not recognized
+</p><p><a href="#L750">750</a>	 * by any HandlerMethodArgumentResolver is interpreted as a request parameter
+</p><p><a href="#L751">751</a>	 * if it is a simple type, or as a model attribute otherwise. A return value
+</p><p><a href="#L752">752</a>	 * not recognized by any HandlerMethodReturnValueHandler will be interpreted
+</p><p><a href="#L753">753</a>	 * as a model attribute.
+</p><p><a href="#L754">754</a>	 */
+</p><p><a href="#L755">755</a>	@Override
+</p><p><a href="#L756">756</a>	protected boolean supportsInternal(HandlerMethod handlerMethod) {
+</p><p><a href="#L757">757</a>		return true;
+</p><p><a href="#L758">758</a>	}
+</p><p><a href="#L759">759</a>
+</p><p><a href="#L760">760</a>	@Override
+</p><p><a href="#L761">761</a>	protected ModelAndView handleInternal(HttpServletRequest request,
+</p><p><a href="#L762">762</a>			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+</p><p><a href="#L763">763</a>
+</p><p><a href="#L764">764</a>		ModelAndView mav;
+</p><p><a href="#L765">765</a>		checkRequest(request);
+</p><p><a href="#L766">766</a>
+</p><p><a href="#L767">767</a>		// Execute invokeHandlerMethod in synchronized block if required.
+</p><p><a href="#L768">768</a>		if (this.synchronizeOnSession) {
+</p><p><a href="#L769">769</a>			HttpSession session = request.getSession(false);
+</p><p><a href="#L770">770</a>			if (session != null) {
+</p><p><a href="#L771">771</a>				Object mutex = WebUtils.getSessionMutex(session);
+</p><p><a href="#L772">772</a>				synchronized (mutex) {
+</p><p><a href="#L773">773</a>					mav = invokeHandlerMethod(request, response, handlerMethod);
+</p><p><a href="#L774">774</a>				}
+</p><p><a href="#L775">775</a>			}
+</p><p><a href="#L776">776</a>			else {
+</p><p><a href="#L777">777</a>				// No HttpSession available -&gt; no mutex necessary
+</p><p><a href="#L778">778</a>				mav = invokeHandlerMethod(request, response, handlerMethod);
+</p><p><a href="#L779">779</a>			}
+</p><p><a href="#L780">780</a>		}
+</p><p><a href="#L781">781</a>		else {
+</p><p><a href="#L782">782</a>			// No synchronization on session demanded at all...
+</p><p><a href="#L783">783</a>			mav = invokeHandlerMethod(request, response, handlerMethod);
+</p><p><a href="#L784">784</a>		}
+</p><p><a href="#L785">785</a>
+</p><p><a href="#L786">786</a>		if (!response.containsHeader(HEADER_CACHE_CONTROL)) {
+</p><p><a href="#L787">787</a>			if (getSessionAttributesHandler(handlerMethod).hasSessionAttributes()) {
+</p><p><a href="#L788">788</a>				applyCacheSeconds(response, this.cacheSecondsForSessionAttributeHandlers);
+</p><p><a href="#L789">789</a>			}
+</p><p><a href="#L790">790</a>			else {
+</p><p><a href="#L791">791</a>				prepareResponse(response);
+</p><p><a href="#L792">792</a>			}
+</p><p><a href="#L793">793</a>		}
+</p><p><a href="#L794">794</a>
+</p><p><a href="#L795">795</a>		return mav;
+</p><p><a href="#L796">796</a>	}
+</p><p><a href="#L797">797</a>
+</p><p><a href="#L798">798</a>	/**
+</p><p><a href="#L799">799</a>	 * This implementation always returns -1. An {@code @RequestMapping} method can
+</p><p><a href="#L800">800</a>	 * calculate the lastModified value, call {@link WebRequest#checkNotModified(long)},
+</p><p><a href="#L801">801</a>	 * and return {@code null} if the result of that call is {@code true}.
+</p><p><a href="#L802">802</a>	 */
+</p><p><a href="#L803">803</a>	@Override
+</p><p><a href="#L804">804</a>	protected long getLastModifiedInternal(HttpServletRequest request, HandlerMethod handlerMethod) {
+</p><p><a href="#L805">805</a>		return -1;
+</p><p><a href="#L806">806</a>	}
+</p><p><a href="#L807">807</a>
+</p><p><a href="#L808">808</a>
+</p><p><a href="#L809">809</a>	/**
+</p><p><a href="#L810">810</a>	 * Return the {@link SessionAttributesHandler} instance for the given handler type
+</p><p><a href="#L811">811</a>	 * (never {@code null}).
+</p><p><a href="#L812">812</a>	 */
+</p><p><a href="#L813">813</a>	private SessionAttributesHandler getSessionAttributesHandler(HandlerMethod handlerMethod) {
+</p><p><a href="#L814">814</a>		Class&lt;?&gt; handlerType = handlerMethod.getBeanType();
+</p><p><a href="#L815">815</a>		SessionAttributesHandler sessionAttrHandler = this.sessionAttributesHandlerCache.get(handlerType);
+</p><p><a href="#L816">816</a>		if (sessionAttrHandler == null) {
+</p><p><a href="#L817">817</a>			synchronized (this.sessionAttributesHandlerCache) {
+</p><p><a href="#L818">818</a>				sessionAttrHandler = this.sessionAttributesHandlerCache.get(handlerType);
+</p><p><a href="#L819">819</a>				if (sessionAttrHandler == null) {
+</p><p><a href="#L820">820</a>					sessionAttrHandler = new SessionAttributesHandler(handlerType, sessionAttributeStore);
+</p><p><a href="#L821">821</a>					this.sessionAttributesHandlerCache.put(handlerType, sessionAttrHandler);
+</p><p><a href="#L822">822</a>				}
+</p><p><a href="#L823">823</a>			}
+</p><p><a href="#L824">824</a>		}
+</p><p><a href="#L825">825</a>		return sessionAttrHandler;
+</p><p><a href="#L826">826</a>	}
+</p><p><a href="#L827">827</a>
+</p><p><a href="#L828">828</a>	/**
+</p><p><a href="#L829">829</a>	 * Invoke the {@link RequestMapping} handler method preparing a {@link ModelAndView}
+</p><p><a href="#L830">830</a>	 * if view resolution is required.
+</p><p><a href="#L831">831</a>	 * @since 4.2
+</p><p><a href="#L832">832</a>	 * @see #createInvocableHandlerMethod(HandlerMethod)
+</p><p><a href="#L833">833</a>	 */
+</p><p><a href="#L834">834</a>	@Nullable
+</p><p><a href="#L835">835</a>	protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
+</p><p><a href="#L836">836</a>			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
+</p><p><a href="#L837">837</a>
+</p><p><a href="#L838">838</a>		ServletWebRequest webRequest = new ServletWebRequest(request, response);
+</p><p><a href="#L839">839</a>		try {
+</p><p><a href="#L840">840</a>			WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
+</p><p><a href="#L841">841</a>			ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
+</p><p><a href="#L842">842</a>
+</p><p><a href="#L843">843</a>			ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
+</p><p><a href="#L844">844</a>			if (this.argumentResolvers != null) {
+</p><p><a href="#L845">845</a>				invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
+</p><p><a href="#L846">846</a>			}
+</p><p><a href="#L847">847</a>			if (this.returnValueHandlers != null) {
+</p><p><a href="#L848">848</a>				invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
+</p><p><a href="#L849">849</a>			}
+</p><p><a href="#L850">850</a>			invocableMethod.setDataBinderFactory(binderFactory);
+</p><p><a href="#L851">851</a>			invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+</p><p><a href="#L852">852</a>
+</p><p><a href="#L853">853</a>			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
+</p><p><a href="#L854">854</a>			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
+</p><p><a href="#L855">855</a>			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
+</p><p><a href="#L856">856</a>			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);
+</p><p><a href="#L857">857</a>
+</p><p><a href="#L858">858</a>			AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
+</p><p><a href="#L859">859</a>			asyncWebRequest.setTimeout(this.asyncRequestTimeout);
+</p><p><a href="#L860">860</a>
+</p><p><a href="#L861">861</a>			WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+</p><p><a href="#L862">862</a>			asyncManager.setTaskExecutor(this.taskExecutor);
+</p><p><a href="#L863">863</a>			asyncManager.setAsyncWebRequest(asyncWebRequest);
+</p><p><a href="#L864">864</a>			asyncManager.registerCallableInterceptors(this.callableInterceptors);
+</p><p><a href="#L865">865</a>			asyncManager.registerDeferredResultInterceptors(this.deferredResultInterceptors);
+</p><p><a href="#L866">866</a>
+</p><p><a href="#L867">867</a>			if (asyncManager.hasConcurrentResult()) {
+</p><p><a href="#L868">868</a>				Object result = asyncManager.getConcurrentResult();
+</p><p><a href="#L869">869</a>				mavContainer = (ModelAndViewContainer) asyncManager.getConcurrentResultContext()[0];
+</p><p><a href="#L870">870</a>				asyncManager.clearConcurrentResult();
+</p><p><a href="#L871">871</a>				if (logger.isDebugEnabled()) {
+</p><p><a href="#L872">872</a>					logger.debug("Found concurrent result value [" + result + "]");
+</p><p><a href="#L873">873</a>				}
+</p><p><a href="#L874">874</a>				invocableMethod = invocableMethod.wrapConcurrentResult(result);
+</p><p><a href="#L875">875</a>			}
+</p><p><a href="#L876">876</a>
+</p><p><a href="#L877">877</a>			invocableMethod.invokeAndHandle(webRequest, mavContainer);
+</p><p><a href="#L878">878</a>			if (asyncManager.isConcurrentHandlingStarted()) {
+</p><p><a href="#L879">879</a>				return null;
+</p><p><a href="#L880">880</a>			}
+</p><p><a href="#L881">881</a>
+</p><p><a href="#L882">882</a>			return getModelAndView(mavContainer, modelFactory, webRequest);
+</p><p><a href="#L883">883</a>		}
+</p><p><a href="#L884">884</a>		finally {
+</p><p><a href="#L885">885</a>			webRequest.requestCompleted();
+</p><p><a href="#L886">886</a>		}
+</p><p><a href="#L887">887</a>	}
+</p><p><a href="#L888">888</a>
+</p><p><a href="#L889">889</a>	/**
+</p><p><a href="#L890">890</a>	 * Create a {@link ServletInvocableHandlerMethod} from the given {@link HandlerMethod} definition.
+</p><p><a href="#L891">891</a>	 * @param handlerMethod the {@link HandlerMethod} definition
+</p><p><a href="#L892">892</a>	 * @return the corresponding {@link ServletInvocableHandlerMethod} (or custom subclass thereof)
+</p><p><a href="#L893">893</a>	 * @since 4.2
+</p><p><a href="#L894">894</a>	 */
+</p><p><a href="#L895">895</a>	protected ServletInvocableHandlerMethod createInvocableHandlerMethod(HandlerMethod handlerMethod) {
+</p><p><a href="#L896">896</a>		return new ServletInvocableHandlerMethod(handlerMethod);
+</p><p><a href="#L897">897</a>	}
+</p><p><a href="#L898">898</a>
+</p><p><a href="#L899">899</a>	private ModelFactory getModelFactory(HandlerMethod handlerMethod, WebDataBinderFactory binderFactory) {
+</p><p><a href="#L900">900</a>		SessionAttributesHandler sessionAttrHandler = getSessionAttributesHandler(handlerMethod);
+</p><p><a href="#L901">901</a>		Class&lt;?&gt; handlerType = handlerMethod.getBeanType();
+</p><p><a href="#L902">902</a>		Set&lt;Method&gt; methods = this.modelAttributeCache.get(handlerType);
+</p><p><a href="#L903">903</a>		if (methods == null) {
+</p><p><a href="#L904">904</a>			methods = MethodIntrospector.selectMethods(handlerType, MODEL_ATTRIBUTE_METHODS);
+</p><p><a href="#L905">905</a>			this.modelAttributeCache.put(handlerType, methods);
+</p><p><a href="#L906">906</a>		}
+</p><p><a href="#L907">907</a>		List&lt;InvocableHandlerMethod&gt; attrMethods = new ArrayList&lt;&gt;();
+</p><p><a href="#L908">908</a>		// Global methods first
+</p><p><a href="#L909">909</a>		this.modelAttributeAdviceCache.forEach((clazz, methodSet) -&gt; {
+</p><p><a href="#L910">910</a>			if (clazz.isApplicableToBeanType(handlerType)) {
+</p><p><a href="#L911">911</a>				Object bean = clazz.resolveBean();
+</p><p><a href="#L912">912</a>				for (Method method : methodSet) {
+</p><p><a href="#L913">913</a>					attrMethods.add(createModelAttributeMethod(binderFactory, bean, method));
+</p><p><a href="#L914">914</a>				}
+</p><p><a href="#L915">915</a>			}
+</p><p><a href="#L916">916</a>		});
+</p><p><a href="#L917">917</a>		for (Method method : methods) {
+</p><p><a href="#L918">918</a>			Object bean = handlerMethod.getBean();
+</p><p><a href="#L919">919</a>			attrMethods.add(createModelAttributeMethod(binderFactory, bean, method));
+</p><p><a href="#L920">920</a>		}
+</p><p><a href="#L921">921</a>		return new ModelFactory(attrMethods, binderFactory, sessionAttrHandler);
+</p><p><a href="#L922">922</a>	}
+</p><p><a href="#L923">923</a>
+</p><p><a href="#L924">924</a>	private InvocableHandlerMethod createModelAttributeMethod(WebDataBinderFactory factory, Object bean, Method method) {
+</p><p><a href="#L925">925</a>		InvocableHandlerMethod attrMethod = new InvocableHandlerMethod(bean, method);
+</p><p><a href="#L926">926</a>		if (this.argumentResolvers != null) {
+</p><p><a href="#L927">927</a>			attrMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
+</p><p><a href="#L928">928</a>		}
+</p><p><a href="#L929">929</a>		attrMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+</p><p><a href="#L930">930</a>		attrMethod.setDataBinderFactory(factory);
+</p><p><a href="#L931">931</a>		return attrMethod;
+</p><p><a href="#L932">932</a>	}
+</p><p><a href="#L933">933</a>
+</p><p><a href="#L934">934</a>	private WebDataBinderFactory getDataBinderFactory(HandlerMethod handlerMethod) throws Exception {
+</p><p><a href="#L935">935</a>		Class&lt;?&gt; handlerType = handlerMethod.getBeanType();
+</p><p><a href="#L936">936</a>		Set&lt;Method&gt; methods = this.initBinderCache.get(handlerType);
+</p><p><a href="#L937">937</a>		if (methods == null) {
+</p><p><a href="#L938">938</a>			methods = MethodIntrospector.selectMethods(handlerType, INIT_BINDER_METHODS);
+</p><p><a href="#L939">939</a>			this.initBinderCache.put(handlerType, methods);
+</p><p><a href="#L940">940</a>		}
+</p><p><a href="#L941">941</a>		List&lt;InvocableHandlerMethod&gt; initBinderMethods = new ArrayList&lt;&gt;();
+</p><p><a href="#L942">942</a>		// Global methods first
+</p><p><a href="#L943">943</a>		this.initBinderAdviceCache.forEach((clazz, methodSet) -&gt; {
+</p><p><a href="#L944">944</a>			if (clazz.isApplicableToBeanType(handlerType)) {
+</p><p><a href="#L945">945</a>				Object bean = clazz.resolveBean();
+</p><p><a href="#L946">946</a>				for (Method method : methodSet) {
+</p><p><a href="#L947">947</a>					initBinderMethods.add(createInitBinderMethod(bean, method));
+</p><p><a href="#L948">948</a>				}
+</p><p><a href="#L949">949</a>			}
+</p><p><a href="#L950">950</a>		});
+</p><p><a href="#L951">951</a>		for (Method method : methods) {
+</p><p><a href="#L952">952</a>			Object bean = handlerMethod.getBean();
+</p><p><a href="#L953">953</a>			initBinderMethods.add(createInitBinderMethod(bean, method));
+</p><p><a href="#L954">954</a>		}
+</p><p><a href="#L955">955</a>		return createDataBinderFactory(initBinderMethods);
+</p><p><a href="#L956">956</a>	}
+</p><p><a href="#L957">957</a>
+</p><p><a href="#L958">958</a>	private InvocableHandlerMethod createInitBinderMethod(Object bean, Method method) {
+</p><p><a href="#L959">959</a>		InvocableHandlerMethod binderMethod = new InvocableHandlerMethod(bean, method);
+</p><p><a href="#L960">960</a>		if (this.initBinderArgumentResolvers != null) {
+</p><p><a href="#L961">961</a>			binderMethod.setHandlerMethodArgumentResolvers(this.initBinderArgumentResolvers);
+</p><p><a href="#L962">962</a>		}
+</p><p><a href="#L963">963</a>		binderMethod.setDataBinderFactory(new DefaultDataBinderFactory(this.webBindingInitializer));
+</p><p><a href="#L964">964</a>		binderMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
+</p><p><a href="#L965">965</a>		return binderMethod;
+</p><p><a href="#L966">966</a>	}
+</p><p><a href="#L967">967</a>
+</p><p><a href="#L968">968</a>	/**
+</p><p><a href="#L969">969</a>	 * Template method to create a new InitBinderDataBinderFactory instance.
+</p><p><a href="#L970">970</a>	 * &lt;p&gt;The default implementation creates a ServletRequestDataBinderFactory.
+</p><p><a href="#L971">971</a>	 * This can be overridden for custom ServletRequestDataBinder subclasses.
+</p><p><a href="#L972">972</a>	 * @param binderMethods {@code @InitBinder} methods
+</p><p><a href="#L973">973</a>	 * @return the InitBinderDataBinderFactory instance to use
+</p><p><a href="#L974">974</a>	 * @throws Exception in case of invalid state or arguments
+</p><p><a href="#L975">975</a>	 */
+</p><p><a href="#L976">976</a>	protected InitBinderDataBinderFactory createDataBinderFactory(List&lt;InvocableHandlerMethod&gt; binderMethods)
+</p><p><a href="#L977">977</a>			throws Exception {
+</p><p><a href="#L978">978</a>
+</p><p><a href="#L979">979</a>		return new ServletRequestDataBinderFactory(binderMethods, getWebBindingInitializer());
+</p><p><a href="#L980">980</a>	}
+</p><p><a href="#L981">981</a>
+</p><p><a href="#L982">982</a>	@Nullable
+</p><p><a href="#L983">983</a>	private ModelAndView getModelAndView(ModelAndViewContainer mavContainer,
+</p><p><a href="#L984">984</a>			ModelFactory modelFactory, NativeWebRequest webRequest) throws Exception {
+</p><p><a href="#L985">985</a>
+</p><p><a href="#L986">986</a>		modelFactory.updateModel(webRequest, mavContainer);
+</p><p><a href="#L987">987</a>		if (mavContainer.isRequestHandled()) {
+</p><p><a href="#L988">988</a>			return null;
+</p><p><a href="#L989">989</a>		}
+</p><p><a href="#L990">990</a>		ModelMap model = mavContainer.getModel();
+</p><p><a href="#L991">991</a>		ModelAndView mav = new ModelAndView(mavContainer.getViewName(), model, mavContainer.getStatus());
+</p><p><a href="#L992">992</a>		if (!mavContainer.isViewReference()) {
+</p><p><a href="#L993">993</a>			mav.setView((View) mavContainer.getView());
+</p><p><a href="#L994">994</a>		}
+</p><p><a href="#L995">995</a>		if (model instanceof RedirectAttributes) {
+</p><p><a href="#L996">996</a>			Map&lt;String, ?&gt; flashAttributes = ((RedirectAttributes) model).getFlashAttributes();
+</p><p><a href="#L997">997</a>			HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+</p><p><a href="#L998">998</a>			if (request != null) {
+</p><p><a href="#L999">999</a>				RequestContextUtils.getOutputFlashMap(request).putAll(flashAttributes);
+</p><p><a href="#L1000">1000</a>			}
+</p><p><a href="#L1001">1001</a>		}
+</p><p><a href="#L1002">1002</a>		return mav;
+</p><p><a href="#L1003">1003</a>	}
+</p><p><a href="#L1004">1004</a>
+</p><p><a href="#L1005">1005</a>
+</p><p><a href="#L1006">1006</a>	/**
+</p><p><a href="#L1007">1007</a>	 * MethodFilter that matches {@link InitBinder @InitBinder} methods.
+</p><p><a href="#L1008">1008</a>	 */
+</p><p><a href="#L1009">1009</a>	public static final MethodFilter INIT_BINDER_METHODS = method -&gt;
+</p><p><a href="#L1010">1010</a>			AnnotationUtils.findAnnotation(method, InitBinder.class) != null;
+</p><p><a href="#L1011">1011</a>
+</p><p><a href="#L1012">1012</a>	/**
+</p><p><a href="#L1013">1013</a>	 * MethodFilter that matches {@link ModelAttribute @ModelAttribute} methods.
+</p><p><a href="#L1014">1014</a>	 */
+</p><p><a href="#L1015">1015</a>	public static final MethodFilter MODEL_ATTRIBUTE_METHODS = method -&gt;
+</p><p><a href="#L1016">1016</a>			((AnnotationUtils.findAnnotation(method, RequestMapping.class) == null) &amp;&amp;
+</p><p><a href="#L1017">1017</a>			(AnnotationUtils.findAnnotation(method, ModelAttribute.class) != null));
+</p><p><a href="#L1018">1018</a>
+</p><p><a href="#L1019">1019</a>}
+</p></pre></body></html>

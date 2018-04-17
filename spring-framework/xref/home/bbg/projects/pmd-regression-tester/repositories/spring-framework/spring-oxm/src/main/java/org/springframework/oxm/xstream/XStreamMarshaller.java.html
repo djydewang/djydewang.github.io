@@ -1,0 +1,862 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2017 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.oxm.xstream;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.IOException;
+</p><p><a href="#L20">20</a>import java.io.InputStream;
+</p><p><a href="#L21">21</a>import java.io.InputStreamReader;
+</p><p><a href="#L22">22</a>import java.io.OutputStream;
+</p><p><a href="#L23">23</a>import java.io.OutputStreamWriter;
+</p><p><a href="#L24">24</a>import java.io.Reader;
+</p><p><a href="#L25">25</a>import java.io.Writer;
+</p><p><a href="#L26">26</a>import java.lang.reflect.Constructor;
+</p><p><a href="#L27">27</a>import java.util.LinkedHashMap;
+</p><p><a href="#L28">28</a>import java.util.List;
+</p><p><a href="#L29">29</a>import java.util.Map;
+</p><p><a href="#L30">30</a>import javax.xml.stream.XMLEventReader;
+</p><p><a href="#L31">31</a>import javax.xml.stream.XMLEventWriter;
+</p><p><a href="#L32">32</a>import javax.xml.stream.XMLStreamException;
+</p><p><a href="#L33">33</a>import javax.xml.stream.XMLStreamReader;
+</p><p><a href="#L34">34</a>import javax.xml.stream.XMLStreamWriter;
+</p><p><a href="#L35">35</a>import javax.xml.transform.stream.StreamSource;
+</p><p><a href="#L36">36</a>
+</p><p><a href="#L37">37</a>import com.thoughtworks.xstream.MarshallingStrategy;
+</p><p><a href="#L38">38</a>import com.thoughtworks.xstream.XStream;
+</p><p><a href="#L39">39</a>import com.thoughtworks.xstream.converters.ConversionException;
+</p><p><a href="#L40">40</a>import com.thoughtworks.xstream.converters.Converter;
+</p><p><a href="#L41">41</a>import com.thoughtworks.xstream.converters.ConverterLookup;
+</p><p><a href="#L42">42</a>import com.thoughtworks.xstream.converters.ConverterMatcher;
+</p><p><a href="#L43">43</a>import com.thoughtworks.xstream.converters.ConverterRegistry;
+</p><p><a href="#L44">44</a>import com.thoughtworks.xstream.converters.DataHolder;
+</p><p><a href="#L45">45</a>import com.thoughtworks.xstream.converters.SingleValueConverter;
+</p><p><a href="#L46">46</a>import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+</p><p><a href="#L47">47</a>import com.thoughtworks.xstream.core.ClassLoaderReference;
+</p><p><a href="#L48">48</a>import com.thoughtworks.xstream.core.DefaultConverterLookup;
+</p><p><a href="#L49">49</a>import com.thoughtworks.xstream.core.util.CompositeClassLoader;
+</p><p><a href="#L50">50</a>import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
+</p><p><a href="#L51">51</a>import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+</p><p><a href="#L52">52</a>import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+</p><p><a href="#L53">53</a>import com.thoughtworks.xstream.io.StreamException;
+</p><p><a href="#L54">54</a>import com.thoughtworks.xstream.io.naming.NameCoder;
+</p><p><a href="#L55">55</a>import com.thoughtworks.xstream.io.xml.CompactWriter;
+</p><p><a href="#L56">56</a>import com.thoughtworks.xstream.io.xml.DomReader;
+</p><p><a href="#L57">57</a>import com.thoughtworks.xstream.io.xml.DomWriter;
+</p><p><a href="#L58">58</a>import com.thoughtworks.xstream.io.xml.QNameMap;
+</p><p><a href="#L59">59</a>import com.thoughtworks.xstream.io.xml.SaxWriter;
+</p><p><a href="#L60">60</a>import com.thoughtworks.xstream.io.xml.StaxReader;
+</p><p><a href="#L61">61</a>import com.thoughtworks.xstream.io.xml.StaxWriter;
+</p><p><a href="#L62">62</a>import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
+</p><p><a href="#L63">63</a>import com.thoughtworks.xstream.io.xml.XppDriver;
+</p><p><a href="#L64">64</a>import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+</p><p><a href="#L65">65</a>import com.thoughtworks.xstream.mapper.Mapper;
+</p><p><a href="#L66">66</a>import com.thoughtworks.xstream.mapper.MapperWrapper;
+</p><p><a href="#L67">67</a>import org.w3c.dom.Document;
+</p><p><a href="#L68">68</a>import org.w3c.dom.Element;
+</p><p><a href="#L69">69</a>import org.w3c.dom.Node;
+</p><p><a href="#L70">70</a>import org.xml.sax.ContentHandler;
+</p><p><a href="#L71">71</a>import org.xml.sax.InputSource;
+</p><p><a href="#L72">72</a>import org.xml.sax.XMLReader;
+</p><p><a href="#L73">73</a>import org.xml.sax.ext.LexicalHandler;
+</p><p><a href="#L74">74</a>
+</p><p><a href="#L75">75</a>import org.springframework.beans.factory.BeanClassLoaderAware;
+</p><p><a href="#L76">76</a>import org.springframework.beans.factory.InitializingBean;
+</p><p><a href="#L77">77</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L78">78</a>import org.springframework.oxm.MarshallingFailureException;
+</p><p><a href="#L79">79</a>import org.springframework.oxm.UncategorizedMappingException;
+</p><p><a href="#L80">80</a>import org.springframework.oxm.UnmarshallingFailureException;
+</p><p><a href="#L81">81</a>import org.springframework.oxm.XmlMappingException;
+</p><p><a href="#L82">82</a>import org.springframework.oxm.support.AbstractMarshaller;
+</p><p><a href="#L83">83</a>import org.springframework.util.ClassUtils;
+</p><p><a href="#L84">84</a>import org.springframework.util.ObjectUtils;
+</p><p><a href="#L85">85</a>import org.springframework.util.StringUtils;
+</p><p><a href="#L86">86</a>import org.springframework.util.xml.StaxUtils;
+</p><p><a href="#L87">87</a>
+</p><p><a href="#L88">88</a>/**
+</p><p><a href="#L89">89</a> * Implementation of the {@code Marshaller} interface for XStream.
+</p><p><a href="#L90">90</a> *
+</p><p><a href="#L91">91</a> * &lt;p&gt;By default, XStream does not require any further configuration and can (un)marshal
+</p><p><a href="#L92">92</a> * any class on the classpath. As such, it is &lt;b&gt;not recommended to use the
+</p><p><a href="#L93">93</a> * {@code XStreamMarshaller} to unmarshal XML from external sources&lt;/b&gt; (i.e. the Web),
+</p><p><a href="#L94">94</a> * as this can result in &lt;b&gt;security vulnerabilities&lt;/b&gt;. If you do use the
+</p><p><a href="#L95">95</a> * {@code XStreamMarshaller} to unmarshal external XML, set the
+</p><p><a href="#L96">96</a> * {@link #setSupportedClasses(Class[]) supportedClasses} and
+</p><p><a href="#L97">97</a> * {@link #setConverters(ConverterMatcher[]) converters} properties (possibly using
+</p><p><a href="#L98">98</a> * a {@link CatchAllConverter}) or override the {@link #customizeXStream(XStream)}
+</p><p><a href="#L99">99</a> * method to make sure it only accepts the classes you want it to support.
+</p><p><a href="#L100">100</a> *
+</p><p><a href="#L101">101</a> * &lt;p&gt;Due to XStream's API, it is required to set the encoding used for writing to
+</p><p><a href="#L102">102</a> * OutputStreams. It defaults to {@code UTF-8}.
+</p><p><a href="#L103">103</a> *
+</p><p><a href="#L104">104</a> * &lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; XStream is an XML serialization library, not a data binding library.
+</p><p><a href="#L105">105</a> * Therefore, it has limited namespace support. As such, it is rather unsuitable for
+</p><p><a href="#L106">106</a> * usage within Web Services.
+</p><p><a href="#L107">107</a> *
+</p><p><a href="#L108">108</a> * &lt;p&gt;This marshaller requires XStream 1.4.5 or higher, as of Spring 4.3.
+</p><p><a href="#L109">109</a> * Note that {@link XStream} construction has been reworked in 4.0, with the
+</p><p><a href="#L110">110</a> * stream driver and the class loader getting passed into XStream itself now.
+</p><p><a href="#L111">111</a> *
+</p><p><a href="#L112">112</a> * @author Peter Meijer
+</p><p><a href="#L113">113</a> * @author Arjen Poutsma
+</p><p><a href="#L114">114</a> * @author Juergen Hoeller
+</p><p><a href="#L115">115</a> * @since 3.0
+</p><p><a href="#L116">116</a> */
+</p><p><a href="#L117">117</a>public class XStreamMarshaller extends AbstractMarshaller implements BeanClassLoaderAware, InitializingBean {
+</p><p><a href="#L118">118</a>
+</p><p><a href="#L119">119</a>	/**
+</p><p><a href="#L120">120</a>	 * The default encoding used for stream access: UTF-8.
+</p><p><a href="#L121">121</a>	 */
+</p><p><a href="#L122">122</a>	public static final String DEFAULT_ENCODING = "UTF-8";
+</p><p><a href="#L123">123</a>
+</p><p><a href="#L124">124</a>
+</p><p><a href="#L125">125</a>	@Nullable
+</p><p><a href="#L126">126</a>	private ReflectionProvider reflectionProvider;
+</p><p><a href="#L127">127</a>
+</p><p><a href="#L128">128</a>	@Nullable
+</p><p><a href="#L129">129</a>	private HierarchicalStreamDriver streamDriver;
+</p><p><a href="#L130">130</a>
+</p><p><a href="#L131">131</a>	@Nullable
+</p><p><a href="#L132">132</a>	private HierarchicalStreamDriver defaultDriver;
+</p><p><a href="#L133">133</a>
+</p><p><a href="#L134">134</a>	@Nullable
+</p><p><a href="#L135">135</a>	private Mapper mapper;
+</p><p><a href="#L136">136</a>
+</p><p><a href="#L137">137</a>	@Nullable
+</p><p><a href="#L138">138</a>	private Class&lt;? extends MapperWrapper&gt;[] mapperWrappers;
+</p><p><a href="#L139">139</a>
+</p><p><a href="#L140">140</a>	private ConverterLookup converterLookup = new DefaultConverterLookup();
+</p><p><a href="#L141">141</a>
+</p><p><a href="#L142">142</a>	private ConverterRegistry converterRegistry = (ConverterRegistry) this.converterLookup;
+</p><p><a href="#L143">143</a>
+</p><p><a href="#L144">144</a>	@Nullable
+</p><p><a href="#L145">145</a>	private ConverterMatcher[] converters;
+</p><p><a href="#L146">146</a>
+</p><p><a href="#L147">147</a>	@Nullable
+</p><p><a href="#L148">148</a>	private MarshallingStrategy marshallingStrategy;
+</p><p><a href="#L149">149</a>
+</p><p><a href="#L150">150</a>	@Nullable
+</p><p><a href="#L151">151</a>	private Integer mode;
+</p><p><a href="#L152">152</a>
+</p><p><a href="#L153">153</a>	@Nullable
+</p><p><a href="#L154">154</a>	private Map&lt;String, ?&gt; aliases;
+</p><p><a href="#L155">155</a>
+</p><p><a href="#L156">156</a>	@Nullable
+</p><p><a href="#L157">157</a>	private Map&lt;String, ?&gt; aliasesByType;
+</p><p><a href="#L158">158</a>
+</p><p><a href="#L159">159</a>	@Nullable
+</p><p><a href="#L160">160</a>	private Map&lt;String, String&gt; fieldAliases;
+</p><p><a href="#L161">161</a>
+</p><p><a href="#L162">162</a>	@Nullable
+</p><p><a href="#L163">163</a>	private Class&lt;?&gt;[] useAttributeForTypes;
+</p><p><a href="#L164">164</a>
+</p><p><a href="#L165">165</a>	@Nullable
+</p><p><a href="#L166">166</a>	private Map&lt;?, ?&gt; useAttributeFor;
+</p><p><a href="#L167">167</a>
+</p><p><a href="#L168">168</a>	@Nullable
+</p><p><a href="#L169">169</a>	private Map&lt;Class&lt;?&gt;, String&gt; implicitCollections;
+</p><p><a href="#L170">170</a>
+</p><p><a href="#L171">171</a>	@Nullable
+</p><p><a href="#L172">172</a>	private Map&lt;Class&lt;?&gt;, String&gt; omittedFields;
+</p><p><a href="#L173">173</a>
+</p><p><a href="#L174">174</a>	@Nullable
+</p><p><a href="#L175">175</a>	private Class&lt;?&gt;[] annotatedClasses;
+</p><p><a href="#L176">176</a>
+</p><p><a href="#L177">177</a>	private boolean autodetectAnnotations;
+</p><p><a href="#L178">178</a>
+</p><p><a href="#L179">179</a>	private String encoding = DEFAULT_ENCODING;
+</p><p><a href="#L180">180</a>
+</p><p><a href="#L181">181</a>	private NameCoder nameCoder = new XmlFriendlyNameCoder();
+</p><p><a href="#L182">182</a>
+</p><p><a href="#L183">183</a>	@Nullable
+</p><p><a href="#L184">184</a>	private Class&lt;?&gt;[] supportedClasses;
+</p><p><a href="#L185">185</a>
+</p><p><a href="#L186">186</a>	private ClassLoader beanClassLoader = new CompositeClassLoader();
+</p><p><a href="#L187">187</a>
+</p><p><a href="#L188">188</a>	@Nullable
+</p><p><a href="#L189">189</a>	private XStream xstream;
+</p><p><a href="#L190">190</a>
+</p><p><a href="#L191">191</a>
+</p><p><a href="#L192">192</a>	/**
+</p><p><a href="#L193">193</a>	 * Set a custom XStream {@link ReflectionProvider} to use.
+</p><p><a href="#L194">194</a>	 * @since 4.0
+</p><p><a href="#L195">195</a>	 */
+</p><p><a href="#L196">196</a>	public void setReflectionProvider(ReflectionProvider reflectionProvider) {
+</p><p><a href="#L197">197</a>		this.reflectionProvider = reflectionProvider;
+</p><p><a href="#L198">198</a>	}
+</p><p><a href="#L199">199</a>
+</p><p><a href="#L200">200</a>	/**
+</p><p><a href="#L201">201</a>	 * Set a XStream {@link HierarchicalStreamDriver} to be used for readers and writers.
+</p><p><a href="#L202">202</a>	 * &lt;p&gt;As of Spring 4.0, this stream driver will also be passed to the {@link XStream}
+</p><p><a href="#L203">203</a>	 * constructor and therefore used by streaming-related native API methods themselves.
+</p><p><a href="#L204">204</a>	 */
+</p><p><a href="#L205">205</a>	public void setStreamDriver(HierarchicalStreamDriver streamDriver) {
+</p><p><a href="#L206">206</a>		this.streamDriver = streamDriver;
+</p><p><a href="#L207">207</a>		this.defaultDriver = streamDriver;
+</p><p><a href="#L208">208</a>	}
+</p><p><a href="#L209">209</a>
+</p><p><a href="#L210">210</a>	private HierarchicalStreamDriver getDefaultDriver() {
+</p><p><a href="#L211">211</a>		if (this.defaultDriver == null) {
+</p><p><a href="#L212">212</a>			this.defaultDriver = new XppDriver();
+</p><p><a href="#L213">213</a>		}
+</p><p><a href="#L214">214</a>		return this.defaultDriver;
+</p><p><a href="#L215">215</a>	}
+</p><p><a href="#L216">216</a>
+</p><p><a href="#L217">217</a>	/**
+</p><p><a href="#L218">218</a>	 * Set a custom XStream {@link Mapper} to use.
+</p><p><a href="#L219">219</a>	 * @since 4.0
+</p><p><a href="#L220">220</a>	 */
+</p><p><a href="#L221">221</a>	public void setMapper(Mapper mapper) {
+</p><p><a href="#L222">222</a>		this.mapper = mapper;
+</p><p><a href="#L223">223</a>	}
+</p><p><a href="#L224">224</a>
+</p><p><a href="#L225">225</a>	/**
+</p><p><a href="#L226">226</a>	 * Set one or more custom XStream {@link MapperWrapper} classes.
+</p><p><a href="#L227">227</a>	 * Each of those classes needs to have a constructor with a single argument
+</p><p><a href="#L228">228</a>	 * of type {@link Mapper} or {@link MapperWrapper}.
+</p><p><a href="#L229">229</a>	 * @since 4.0
+</p><p><a href="#L230">230</a>	 */
+</p><p><a href="#L231">231</a>	@SuppressWarnings("unchecked")
+</p><p><a href="#L232">232</a>	public void setMapperWrappers(Class&lt;? extends MapperWrapper&gt;... mapperWrappers) {
+</p><p><a href="#L233">233</a>		this.mapperWrappers = mapperWrappers;
+</p><p><a href="#L234">234</a>	}
+</p><p><a href="#L235">235</a>
+</p><p><a href="#L236">236</a>	/**
+</p><p><a href="#L237">237</a>	 * Set a custom XStream {@link ConverterLookup} to use.
+</p><p><a href="#L238">238</a>	 * Also used as {@link ConverterRegistry} if the given reference implements it as well.
+</p><p><a href="#L239">239</a>	 * @since 4.0
+</p><p><a href="#L240">240</a>	 * @see DefaultConverterLookup
+</p><p><a href="#L241">241</a>	 */
+</p><p><a href="#L242">242</a>	public void setConverterLookup(ConverterLookup converterLookup) {
+</p><p><a href="#L243">243</a>		this.converterLookup = converterLookup;
+</p><p><a href="#L244">244</a>		if (converterLookup instanceof ConverterRegistry) {
+</p><p><a href="#L245">245</a>			this.converterRegistry = (ConverterRegistry) converterLookup;
+</p><p><a href="#L246">246</a>		}
+</p><p><a href="#L247">247</a>	}
+</p><p><a href="#L248">248</a>
+</p><p><a href="#L249">249</a>	/**
+</p><p><a href="#L250">250</a>	 * Set a custom XStream {@link ConverterRegistry} to use.
+</p><p><a href="#L251">251</a>	 * @since 4.0
+</p><p><a href="#L252">252</a>	 * @see #setConverterLookup
+</p><p><a href="#L253">253</a>	 * @see DefaultConverterLookup
+</p><p><a href="#L254">254</a>	 */
+</p><p><a href="#L255">255</a>	public void setConverterRegistry(ConverterRegistry converterRegistry) {
+</p><p><a href="#L256">256</a>		this.converterRegistry = converterRegistry;
+</p><p><a href="#L257">257</a>	}
+</p><p><a href="#L258">258</a>
+</p><p><a href="#L259">259</a>	/**
+</p><p><a href="#L260">260</a>	 * Set the {@code Converters} or {@code SingleValueConverters} to be registered
+</p><p><a href="#L261">261</a>	 * with the {@code XStream} instance.
+</p><p><a href="#L262">262</a>	 * @see Converter
+</p><p><a href="#L263">263</a>	 * @see SingleValueConverter
+</p><p><a href="#L264">264</a>	 */
+</p><p><a href="#L265">265</a>	public void setConverters(ConverterMatcher... converters) {
+</p><p><a href="#L266">266</a>		this.converters = converters;
+</p><p><a href="#L267">267</a>	}
+</p><p><a href="#L268">268</a>
+</p><p><a href="#L269">269</a>	/**
+</p><p><a href="#L270">270</a>	 * Set a custom XStream {@link MarshallingStrategy} to use.
+</p><p><a href="#L271">271</a>	 * @since 4.0
+</p><p><a href="#L272">272</a>	 */
+</p><p><a href="#L273">273</a>	public void setMarshallingStrategy(MarshallingStrategy marshallingStrategy) {
+</p><p><a href="#L274">274</a>		this.marshallingStrategy = marshallingStrategy;
+</p><p><a href="#L275">275</a>	}
+</p><p><a href="#L276">276</a>
+</p><p><a href="#L277">277</a>	/**
+</p><p><a href="#L278">278</a>	 * Set the XStream mode to use.
+</p><p><a href="#L279">279</a>	 * @see XStream#ID_REFERENCES
+</p><p><a href="#L280">280</a>	 * @see XStream#NO_REFERENCES
+</p><p><a href="#L281">281</a>	 */
+</p><p><a href="#L282">282</a>	public void setMode(int mode) {
+</p><p><a href="#L283">283</a>		this.mode = mode;
+</p><p><a href="#L284">284</a>	}
+</p><p><a href="#L285">285</a>
+</p><p><a href="#L286">286</a>	/**
+</p><p><a href="#L287">287</a>	 * Set the alias/type map, consisting of string aliases mapped to classes.
+</p><p><a href="#L288">288</a>	 * &lt;p&gt;Keys are aliases; values are either {@code Class} instances, or String class names.
+</p><p><a href="#L289">289</a>	 * @see XStream#alias(String, Class)
+</p><p><a href="#L290">290</a>	 */
+</p><p><a href="#L291">291</a>	public void setAliases(Map&lt;String, ?&gt; aliases) {
+</p><p><a href="#L292">292</a>		this.aliases = aliases;
+</p><p><a href="#L293">293</a>	}
+</p><p><a href="#L294">294</a>
+</p><p><a href="#L295">295</a>	/**
+</p><p><a href="#L296">296</a>	 * Set the &lt;em&gt;aliases by type&lt;/em&gt; map, consisting of string aliases mapped to classes.
+</p><p><a href="#L297">297</a>	 * &lt;p&gt;Any class that is assignable to this type will be aliased to the same name.
+</p><p><a href="#L298">298</a>	 * Keys are aliases; values are either {@code Class} instances, or String class names.
+</p><p><a href="#L299">299</a>	 * @see XStream#aliasType(String, Class)
+</p><p><a href="#L300">300</a>	 */
+</p><p><a href="#L301">301</a>	public void setAliasesByType(Map&lt;String, ?&gt; aliasesByType) {
+</p><p><a href="#L302">302</a>		this.aliasesByType = aliasesByType;
+</p><p><a href="#L303">303</a>	}
+</p><p><a href="#L304">304</a>
+</p><p><a href="#L305">305</a>	/**
+</p><p><a href="#L306">306</a>	 * Set the field alias/type map, consisting of field names.
+</p><p><a href="#L307">307</a>	 * @see XStream#aliasField(String, Class, String)
+</p><p><a href="#L308">308</a>	 */
+</p><p><a href="#L309">309</a>	public void setFieldAliases(Map&lt;String, String&gt; fieldAliases) {
+</p><p><a href="#L310">310</a>		this.fieldAliases = fieldAliases;
+</p><p><a href="#L311">311</a>	}
+</p><p><a href="#L312">312</a>
+</p><p><a href="#L313">313</a>	/**
+</p><p><a href="#L314">314</a>	 * Set types to use XML attributes for.
+</p><p><a href="#L315">315</a>	 * @see XStream#useAttributeFor(Class)
+</p><p><a href="#L316">316</a>	 */
+</p><p><a href="#L317">317</a>	public void setUseAttributeForTypes(Class&lt;?&gt;... useAttributeForTypes) {
+</p><p><a href="#L318">318</a>		this.useAttributeForTypes = useAttributeForTypes;
+</p><p><a href="#L319">319</a>	}
+</p><p><a href="#L320">320</a>
+</p><p><a href="#L321">321</a>	/**
+</p><p><a href="#L322">322</a>	 * Set the types to use XML attributes for. The given map can contain
+</p><p><a href="#L323">323</a>	 * either {@code &lt;String, Class&gt;} pairs, in which case
+</p><p><a href="#L324">324</a>	 * {@link XStream#useAttributeFor(String, Class)} is called.
+</p><p><a href="#L325">325</a>	 * Alternatively, the map can contain {@code &lt;Class, String&gt;}
+</p><p><a href="#L326">326</a>	 * or {@code &lt;Class, List&lt;String&gt;&gt;} pairs, which results
+</p><p><a href="#L327">327</a>	 * in {@link XStream#useAttributeFor(Class, String)} calls.
+</p><p><a href="#L328">328</a>	 */
+</p><p><a href="#L329">329</a>	public void setUseAttributeFor(Map&lt;?, ?&gt; useAttributeFor) {
+</p><p><a href="#L330">330</a>		this.useAttributeFor = useAttributeFor;
+</p><p><a href="#L331">331</a>	}
+</p><p><a href="#L332">332</a>
+</p><p><a href="#L333">333</a>	/**
+</p><p><a href="#L334">334</a>	 * Specify implicit collection fields, as a Map consisting of {@code Class} instances
+</p><p><a href="#L335">335</a>	 * mapped to comma separated collection field names.
+</p><p><a href="#L336">336</a>	 * @see XStream#addImplicitCollection(Class, String)
+</p><p><a href="#L337">337</a>	 */
+</p><p><a href="#L338">338</a>	public void setImplicitCollections(Map&lt;Class&lt;?&gt;, String&gt; implicitCollections) {
+</p><p><a href="#L339">339</a>		this.implicitCollections = implicitCollections;
+</p><p><a href="#L340">340</a>	}
+</p><p><a href="#L341">341</a>
+</p><p><a href="#L342">342</a>	/**
+</p><p><a href="#L343">343</a>	 * Specify omitted fields, as a Map consisting of {@code Class} instances
+</p><p><a href="#L344">344</a>	 * mapped to comma separated field names.
+</p><p><a href="#L345">345</a>	 * @see XStream#omitField(Class, String)
+</p><p><a href="#L346">346</a>	 */
+</p><p><a href="#L347">347</a>	public void setOmittedFields(Map&lt;Class&lt;?&gt;, String&gt; omittedFields) {
+</p><p><a href="#L348">348</a>		this.omittedFields = omittedFields;
+</p><p><a href="#L349">349</a>	}
+</p><p><a href="#L350">350</a>
+</p><p><a href="#L351">351</a>	/**
+</p><p><a href="#L352">352</a>	 * Set annotated classes for which aliases will be read from class-level annotation metadata.
+</p><p><a href="#L353">353</a>	 * @see XStream#processAnnotations(Class[])
+</p><p><a href="#L354">354</a>	 */
+</p><p><a href="#L355">355</a>	public void setAnnotatedClasses(Class&lt;?&gt;... annotatedClasses) {
+</p><p><a href="#L356">356</a>		this.annotatedClasses = annotatedClasses;
+</p><p><a href="#L357">357</a>	}
+</p><p><a href="#L358">358</a>
+</p><p><a href="#L359">359</a>	/**
+</p><p><a href="#L360">360</a>	 * Activate XStream's autodetection mode.
+</p><p><a href="#L361">361</a>	 * &lt;p&gt;&lt;b&gt;Note&lt;/b&gt;: Autodetection implies that the XStream instance is being configured while
+</p><p><a href="#L362">362</a>	 * it is processing the XML streams, and thus introduces a potential concurrency problem.
+</p><p><a href="#L363">363</a>	 * @see XStream#autodetectAnnotations(boolean)
+</p><p><a href="#L364">364</a>	 */
+</p><p><a href="#L365">365</a>	public void setAutodetectAnnotations(boolean autodetectAnnotations) {
+</p><p><a href="#L366">366</a>		this.autodetectAnnotations = autodetectAnnotations;
+</p><p><a href="#L367">367</a>	}
+</p><p><a href="#L368">368</a>
+</p><p><a href="#L369">369</a>	/**
+</p><p><a href="#L370">370</a>	 * Set the encoding to be used for stream access.
+</p><p><a href="#L371">371</a>	 * @see #DEFAULT_ENCODING
+</p><p><a href="#L372">372</a>	 */
+</p><p><a href="#L373">373</a>	public void setEncoding(String encoding) {
+</p><p><a href="#L374">374</a>		this.encoding = encoding;
+</p><p><a href="#L375">375</a>	}
+</p><p><a href="#L376">376</a>
+</p><p><a href="#L377">377</a>	@Override
+</p><p><a href="#L378">378</a>	protected String getDefaultEncoding() {
+</p><p><a href="#L379">379</a>		return this.encoding;
+</p><p><a href="#L380">380</a>	}
+</p><p><a href="#L381">381</a>
+</p><p><a href="#L382">382</a>	/**
+</p><p><a href="#L383">383</a>	 * Set a custom XStream {@link NameCoder} to use.
+</p><p><a href="#L384">384</a>	 * The default is an {@link XmlFriendlyNameCoder}.
+</p><p><a href="#L385">385</a>	 * @since 4.0.4
+</p><p><a href="#L386">386</a>	 */
+</p><p><a href="#L387">387</a>	public void setNameCoder(NameCoder nameCoder) {
+</p><p><a href="#L388">388</a>		this.nameCoder = nameCoder;
+</p><p><a href="#L389">389</a>	}
+</p><p><a href="#L390">390</a>
+</p><p><a href="#L391">391</a>	/**
+</p><p><a href="#L392">392</a>	 * Set the classes supported by this marshaller.
+</p><p><a href="#L393">393</a>	 * &lt;p&gt;If this property is empty (the default), all classes are supported.
+</p><p><a href="#L394">394</a>	 * @see #supports(Class)
+</p><p><a href="#L395">395</a>	 */
+</p><p><a href="#L396">396</a>	public void setSupportedClasses(Class&lt;?&gt;... supportedClasses) {
+</p><p><a href="#L397">397</a>		this.supportedClasses = supportedClasses;
+</p><p><a href="#L398">398</a>	}
+</p><p><a href="#L399">399</a>
+</p><p><a href="#L400">400</a>	@Override
+</p><p><a href="#L401">401</a>	public void setBeanClassLoader(ClassLoader classLoader) {
+</p><p><a href="#L402">402</a>		this.beanClassLoader = classLoader;
+</p><p><a href="#L403">403</a>	}
+</p><p><a href="#L404">404</a>
+</p><p><a href="#L405">405</a>
+</p><p><a href="#L406">406</a>	@Override
+</p><p><a href="#L407">407</a>	public void afterPropertiesSet() {
+</p><p><a href="#L408">408</a>		this.xstream = buildXStream();
+</p><p><a href="#L409">409</a>	}
+</p><p><a href="#L410">410</a>
+</p><p><a href="#L411">411</a>	/**
+</p><p><a href="#L412">412</a>	 * Build the native XStream delegate to be used by this marshaller,
+</p><p><a href="#L413">413</a>	 * delegating to {@link #constructXStream()}, {@link #configureXStream}
+</p><p><a href="#L414">414</a>	 * and {@link #customizeXStream}.
+</p><p><a href="#L415">415</a>	 */
+</p><p><a href="#L416">416</a>	protected XStream buildXStream() {
+</p><p><a href="#L417">417</a>		XStream xstream = constructXStream();
+</p><p><a href="#L418">418</a>		configureXStream(xstream);
+</p><p><a href="#L419">419</a>		customizeXStream(xstream);
+</p><p><a href="#L420">420</a>		return xstream;
+</p><p><a href="#L421">421</a>	}
+</p><p><a href="#L422">422</a>
+</p><p><a href="#L423">423</a>	/**
+</p><p><a href="#L424">424</a>	 * Construct an XStream instance, either using one of the
+</p><p><a href="#L425">425</a>	 * standard constructors or creating a custom subclass.
+</p><p><a href="#L426">426</a>	 * @return the {@code XStream} instance
+</p><p><a href="#L427">427</a>	 */
+</p><p><a href="#L428">428</a>	protected XStream constructXStream() {
+</p><p><a href="#L429">429</a>		return new XStream(this.reflectionProvider, getDefaultDriver(), new ClassLoaderReference(this.beanClassLoader),
+</p><p><a href="#L430">430</a>				this.mapper, this.converterLookup, this.converterRegistry) {
+</p><p><a href="#L431">431</a>			@Override
+</p><p><a href="#L432">432</a>			protected MapperWrapper wrapMapper(MapperWrapper next) {
+</p><p><a href="#L433">433</a>				MapperWrapper mapperToWrap = next;
+</p><p><a href="#L434">434</a>				if (mapperWrappers != null) {
+</p><p><a href="#L435">435</a>					for (Class&lt;? extends MapperWrapper&gt; mapperWrapper : mapperWrappers) {
+</p><p><a href="#L436">436</a>						Constructor&lt;? extends MapperWrapper&gt; ctor;
+</p><p><a href="#L437">437</a>						try {
+</p><p><a href="#L438">438</a>							ctor = mapperWrapper.getConstructor(Mapper.class);
+</p><p><a href="#L439">439</a>						}
+</p><p><a href="#L440">440</a>						catch (NoSuchMethodException ex) {
+</p><p><a href="#L441">441</a>							try {
+</p><p><a href="#L442">442</a>								ctor = mapperWrapper.getConstructor(MapperWrapper.class);
+</p><p><a href="#L443">443</a>							}
+</p><p><a href="#L444">444</a>							catch (NoSuchMethodException ex2) {
+</p><p><a href="#L445">445</a>								throw new IllegalStateException("No appropriate MapperWrapper constructor found: " + mapperWrapper);
+</p><p><a href="#L446">446</a>							}
+</p><p><a href="#L447">447</a>						}
+</p><p><a href="#L448">448</a>						try {
+</p><p><a href="#L449">449</a>							mapperToWrap = ctor.newInstance(mapperToWrap);
+</p><p><a href="#L450">450</a>						}
+</p><p><a href="#L451">451</a>						catch (Throwable ex) {
+</p><p><a href="#L452">452</a>							throw new IllegalStateException("Failed to construct MapperWrapper: " + mapperWrapper);
+</p><p><a href="#L453">453</a>						}
+</p><p><a href="#L454">454</a>					}
+</p><p><a href="#L455">455</a>				}
+</p><p><a href="#L456">456</a>				return mapperToWrap;
+</p><p><a href="#L457">457</a>			}
+</p><p><a href="#L458">458</a>		};
+</p><p><a href="#L459">459</a>	}
+</p><p><a href="#L460">460</a>
+</p><p><a href="#L461">461</a>	/**
+</p><p><a href="#L462">462</a>	 * Configure the XStream instance with this marshaller's bean properties.
+</p><p><a href="#L463">463</a>	 * @param xstream the {@code XStream} instance
+</p><p><a href="#L464">464</a>	 */
+</p><p><a href="#L465">465</a>	protected void configureXStream(XStream xstream) {
+</p><p><a href="#L466">466</a>		if (this.converters != null) {
+</p><p><a href="#L467">467</a>			for (int i = 0; i &lt; this.converters.length; i++) {
+</p><p><a href="#L468">468</a>				if (this.converters[i] instanceof Converter) {
+</p><p><a href="#L469">469</a>					xstream.registerConverter((Converter) this.converters[i], i);
+</p><p><a href="#L470">470</a>				}
+</p><p><a href="#L471">471</a>				else if (this.converters[i] instanceof SingleValueConverter) {
+</p><p><a href="#L472">472</a>					xstream.registerConverter((SingleValueConverter) this.converters[i], i);
+</p><p><a href="#L473">473</a>				}
+</p><p><a href="#L474">474</a>				else {
+</p><p><a href="#L475">475</a>					throw new IllegalArgumentException("Invalid ConverterMatcher [" + this.converters[i] + "]");
+</p><p><a href="#L476">476</a>				}
+</p><p><a href="#L477">477</a>			}
+</p><p><a href="#L478">478</a>		}
+</p><p><a href="#L479">479</a>
+</p><p><a href="#L480">480</a>		if (this.marshallingStrategy != null) {
+</p><p><a href="#L481">481</a>			xstream.setMarshallingStrategy(this.marshallingStrategy);
+</p><p><a href="#L482">482</a>		}
+</p><p><a href="#L483">483</a>		if (this.mode != null) {
+</p><p><a href="#L484">484</a>			xstream.setMode(this.mode);
+</p><p><a href="#L485">485</a>		}
+</p><p><a href="#L486">486</a>
+</p><p><a href="#L487">487</a>		try {
+</p><p><a href="#L488">488</a>			if (this.aliases != null) {
+</p><p><a href="#L489">489</a>				Map&lt;String, Class&lt;?&gt;&gt; classMap = toClassMap(this.aliases);
+</p><p><a href="#L490">490</a>				classMap.forEach(xstream::alias);
+</p><p><a href="#L491">491</a>			}
+</p><p><a href="#L492">492</a>			if (this.aliasesByType != null) {
+</p><p><a href="#L493">493</a>				Map&lt;String, Class&lt;?&gt;&gt; classMap = toClassMap(this.aliasesByType);
+</p><p><a href="#L494">494</a>				classMap.forEach(xstream::aliasType);
+</p><p><a href="#L495">495</a>			}
+</p><p><a href="#L496">496</a>			if (this.fieldAliases != null) {
+</p><p><a href="#L497">497</a>				for (Map.Entry&lt;String, String&gt; entry : this.fieldAliases.entrySet()) {
+</p><p><a href="#L498">498</a>					String alias = entry.getValue();
+</p><p><a href="#L499">499</a>					String field = entry.getKey();
+</p><p><a href="#L500">500</a>					int idx = field.lastIndexOf('.');
+</p><p><a href="#L501">501</a>					if (idx != -1) {
+</p><p><a href="#L502">502</a>						String className = field.substring(0, idx);
+</p><p><a href="#L503">503</a>						Class&lt;?&gt; clazz = ClassUtils.forName(className, this.beanClassLoader);
+</p><p><a href="#L504">504</a>						String fieldName = field.substring(idx + 1);
+</p><p><a href="#L505">505</a>						xstream.aliasField(alias, clazz, fieldName);
+</p><p><a href="#L506">506</a>					}
+</p><p><a href="#L507">507</a>					else {
+</p><p><a href="#L508">508</a>						throw new IllegalArgumentException("Field name [" + field + "] does not contain '.'");
+</p><p><a href="#L509">509</a>					}
+</p><p><a href="#L510">510</a>				}
+</p><p><a href="#L511">511</a>			}
+</p><p><a href="#L512">512</a>		}
+</p><p><a href="#L513">513</a>		catch (ClassNotFoundException ex) {
+</p><p><a href="#L514">514</a>			throw new IllegalStateException("Failed to load specified alias class", ex);
+</p><p><a href="#L515">515</a>		}
+</p><p><a href="#L516">516</a>
+</p><p><a href="#L517">517</a>		if (this.useAttributeForTypes != null) {
+</p><p><a href="#L518">518</a>			for (Class&lt;?&gt; type : this.useAttributeForTypes) {
+</p><p><a href="#L519">519</a>				xstream.useAttributeFor(type);
+</p><p><a href="#L520">520</a>			}
+</p><p><a href="#L521">521</a>		}
+</p><p><a href="#L522">522</a>		if (this.useAttributeFor != null) {
+</p><p><a href="#L523">523</a>			for (Map.Entry&lt;?, ?&gt; entry : this.useAttributeFor.entrySet()) {
+</p><p><a href="#L524">524</a>				if (entry.getKey() instanceof String) {
+</p><p><a href="#L525">525</a>					if (entry.getValue() instanceof Class) {
+</p><p><a href="#L526">526</a>						xstream.useAttributeFor((String) entry.getKey(), (Class&lt;?&gt;) entry.getValue());
+</p><p><a href="#L527">527</a>					}
+</p><p><a href="#L528">528</a>					else {
+</p><p><a href="#L529">529</a>						throw new IllegalArgumentException(
+</p><p><a href="#L530">530</a>								"'useAttributesFor' takes Map&lt;String, Class&gt; when using a map key of type String");
+</p><p><a href="#L531">531</a>					}
+</p><p><a href="#L532">532</a>				}
+</p><p><a href="#L533">533</a>				else if (entry.getKey() instanceof Class) {
+</p><p><a href="#L534">534</a>					Class&lt;?&gt; key = (Class&lt;?&gt;) entry.getKey();
+</p><p><a href="#L535">535</a>					if (entry.getValue() instanceof String) {
+</p><p><a href="#L536">536</a>						xstream.useAttributeFor(key, (String) entry.getValue());
+</p><p><a href="#L537">537</a>					}
+</p><p><a href="#L538">538</a>					else if (entry.getValue() instanceof List) {
+</p><p><a href="#L539">539</a>						@SuppressWarnings("unchecked")
+</p><p><a href="#L540">540</a>						List&lt;Object&gt; listValue = (List&lt;Object&gt;) entry.getValue();
+</p><p><a href="#L541">541</a>						for (Object element : listValue) {
+</p><p><a href="#L542">542</a>							if (element instanceof String) {
+</p><p><a href="#L543">543</a>								xstream.useAttributeFor(key, (String) element);
+</p><p><a href="#L544">544</a>							}
+</p><p><a href="#L545">545</a>						}
+</p><p><a href="#L546">546</a>					}
+</p><p><a href="#L547">547</a>					else {
+</p><p><a href="#L548">548</a>						throw new IllegalArgumentException("'useAttributesFor' property takes either Map&lt;Class, String&gt; " +
+</p><p><a href="#L549">549</a>								"or Map&lt;Class, List&lt;String&gt;&gt; when using a map key of type Class");
+</p><p><a href="#L550">550</a>					}
+</p><p><a href="#L551">551</a>				}
+</p><p><a href="#L552">552</a>				else {
+</p><p><a href="#L553">553</a>					throw new IllegalArgumentException(
+</p><p><a href="#L554">554</a>							"'useAttributesFor' property takes either a map key of type String or Class");
+</p><p><a href="#L555">555</a>				}
+</p><p><a href="#L556">556</a>			}
+</p><p><a href="#L557">557</a>		}
+</p><p><a href="#L558">558</a>
+</p><p><a href="#L559">559</a>		if (this.implicitCollections != null) {
+</p><p><a href="#L560">560</a>			this.implicitCollections.forEach((key, fields) -&gt; {
+</p><p><a href="#L561">561</a>				String[] collectionFields = StringUtils.commaDelimitedListToStringArray(fields);
+</p><p><a href="#L562">562</a>				for (String collectionField : collectionFields) {
+</p><p><a href="#L563">563</a>					xstream.addImplicitCollection(key, collectionField);
+</p><p><a href="#L564">564</a>				}
+</p><p><a href="#L565">565</a>			});
+</p><p><a href="#L566">566</a>		}
+</p><p><a href="#L567">567</a>		if (this.omittedFields != null) {
+</p><p><a href="#L568">568</a>			this.omittedFields.forEach((key, value) -&gt; {
+</p><p><a href="#L569">569</a>				String[] fields = StringUtils.commaDelimitedListToStringArray(value);
+</p><p><a href="#L570">570</a>				for (String field : fields) {
+</p><p><a href="#L571">571</a>					xstream.omitField(key, field);
+</p><p><a href="#L572">572</a>				}
+</p><p><a href="#L573">573</a>			});
+</p><p><a href="#L574">574</a>		}
+</p><p><a href="#L575">575</a>
+</p><p><a href="#L576">576</a>		if (this.annotatedClasses != null) {
+</p><p><a href="#L577">577</a>			xstream.processAnnotations(this.annotatedClasses);
+</p><p><a href="#L578">578</a>		}
+</p><p><a href="#L579">579</a>		if (this.autodetectAnnotations) {
+</p><p><a href="#L580">580</a>			xstream.autodetectAnnotations(true);
+</p><p><a href="#L581">581</a>		}
+</p><p><a href="#L582">582</a>	}
+</p><p><a href="#L583">583</a>
+</p><p><a href="#L584">584</a>	private Map&lt;String, Class&lt;?&gt;&gt; toClassMap(Map&lt;String, ?&gt; map) throws ClassNotFoundException {
+</p><p><a href="#L585">585</a>		Map&lt;String, Class&lt;?&gt;&gt; result = new LinkedHashMap&lt;&gt;(map.size());
+</p><p><a href="#L586">586</a>		for (Map.Entry&lt;String, ?&gt; entry : map.entrySet()) {
+</p><p><a href="#L587">587</a>			String key = entry.getKey();
+</p><p><a href="#L588">588</a>			Object value = entry.getValue();
+</p><p><a href="#L589">589</a>			Class&lt;?&gt; type;
+</p><p><a href="#L590">590</a>			if (value instanceof Class) {
+</p><p><a href="#L591">591</a>				type = (Class&lt;?&gt;) value;
+</p><p><a href="#L592">592</a>			}
+</p><p><a href="#L593">593</a>			else if (value instanceof String) {
+</p><p><a href="#L594">594</a>				String className = (String) value;
+</p><p><a href="#L595">595</a>				type = ClassUtils.forName(className, this.beanClassLoader);
+</p><p><a href="#L596">596</a>			}
+</p><p><a href="#L597">597</a>			else {
+</p><p><a href="#L598">598</a>				throw new IllegalArgumentException("Unknown value [" + value + "] - expected String or Class");
+</p><p><a href="#L599">599</a>			}
+</p><p><a href="#L600">600</a>			result.put(key, type);
+</p><p><a href="#L601">601</a>		}
+</p><p><a href="#L602">602</a>		return result;
+</p><p><a href="#L603">603</a>	}
+</p><p><a href="#L604">604</a>
+</p><p><a href="#L605">605</a>	/**
+</p><p><a href="#L606">606</a>	 * Template to allow for customizing the given {@link XStream}.
+</p><p><a href="#L607">607</a>	 * &lt;p&gt;The default implementation is empty.
+</p><p><a href="#L608">608</a>	 * @param xstream the {@code XStream} instance
+</p><p><a href="#L609">609</a>	 */
+</p><p><a href="#L610">610</a>	protected void customizeXStream(XStream xstream) {
+</p><p><a href="#L611">611</a>	}
+</p><p><a href="#L612">612</a>
+</p><p><a href="#L613">613</a>	/**
+</p><p><a href="#L614">614</a>	 * Return the native XStream delegate used by this marshaller.
+</p><p><a href="#L615">615</a>	 * &lt;p&gt;&lt;b&gt;NOTE: This method has been marked as final as of Spring 4.0.&lt;/b&gt;
+</p><p><a href="#L616">616</a>	 * It can be used to access the fully configured XStream for marshalling
+</p><p><a href="#L617">617</a>	 * but not configuration purposes anymore.
+</p><p><a href="#L618">618</a>	 */
+</p><p><a href="#L619">619</a>	public final XStream getXStream() {
+</p><p><a href="#L620">620</a>		if (this.xstream == null) {
+</p><p><a href="#L621">621</a>			this.xstream = buildXStream();
+</p><p><a href="#L622">622</a>		}
+</p><p><a href="#L623">623</a>		return this.xstream;
+</p><p><a href="#L624">624</a>	}
+</p><p><a href="#L625">625</a>
+</p><p><a href="#L626">626</a>
+</p><p><a href="#L627">627</a>	@Override
+</p><p><a href="#L628">628</a>	public boolean supports(Class&lt;?&gt; clazz) {
+</p><p><a href="#L629">629</a>		if (ObjectUtils.isEmpty(this.supportedClasses)) {
+</p><p><a href="#L630">630</a>			return true;
+</p><p><a href="#L631">631</a>		}
+</p><p><a href="#L632">632</a>		else {
+</p><p><a href="#L633">633</a>			for (Class&lt;?&gt; supportedClass : this.supportedClasses) {
+</p><p><a href="#L634">634</a>				if (supportedClass.isAssignableFrom(clazz)) {
+</p><p><a href="#L635">635</a>					return true;
+</p><p><a href="#L636">636</a>				}
+</p><p><a href="#L637">637</a>			}
+</p><p><a href="#L638">638</a>			return false;
+</p><p><a href="#L639">639</a>		}
+</p><p><a href="#L640">640</a>	}
+</p><p><a href="#L641">641</a>
+</p><p><a href="#L642">642</a>
+</p><p><a href="#L643">643</a>	// Marshalling
+</p><p><a href="#L644">644</a>
+</p><p><a href="#L645">645</a>	@Override
+</p><p><a href="#L646">646</a>	protected void marshalDomNode(Object graph, Node node) throws XmlMappingException {
+</p><p><a href="#L647">647</a>		HierarchicalStreamWriter streamWriter;
+</p><p><a href="#L648">648</a>		if (node instanceof Document) {
+</p><p><a href="#L649">649</a>			streamWriter = new DomWriter((Document) node, this.nameCoder);
+</p><p><a href="#L650">650</a>		}
+</p><p><a href="#L651">651</a>		else if (node instanceof Element) {
+</p><p><a href="#L652">652</a>			streamWriter = new DomWriter((Element) node, node.getOwnerDocument(), this.nameCoder);
+</p><p><a href="#L653">653</a>		}
+</p><p><a href="#L654">654</a>		else {
+</p><p><a href="#L655">655</a>			throw new IllegalArgumentException("DOMResult contains neither Document nor Element");
+</p><p><a href="#L656">656</a>		}
+</p><p><a href="#L657">657</a>		doMarshal(graph, streamWriter, null);
+</p><p><a href="#L658">658</a>	}
+</p><p><a href="#L659">659</a>
+</p><p><a href="#L660">660</a>	@Override
+</p><p><a href="#L661">661</a>	protected void marshalXmlEventWriter(Object graph, XMLEventWriter eventWriter) throws XmlMappingException {
+</p><p><a href="#L662">662</a>		ContentHandler contentHandler = StaxUtils.createContentHandler(eventWriter);
+</p><p><a href="#L663">663</a>		LexicalHandler lexicalHandler = null;
+</p><p><a href="#L664">664</a>		if (contentHandler instanceof LexicalHandler) {
+</p><p><a href="#L665">665</a>			lexicalHandler = (LexicalHandler) contentHandler;
+</p><p><a href="#L666">666</a>		}
+</p><p><a href="#L667">667</a>		marshalSaxHandlers(graph, contentHandler, lexicalHandler);
+</p><p><a href="#L668">668</a>	}
+</p><p><a href="#L669">669</a>
+</p><p><a href="#L670">670</a>	@Override
+</p><p><a href="#L671">671</a>	protected void marshalXmlStreamWriter(Object graph, XMLStreamWriter streamWriter) throws XmlMappingException {
+</p><p><a href="#L672">672</a>		try {
+</p><p><a href="#L673">673</a>			doMarshal(graph, new StaxWriter(new QNameMap(), streamWriter, this.nameCoder), null);
+</p><p><a href="#L674">674</a>		}
+</p><p><a href="#L675">675</a>		catch (XMLStreamException ex) {
+</p><p><a href="#L676">676</a>			throw convertXStreamException(ex, true);
+</p><p><a href="#L677">677</a>		}
+</p><p><a href="#L678">678</a>	}
+</p><p><a href="#L679">679</a>
+</p><p><a href="#L680">680</a>	@Override
+</p><p><a href="#L681">681</a>	protected void marshalSaxHandlers(Object graph, ContentHandler contentHandler, @Nullable LexicalHandler lexicalHandler)
+</p><p><a href="#L682">682</a>			throws XmlMappingException {
+</p><p><a href="#L683">683</a>
+</p><p><a href="#L684">684</a>		SaxWriter saxWriter = new SaxWriter(this.nameCoder);
+</p><p><a href="#L685">685</a>		saxWriter.setContentHandler(contentHandler);
+</p><p><a href="#L686">686</a>		doMarshal(graph, saxWriter, null);
+</p><p><a href="#L687">687</a>	}
+</p><p><a href="#L688">688</a>
+</p><p><a href="#L689">689</a>	@Override
+</p><p><a href="#L690">690</a>	public void marshalOutputStream(Object graph, OutputStream outputStream) throws XmlMappingException, IOException {
+</p><p><a href="#L691">691</a>		marshalOutputStream(graph, outputStream, null);
+</p><p><a href="#L692">692</a>	}
+</p><p><a href="#L693">693</a>
+</p><p><a href="#L694">694</a>	public void marshalOutputStream(Object graph, OutputStream outputStream, @Nullable DataHolder dataHolder)
+</p><p><a href="#L695">695</a>			throws XmlMappingException, IOException {
+</p><p><a href="#L696">696</a>
+</p><p><a href="#L697">697</a>		if (this.streamDriver != null) {
+</p><p><a href="#L698">698</a>			doMarshal(graph, this.streamDriver.createWriter(outputStream), dataHolder);
+</p><p><a href="#L699">699</a>		}
+</p><p><a href="#L700">700</a>		else {
+</p><p><a href="#L701">701</a>			marshalWriter(graph, new OutputStreamWriter(outputStream, this.encoding), dataHolder);
+</p><p><a href="#L702">702</a>		}
+</p><p><a href="#L703">703</a>	}
+</p><p><a href="#L704">704</a>
+</p><p><a href="#L705">705</a>	@Override
+</p><p><a href="#L706">706</a>	public void marshalWriter(Object graph, Writer writer) throws XmlMappingException, IOException {
+</p><p><a href="#L707">707</a>		marshalWriter(graph, writer, null);
+</p><p><a href="#L708">708</a>	}
+</p><p><a href="#L709">709</a>
+</p><p><a href="#L710">710</a>	public void marshalWriter(Object graph, Writer writer, @Nullable DataHolder dataHolder)
+</p><p><a href="#L711">711</a>			throws XmlMappingException, IOException {
+</p><p><a href="#L712">712</a>
+</p><p><a href="#L713">713</a>		if (this.streamDriver != null) {
+</p><p><a href="#L714">714</a>			doMarshal(graph, this.streamDriver.createWriter(writer), dataHolder);
+</p><p><a href="#L715">715</a>		}
+</p><p><a href="#L716">716</a>		else {
+</p><p><a href="#L717">717</a>			doMarshal(graph, new CompactWriter(writer), dataHolder);
+</p><p><a href="#L718">718</a>		}
+</p><p><a href="#L719">719</a>	}
+</p><p><a href="#L720">720</a>
+</p><p><a href="#L721">721</a>	/**
+</p><p><a href="#L722">722</a>	 * Marshals the given graph to the given XStream HierarchicalStreamWriter.
+</p><p><a href="#L723">723</a>	 * Converts exceptions using {@link #convertXStreamException}.
+</p><p><a href="#L724">724</a>	 */
+</p><p><a href="#L725">725</a>	private void doMarshal(Object graph, HierarchicalStreamWriter streamWriter, @Nullable DataHolder dataHolder) {
+</p><p><a href="#L726">726</a>		try {
+</p><p><a href="#L727">727</a>			getXStream().marshal(graph, streamWriter, dataHolder);
+</p><p><a href="#L728">728</a>		}
+</p><p><a href="#L729">729</a>		catch (Exception ex) {
+</p><p><a href="#L730">730</a>			throw convertXStreamException(ex, true);
+</p><p><a href="#L731">731</a>		}
+</p><p><a href="#L732">732</a>		finally {
+</p><p><a href="#L733">733</a>			try {
+</p><p><a href="#L734">734</a>				streamWriter.flush();
+</p><p><a href="#L735">735</a>			}
+</p><p><a href="#L736">736</a>			catch (Exception ex) {
+</p><p><a href="#L737">737</a>				logger.debug("Could not flush HierarchicalStreamWriter", ex);
+</p><p><a href="#L738">738</a>			}
+</p><p><a href="#L739">739</a>		}
+</p><p><a href="#L740">740</a>	}
+</p><p><a href="#L741">741</a>
+</p><p><a href="#L742">742</a>
+</p><p><a href="#L743">743</a>	// Unmarshalling
+</p><p><a href="#L744">744</a>
+</p><p><a href="#L745">745</a>	@Override
+</p><p><a href="#L746">746</a>	protected Object unmarshalStreamSource(StreamSource streamSource) throws XmlMappingException, IOException {
+</p><p><a href="#L747">747</a>		if (streamSource.getInputStream() != null) {
+</p><p><a href="#L748">748</a>			return unmarshalInputStream(streamSource.getInputStream());
+</p><p><a href="#L749">749</a>		}
+</p><p><a href="#L750">750</a>		else if (streamSource.getReader() != null) {
+</p><p><a href="#L751">751</a>			return unmarshalReader(streamSource.getReader());
+</p><p><a href="#L752">752</a>		}
+</p><p><a href="#L753">753</a>		else {
+</p><p><a href="#L754">754</a>			throw new IllegalArgumentException("StreamSource contains neither InputStream nor Reader");
+</p><p><a href="#L755">755</a>		}
+</p><p><a href="#L756">756</a>	}
+</p><p><a href="#L757">757</a>
+</p><p><a href="#L758">758</a>	@Override
+</p><p><a href="#L759">759</a>	protected Object unmarshalDomNode(Node node) throws XmlMappingException {
+</p><p><a href="#L760">760</a>		HierarchicalStreamReader streamReader;
+</p><p><a href="#L761">761</a>		if (node instanceof Document) {
+</p><p><a href="#L762">762</a>			streamReader = new DomReader((Document) node, this.nameCoder);
+</p><p><a href="#L763">763</a>		}
+</p><p><a href="#L764">764</a>		else if (node instanceof Element) {
+</p><p><a href="#L765">765</a>			streamReader = new DomReader((Element) node, this.nameCoder);
+</p><p><a href="#L766">766</a>		}
+</p><p><a href="#L767">767</a>		else {
+</p><p><a href="#L768">768</a>			throw new IllegalArgumentException("DOMSource contains neither Document nor Element");
+</p><p><a href="#L769">769</a>		}
+</p><p><a href="#L770">770</a>        return doUnmarshal(streamReader, null);
+</p><p><a href="#L771">771</a>	}
+</p><p><a href="#L772">772</a>
+</p><p><a href="#L773">773</a>	@Override
+</p><p><a href="#L774">774</a>	protected Object unmarshalXmlEventReader(XMLEventReader eventReader) throws XmlMappingException {
+</p><p><a href="#L775">775</a>		try {
+</p><p><a href="#L776">776</a>			XMLStreamReader streamReader = StaxUtils.createEventStreamReader(eventReader);
+</p><p><a href="#L777">777</a>			return unmarshalXmlStreamReader(streamReader);
+</p><p><a href="#L778">778</a>		}
+</p><p><a href="#L779">779</a>		catch (XMLStreamException ex) {
+</p><p><a href="#L780">780</a>			throw convertXStreamException(ex, false);
+</p><p><a href="#L781">781</a>		}
+</p><p><a href="#L782">782</a>	}
+</p><p><a href="#L783">783</a>
+</p><p><a href="#L784">784</a>	@Override
+</p><p><a href="#L785">785</a>	protected Object unmarshalXmlStreamReader(XMLStreamReader streamReader) throws XmlMappingException {
+</p><p><a href="#L786">786</a>        return doUnmarshal(new StaxReader(new QNameMap(), streamReader, this.nameCoder), null);
+</p><p><a href="#L787">787</a>	}
+</p><p><a href="#L788">788</a>
+</p><p><a href="#L789">789</a>	@Override
+</p><p><a href="#L790">790</a>	protected Object unmarshalSaxReader(XMLReader xmlReader, InputSource inputSource)
+</p><p><a href="#L791">791</a>			throws XmlMappingException, IOException {
+</p><p><a href="#L792">792</a>
+</p><p><a href="#L793">793</a>		throw new UnsupportedOperationException(
+</p><p><a href="#L794">794</a>				"XStreamMarshaller does not support unmarshalling using SAX XMLReaders");
+</p><p><a href="#L795">795</a>	}
+</p><p><a href="#L796">796</a>
+</p><p><a href="#L797">797</a>	@Override
+</p><p><a href="#L798">798</a>	public Object unmarshalInputStream(InputStream inputStream) throws XmlMappingException, IOException {
+</p><p><a href="#L799">799</a>		return unmarshalInputStream(inputStream, null);
+</p><p><a href="#L800">800</a>	}
+</p><p><a href="#L801">801</a>
+</p><p><a href="#L802">802</a>	public Object unmarshalInputStream(InputStream inputStream, @Nullable DataHolder dataHolder) throws XmlMappingException, IOException {
+</p><p><a href="#L803">803</a>        if (this.streamDriver != null) {
+</p><p><a href="#L804">804</a>            return doUnmarshal(this.streamDriver.createReader(inputStream), dataHolder);
+</p><p><a href="#L805">805</a>        }
+</p><p><a href="#L806">806</a>        else {
+</p><p><a href="#L807">807</a>		    return unmarshalReader(new InputStreamReader(inputStream, this.encoding), dataHolder);
+</p><p><a href="#L808">808</a>        }
+</p><p><a href="#L809">809</a>	}
+</p><p><a href="#L810">810</a>
+</p><p><a href="#L811">811</a>	@Override
+</p><p><a href="#L812">812</a>	public Object unmarshalReader(Reader reader) throws XmlMappingException, IOException {
+</p><p><a href="#L813">813</a>		return unmarshalReader(reader, null);
+</p><p><a href="#L814">814</a>	}
+</p><p><a href="#L815">815</a>
+</p><p><a href="#L816">816</a>	public Object unmarshalReader(Reader reader, @Nullable DataHolder dataHolder) throws XmlMappingException, IOException {
+</p><p><a href="#L817">817</a>		return doUnmarshal(getDefaultDriver().createReader(reader), dataHolder);
+</p><p><a href="#L818">818</a>	}
+</p><p><a href="#L819">819</a>
+</p><p><a href="#L820">820</a>    /**
+</p><p><a href="#L821">821</a>     * Unmarshals the given graph to the given XStream HierarchicalStreamWriter.
+</p><p><a href="#L822">822</a>     * Converts exceptions using {@link #convertXStreamException}.
+</p><p><a href="#L823">823</a>     */
+</p><p><a href="#L824">824</a>    private Object doUnmarshal(HierarchicalStreamReader streamReader, @Nullable DataHolder dataHolder) {
+</p><p><a href="#L825">825</a>        try {
+</p><p><a href="#L826">826</a>            return getXStream().unmarshal(streamReader, null, dataHolder);
+</p><p><a href="#L827">827</a>        }
+</p><p><a href="#L828">828</a>        catch (Exception ex) {
+</p><p><a href="#L829">829</a>            throw convertXStreamException(ex, false);
+</p><p><a href="#L830">830</a>        }
+</p><p><a href="#L831">831</a>    }
+</p><p><a href="#L832">832</a>
+</p><p><a href="#L833">833</a>
+</p><p><a href="#L834">834</a>    /**
+</p><p><a href="#L835">835</a>     * Convert the given XStream exception to an appropriate exception from the
+</p><p><a href="#L836">836</a>     * {@code org.springframework.oxm} hierarchy.
+</p><p><a href="#L837">837</a>     * &lt;p&gt;A boolean flag is used to indicate whether this exception occurs during marshalling or
+</p><p><a href="#L838">838</a>     * unmarshalling, since XStream itself does not make this distinction in its exception hierarchy.
+</p><p><a href="#L839">839</a>     * @param ex XStream exception that occurred
+</p><p><a href="#L840">840</a>     * @param marshalling indicates whether the exception occurs during marshalling ({@code true}),
+</p><p><a href="#L841">841</a>     * or unmarshalling ({@code false})
+</p><p><a href="#L842">842</a>     * @return the corresponding {@code XmlMappingException}
+</p><p><a href="#L843">843</a>     */
+</p><p><a href="#L844">844</a>	protected XmlMappingException convertXStreamException(Exception ex, boolean marshalling) {
+</p><p><a href="#L845">845</a>		if (ex instanceof StreamException || ex instanceof CannotResolveClassException ||
+</p><p><a href="#L846">846</a>				ex instanceof ConversionException) {
+</p><p><a href="#L847">847</a>			if (marshalling) {
+</p><p><a href="#L848">848</a>				return new MarshallingFailureException("XStream marshalling exception",  ex);
+</p><p><a href="#L849">849</a>			}
+</p><p><a href="#L850">850</a>			else {
+</p><p><a href="#L851">851</a>				return new UnmarshallingFailureException("XStream unmarshalling exception", ex);
+</p><p><a href="#L852">852</a>			}
+</p><p><a href="#L853">853</a>		}
+</p><p><a href="#L854">854</a>		else {
+</p><p><a href="#L855">855</a>			// fallback
+</p><p><a href="#L856">856</a>			return new UncategorizedMappingException("Unknown XStream exception", ex);
+</p><p><a href="#L857">857</a>		}
+</p><p><a href="#L858">858</a>	}
+</p><p><a href="#L859">859</a>
+</p><p><a href="#L860">860</a>}
+</p></pre></body></html>

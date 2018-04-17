@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2018 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.validation.beanvalidation;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.IOException;
+</p><p><a href="#L20">20</a>import java.lang.reflect.Constructor;
+</p><p><a href="#L21">21</a>import java.lang.reflect.Method;
+</p><p><a href="#L22">22</a>import java.util.Arrays;
+</p><p><a href="#L23">23</a>import java.util.HashMap;
+</p><p><a href="#L24">24</a>import java.util.List;
+</p><p><a href="#L25">25</a>import java.util.Map;
+</p><p><a href="#L26">26</a>import java.util.Properties;
+</p><p><a href="#L27">27</a>import javax.validation.Configuration;
+</p><p><a href="#L28">28</a>import javax.validation.ConstraintValidatorFactory;
+</p><p><a href="#L29">29</a>import javax.validation.MessageInterpolator;
+</p><p><a href="#L30">30</a>import javax.validation.ParameterNameProvider;
+</p><p><a href="#L31">31</a>import javax.validation.TraversableResolver;
+</p><p><a href="#L32">32</a>import javax.validation.Validation;
+</p><p><a href="#L33">33</a>import javax.validation.ValidationException;
+</p><p><a href="#L34">34</a>import javax.validation.ValidationProviderResolver;
+</p><p><a href="#L35">35</a>import javax.validation.Validator;
+</p><p><a href="#L36">36</a>import javax.validation.ValidatorContext;
+</p><p><a href="#L37">37</a>import javax.validation.ValidatorFactory;
+</p><p><a href="#L38">38</a>import javax.validation.bootstrap.GenericBootstrap;
+</p><p><a href="#L39">39</a>import javax.validation.bootstrap.ProviderSpecificBootstrap;
+</p><p><a href="#L40">40</a>
+</p><p><a href="#L41">41</a>import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+</p><p><a href="#L42">42</a>
+</p><p><a href="#L43">43</a>import org.springframework.beans.factory.DisposableBean;
+</p><p><a href="#L44">44</a>import org.springframework.beans.factory.InitializingBean;
+</p><p><a href="#L45">45</a>import org.springframework.context.ApplicationContext;
+</p><p><a href="#L46">46</a>import org.springframework.context.ApplicationContextAware;
+</p><p><a href="#L47">47</a>import org.springframework.context.MessageSource;
+</p><p><a href="#L48">48</a>import org.springframework.core.DefaultParameterNameDiscoverer;
+</p><p><a href="#L49">49</a>import org.springframework.core.ParameterNameDiscoverer;
+</p><p><a href="#L50">50</a>import org.springframework.core.io.Resource;
+</p><p><a href="#L51">51</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L52">52</a>import org.springframework.util.Assert;
+</p><p><a href="#L53">53</a>import org.springframework.util.CollectionUtils;
+</p><p><a href="#L54">54</a>import org.springframework.util.ReflectionUtils;
+</p><p><a href="#L55">55</a>
+</p><p><a href="#L56">56</a>/**
+</p><p><a href="#L57">57</a> * This is the central class for {@code javax.validation} (JSR-303) setup in a Spring
+</p><p><a href="#L58">58</a> * application context: It bootstraps a {@code javax.validation.ValidationFactory} and
+</p><p><a href="#L59">59</a> * exposes it through the Spring {@link org.springframework.validation.Validator} interface
+</p><p><a href="#L60">60</a> * as well as through the JSR-303 {@link javax.validation.Validator} interface and the
+</p><p><a href="#L61">61</a> * {@link javax.validation.ValidatorFactory} interface itself.
+</p><p><a href="#L62">62</a> *
+</p><p><a href="#L63">63</a> * &lt;p&gt;When talking to an instance of this bean through the Spring or JSR-303 Validator interfaces,
+</p><p><a href="#L64">64</a> * you'll be talking to the default Validator of the underlying ValidatorFactory. This is very
+</p><p><a href="#L65">65</a> * convenient in that you don't have to perform yet another call on the factory, assuming that
+</p><p><a href="#L66">66</a> * you will almost always use the default Validator anyway. This can also be injected directly
+</p><p><a href="#L67">67</a> * into any target dependency of type {@link org.springframework.validation.Validator}!
+</p><p><a href="#L68">68</a> *
+</p><p><a href="#L69">69</a> * &lt;p&gt;&lt;b&gt;As of Spring 5.0, this class requires Bean Validation 1.1+, with special support
+</p><p><a href="#L70">70</a> * for Hibernate Validator 5.x&lt;/b&gt; (see {@link #setValidationMessageSource}).
+</p><p><a href="#L71">71</a> * This class is also runtime-compatible with Bean Validation 2.0 and Hibernate Validator 6.0,
+</p><p><a href="#L72">72</a> * with one special note: If you'd like to call BV 2.0's {@code getClockProvider()} method,
+</p><p><a href="#L73">73</a> * obtain the native {@code ValidatorFactory} through {@code #unwrap(ValidatorFactory.class)}
+</p><p><a href="#L74">74</a> * and call the {@code getClockProvider()} method on the returned native reference there.
+</p><p><a href="#L75">75</a> *
+</p><p><a href="#L76">76</a> * &lt;p&gt;This class is also being used by Spring's MVC configuration namespace, in case of the
+</p><p><a href="#L77">77</a> * {@code javax.validation} API being present but no explicit Validator having been configured.
+</p><p><a href="#L78">78</a> *
+</p><p><a href="#L79">79</a> * @author Juergen Hoeller
+</p><p><a href="#L80">80</a> * @since 3.0
+</p><p><a href="#L81">81</a> * @see javax.validation.ValidatorFactory
+</p><p><a href="#L82">82</a> * @see javax.validation.Validator
+</p><p><a href="#L83">83</a> * @see javax.validation.Validation#buildDefaultValidatorFactory()
+</p><p><a href="#L84">84</a> * @see javax.validation.ValidatorFactory#getValidator()
+</p><p><a href="#L85">85</a> */
+</p><p><a href="#L86">86</a>public class LocalValidatorFactoryBean extends SpringValidatorAdapter
+</p><p><a href="#L87">87</a>		implements ValidatorFactory, ApplicationContextAware, InitializingBean, DisposableBean {
+</p><p><a href="#L88">88</a>
+</p><p><a href="#L89">89</a>	@SuppressWarnings("rawtypes")
+</p><p><a href="#L90">90</a>	@Nullable
+</p><p><a href="#L91">91</a>	private Class providerClass;
+</p><p><a href="#L92">92</a>
+</p><p><a href="#L93">93</a>	@Nullable
+</p><p><a href="#L94">94</a>	private ValidationProviderResolver validationProviderResolver;
+</p><p><a href="#L95">95</a>
+</p><p><a href="#L96">96</a>	@Nullable
+</p><p><a href="#L97">97</a>	private MessageInterpolator messageInterpolator;
+</p><p><a href="#L98">98</a>
+</p><p><a href="#L99">99</a>	@Nullable
+</p><p><a href="#L100">100</a>	private TraversableResolver traversableResolver;
+</p><p><a href="#L101">101</a>
+</p><p><a href="#L102">102</a>	@Nullable
+</p><p><a href="#L103">103</a>	private ConstraintValidatorFactory constraintValidatorFactory;
+</p><p><a href="#L104">104</a>
+</p><p><a href="#L105">105</a>	@Nullable
+</p><p><a href="#L106">106</a>	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+</p><p><a href="#L107">107</a>
+</p><p><a href="#L108">108</a>	@Nullable
+</p><p><a href="#L109">109</a>	private Resource[] mappingLocations;
+</p><p><a href="#L110">110</a>
+</p><p><a href="#L111">111</a>	private final Map&lt;String, String&gt; validationPropertyMap = new HashMap&lt;&gt;();
+</p><p><a href="#L112">112</a>
+</p><p><a href="#L113">113</a>	@Nullable
+</p><p><a href="#L114">114</a>	private ApplicationContext applicationContext;
+</p><p><a href="#L115">115</a>
+</p><p><a href="#L116">116</a>	@Nullable
+</p><p><a href="#L117">117</a>	private ValidatorFactory validatorFactory;
+</p><p><a href="#L118">118</a>
+</p><p><a href="#L119">119</a>
+</p><p><a href="#L120">120</a>	/**
+</p><p><a href="#L121">121</a>	 * Specify the desired provider class, if any.
+</p><p><a href="#L122">122</a>	 * &lt;p&gt;If not specified, JSR-303's default search mechanism will be used.
+</p><p><a href="#L123">123</a>	 * @see javax.validation.Validation#byProvider(Class)
+</p><p><a href="#L124">124</a>	 * @see javax.validation.Validation#byDefaultProvider()
+</p><p><a href="#L125">125</a>	 */
+</p><p><a href="#L126">126</a>	@SuppressWarnings("rawtypes")
+</p><p><a href="#L127">127</a>	public void setProviderClass(Class providerClass) {
+</p><p><a href="#L128">128</a>		this.providerClass = providerClass;
+</p><p><a href="#L129">129</a>	}
+</p><p><a href="#L130">130</a>
+</p><p><a href="#L131">131</a>	/**
+</p><p><a href="#L132">132</a>	 * Specify a JSR-303 {@link ValidationProviderResolver} for bootstrapping the
+</p><p><a href="#L133">133</a>	 * provider of choice, as an alternative to {@code META-INF} driven resolution.
+</p><p><a href="#L134">134</a>	 * @since 4.3
+</p><p><a href="#L135">135</a>	 */
+</p><p><a href="#L136">136</a>	public void setValidationProviderResolver(ValidationProviderResolver validationProviderResolver) {
+</p><p><a href="#L137">137</a>		this.validationProviderResolver = validationProviderResolver;
+</p><p><a href="#L138">138</a>	}
+</p><p><a href="#L139">139</a>
+</p><p><a href="#L140">140</a>	/**
+</p><p><a href="#L141">141</a>	 * Specify a custom MessageInterpolator to use for this ValidatorFactory
+</p><p><a href="#L142">142</a>	 * and its exposed default Validator.
+</p><p><a href="#L143">143</a>	 */
+</p><p><a href="#L144">144</a>	public void setMessageInterpolator(MessageInterpolator messageInterpolator) {
+</p><p><a href="#L145">145</a>		this.messageInterpolator = messageInterpolator;
+</p><p><a href="#L146">146</a>	}
+</p><p><a href="#L147">147</a>
+</p><p><a href="#L148">148</a>	/**
+</p><p><a href="#L149">149</a>	 * Specify a custom Spring MessageSource for resolving validation messages,
+</p><p><a href="#L150">150</a>	 * instead of relying on JSR-303's default "ValidationMessages.properties" bundle
+</p><p><a href="#L151">151</a>	 * in the classpath. This may refer to a Spring context's shared "messageSource" bean,
+</p><p><a href="#L152">152</a>	 * or to some special MessageSource setup for validation purposes only.
+</p><p><a href="#L153">153</a>	 * &lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; This feature requires Hibernate Validator 4.3 or higher on the classpath.
+</p><p><a href="#L154">154</a>	 * You may nevertheless use a different validation provider but Hibernate Validator's
+</p><p><a href="#L155">155</a>	 * {@link ResourceBundleMessageInterpolator} class must be accessible during configuration.
+</p><p><a href="#L156">156</a>	 * &lt;p&gt;Specify either this property or {@link #setMessageInterpolator "messageInterpolator"},
+</p><p><a href="#L157">157</a>	 * not both. If you would like to build a custom MessageInterpolator, consider deriving from
+</p><p><a href="#L158">158</a>	 * Hibernate Validator's {@link ResourceBundleMessageInterpolator} and passing in a
+</p><p><a href="#L159">159</a>	 * Spring-based {@code ResourceBundleLocator} when constructing your interpolator.
+</p><p><a href="#L160">160</a>	 * &lt;p&gt;In order for Hibernate's default validation messages to be resolved still, your
+</p><p><a href="#L161">161</a>	 * {@link MessageSource} must be configured for optional resolution (usually the default).
+</p><p><a href="#L162">162</a>	 * In particular, the {@code MessageSource} instance specified here should not apply
+</p><p><a href="#L163">163</a>	 * {@link org.springframework.context.support.AbstractMessageSource#setUseCodeAsDefaultMessage
+</p><p><a href="#L164">164</a>	 * "useCodeAsDefaultMessage"} behavior. Please double-check your setup accordingly.
+</p><p><a href="#L165">165</a>	 * @see ResourceBundleMessageInterpolator
+</p><p><a href="#L166">166</a>	 */
+</p><p><a href="#L167">167</a>	public void setValidationMessageSource(MessageSource messageSource) {
+</p><p><a href="#L168">168</a>		this.messageInterpolator = HibernateValidatorDelegate.buildMessageInterpolator(messageSource);
+</p><p><a href="#L169">169</a>	}
+</p><p><a href="#L170">170</a>
+</p><p><a href="#L171">171</a>	/**
+</p><p><a href="#L172">172</a>	 * Specify a custom TraversableResolver to use for this ValidatorFactory
+</p><p><a href="#L173">173</a>	 * and its exposed default Validator.
+</p><p><a href="#L174">174</a>	 */
+</p><p><a href="#L175">175</a>	public void setTraversableResolver(TraversableResolver traversableResolver) {
+</p><p><a href="#L176">176</a>		this.traversableResolver = traversableResolver;
+</p><p><a href="#L177">177</a>	}
+</p><p><a href="#L178">178</a>
+</p><p><a href="#L179">179</a>	/**
+</p><p><a href="#L180">180</a>	 * Specify a custom ConstraintValidatorFactory to use for this ValidatorFactory.
+</p><p><a href="#L181">181</a>	 * &lt;p&gt;Default is a {@link SpringConstraintValidatorFactory}, delegating to the
+</p><p><a href="#L182">182</a>	 * containing ApplicationContext for creating autowired ConstraintValidator instances.
+</p><p><a href="#L183">183</a>	 */
+</p><p><a href="#L184">184</a>	public void setConstraintValidatorFactory(ConstraintValidatorFactory constraintValidatorFactory) {
+</p><p><a href="#L185">185</a>		this.constraintValidatorFactory = constraintValidatorFactory;
+</p><p><a href="#L186">186</a>	}
+</p><p><a href="#L187">187</a>
+</p><p><a href="#L188">188</a>	/**
+</p><p><a href="#L189">189</a>	 * Set the ParameterNameDiscoverer to use for resolving method and constructor
+</p><p><a href="#L190">190</a>	 * parameter names if needed for message interpolation.
+</p><p><a href="#L191">191</a>	 * &lt;p&gt;Default is a {@link org.springframework.core.DefaultParameterNameDiscoverer}.
+</p><p><a href="#L192">192</a>	 */
+</p><p><a href="#L193">193</a>	public void setParameterNameDiscoverer(ParameterNameDiscoverer parameterNameDiscoverer) {
+</p><p><a href="#L194">194</a>		this.parameterNameDiscoverer = parameterNameDiscoverer;
+</p><p><a href="#L195">195</a>	}
+</p><p><a href="#L196">196</a>
+</p><p><a href="#L197">197</a>	/**
+</p><p><a href="#L198">198</a>	 * Specify resource locations to load XML constraint mapping files from, if any.
+</p><p><a href="#L199">199</a>	 */
+</p><p><a href="#L200">200</a>	public void setMappingLocations(Resource... mappingLocations) {
+</p><p><a href="#L201">201</a>		this.mappingLocations = mappingLocations;
+</p><p><a href="#L202">202</a>	}
+</p><p><a href="#L203">203</a>
+</p><p><a href="#L204">204</a>	/**
+</p><p><a href="#L205">205</a>	 * Specify bean validation properties to be passed to the validation provider.
+</p><p><a href="#L206">206</a>	 * &lt;p&gt;Can be populated with a String "value" (parsed via PropertiesEditor)
+</p><p><a href="#L207">207</a>	 * or a "props" element in XML bean definitions.
+</p><p><a href="#L208">208</a>	 * @see javax.validation.Configuration#addProperty(String, String)
+</p><p><a href="#L209">209</a>	 */
+</p><p><a href="#L210">210</a>	public void setValidationProperties(Properties jpaProperties) {
+</p><p><a href="#L211">211</a>		CollectionUtils.mergePropertiesIntoMap(jpaProperties, this.validationPropertyMap);
+</p><p><a href="#L212">212</a>	}
+</p><p><a href="#L213">213</a>
+</p><p><a href="#L214">214</a>	/**
+</p><p><a href="#L215">215</a>	 * Specify bean validation properties to be passed to the validation provider as a Map.
+</p><p><a href="#L216">216</a>	 * &lt;p&gt;Can be populated with a "map" or "props" element in XML bean definitions.
+</p><p><a href="#L217">217</a>	 * @see javax.validation.Configuration#addProperty(String, String)
+</p><p><a href="#L218">218</a>	 */
+</p><p><a href="#L219">219</a>	public void setValidationPropertyMap(@Nullable Map&lt;String, String&gt; validationProperties) {
+</p><p><a href="#L220">220</a>		if (validationProperties != null) {
+</p><p><a href="#L221">221</a>			this.validationPropertyMap.putAll(validationProperties);
+</p><p><a href="#L222">222</a>		}
+</p><p><a href="#L223">223</a>	}
+</p><p><a href="#L224">224</a>
+</p><p><a href="#L225">225</a>	/**
+</p><p><a href="#L226">226</a>	 * Allow Map access to the bean validation properties to be passed to the validation provider,
+</p><p><a href="#L227">227</a>	 * with the option to add or override specific entries.
+</p><p><a href="#L228">228</a>	 * &lt;p&gt;Useful for specifying entries directly, for example via "validationPropertyMap[myKey]".
+</p><p><a href="#L229">229</a>	 */
+</p><p><a href="#L230">230</a>	public Map&lt;String, String&gt; getValidationPropertyMap() {
+</p><p><a href="#L231">231</a>		return this.validationPropertyMap;
+</p><p><a href="#L232">232</a>	}
+</p><p><a href="#L233">233</a>
+</p><p><a href="#L234">234</a>	@Override
+</p><p><a href="#L235">235</a>	public void setApplicationContext(ApplicationContext applicationContext) {
+</p><p><a href="#L236">236</a>		this.applicationContext = applicationContext;
+</p><p><a href="#L237">237</a>	}
+</p><p><a href="#L238">238</a>
+</p><p><a href="#L239">239</a>
+</p><p><a href="#L240">240</a>	@Override
+</p><p><a href="#L241">241</a>	@SuppressWarnings({"rawtypes", "unchecked"})
+</p><p><a href="#L242">242</a>	public void afterPropertiesSet() {
+</p><p><a href="#L243">243</a>		Configuration&lt;?&gt; configuration;
+</p><p><a href="#L244">244</a>		if (this.providerClass != null) {
+</p><p><a href="#L245">245</a>			ProviderSpecificBootstrap bootstrap = Validation.byProvider(this.providerClass);
+</p><p><a href="#L246">246</a>			if (this.validationProviderResolver != null) {
+</p><p><a href="#L247">247</a>				bootstrap = bootstrap.providerResolver(this.validationProviderResolver);
+</p><p><a href="#L248">248</a>			}
+</p><p><a href="#L249">249</a>			configuration = bootstrap.configure();
+</p><p><a href="#L250">250</a>		}
+</p><p><a href="#L251">251</a>		else {
+</p><p><a href="#L252">252</a>			GenericBootstrap bootstrap = Validation.byDefaultProvider();
+</p><p><a href="#L253">253</a>			if (this.validationProviderResolver != null) {
+</p><p><a href="#L254">254</a>				bootstrap = bootstrap.providerResolver(this.validationProviderResolver);
+</p><p><a href="#L255">255</a>			}
+</p><p><a href="#L256">256</a>			configuration = bootstrap.configure();
+</p><p><a href="#L257">257</a>		}
+</p><p><a href="#L258">258</a>
+</p><p><a href="#L259">259</a>		// Try Hibernate Validator 5.2's externalClassLoader(ClassLoader) method
+</p><p><a href="#L260">260</a>		if (this.applicationContext != null) {
+</p><p><a href="#L261">261</a>			try {
+</p><p><a href="#L262">262</a>				Method eclMethod = configuration.getClass().getMethod("externalClassLoader", ClassLoader.class);
+</p><p><a href="#L263">263</a>				ReflectionUtils.invokeMethod(eclMethod, configuration, this.applicationContext.getClassLoader());
+</p><p><a href="#L264">264</a>			}
+</p><p><a href="#L265">265</a>			catch (NoSuchMethodException ex) {
+</p><p><a href="#L266">266</a>				// Ignore - no Hibernate Validator 5.2+ or similar provider
+</p><p><a href="#L267">267</a>			}
+</p><p><a href="#L268">268</a>		}
+</p><p><a href="#L269">269</a>
+</p><p><a href="#L270">270</a>		MessageInterpolator targetInterpolator = this.messageInterpolator;
+</p><p><a href="#L271">271</a>		if (targetInterpolator == null) {
+</p><p><a href="#L272">272</a>			targetInterpolator = configuration.getDefaultMessageInterpolator();
+</p><p><a href="#L273">273</a>		}
+</p><p><a href="#L274">274</a>		configuration.messageInterpolator(new LocaleContextMessageInterpolator(targetInterpolator));
+</p><p><a href="#L275">275</a>
+</p><p><a href="#L276">276</a>		if (this.traversableResolver != null) {
+</p><p><a href="#L277">277</a>			configuration.traversableResolver(this.traversableResolver);
+</p><p><a href="#L278">278</a>		}
+</p><p><a href="#L279">279</a>
+</p><p><a href="#L280">280</a>		ConstraintValidatorFactory targetConstraintValidatorFactory = this.constraintValidatorFactory;
+</p><p><a href="#L281">281</a>		if (targetConstraintValidatorFactory == null &amp;&amp; this.applicationContext != null) {
+</p><p><a href="#L282">282</a>			targetConstraintValidatorFactory =
+</p><p><a href="#L283">283</a>					new SpringConstraintValidatorFactory(this.applicationContext.getAutowireCapableBeanFactory());
+</p><p><a href="#L284">284</a>		}
+</p><p><a href="#L285">285</a>		if (targetConstraintValidatorFactory != null) {
+</p><p><a href="#L286">286</a>			configuration.constraintValidatorFactory(targetConstraintValidatorFactory);
+</p><p><a href="#L287">287</a>		}
+</p><p><a href="#L288">288</a>
+</p><p><a href="#L289">289</a>		if (this.parameterNameDiscoverer != null) {
+</p><p><a href="#L290">290</a>			configureParameterNameProvider(this.parameterNameDiscoverer, configuration);
+</p><p><a href="#L291">291</a>		}
+</p><p><a href="#L292">292</a>
+</p><p><a href="#L293">293</a>		if (this.mappingLocations != null) {
+</p><p><a href="#L294">294</a>			for (Resource location : this.mappingLocations) {
+</p><p><a href="#L295">295</a>				try {
+</p><p><a href="#L296">296</a>					configuration.addMapping(location.getInputStream());
+</p><p><a href="#L297">297</a>				}
+</p><p><a href="#L298">298</a>				catch (IOException ex) {
+</p><p><a href="#L299">299</a>					throw new IllegalStateException("Cannot read mapping resource: " + location);
+</p><p><a href="#L300">300</a>				}
+</p><p><a href="#L301">301</a>			}
+</p><p><a href="#L302">302</a>		}
+</p><p><a href="#L303">303</a>
+</p><p><a href="#L304">304</a>		this.validationPropertyMap.forEach(configuration::addProperty);
+</p><p><a href="#L305">305</a>
+</p><p><a href="#L306">306</a>		// Allow for custom post-processing before we actually build the ValidatorFactory.
+</p><p><a href="#L307">307</a>		postProcessConfiguration(configuration);
+</p><p><a href="#L308">308</a>
+</p><p><a href="#L309">309</a>		this.validatorFactory = configuration.buildValidatorFactory();
+</p><p><a href="#L310">310</a>		setTargetValidator(this.validatorFactory.getValidator());
+</p><p><a href="#L311">311</a>	}
+</p><p><a href="#L312">312</a>
+</p><p><a href="#L313">313</a>	private void configureParameterNameProvider(ParameterNameDiscoverer discoverer, Configuration&lt;?&gt; configuration) {
+</p><p><a href="#L314">314</a>		final ParameterNameProvider defaultProvider = configuration.getDefaultParameterNameProvider();
+</p><p><a href="#L315">315</a>		configuration.parameterNameProvider(new ParameterNameProvider() {
+</p><p><a href="#L316">316</a>			@Override
+</p><p><a href="#L317">317</a>			public List&lt;String&gt; getParameterNames(Constructor&lt;?&gt; constructor) {
+</p><p><a href="#L318">318</a>				String[] paramNames = discoverer.getParameterNames(constructor);
+</p><p><a href="#L319">319</a>				return (paramNames != null ? Arrays.asList(paramNames) :
+</p><p><a href="#L320">320</a>						defaultProvider.getParameterNames(constructor));
+</p><p><a href="#L321">321</a>			}
+</p><p><a href="#L322">322</a>			@Override
+</p><p><a href="#L323">323</a>			public List&lt;String&gt; getParameterNames(Method method) {
+</p><p><a href="#L324">324</a>				String[] paramNames = discoverer.getParameterNames(method);
+</p><p><a href="#L325">325</a>				return (paramNames != null ? Arrays.asList(paramNames) :
+</p><p><a href="#L326">326</a>						defaultProvider.getParameterNames(method));
+</p><p><a href="#L327">327</a>			}
+</p><p><a href="#L328">328</a>		});
+</p><p><a href="#L329">329</a>	}
+</p><p><a href="#L330">330</a>
+</p><p><a href="#L331">331</a>	/**
+</p><p><a href="#L332">332</a>	 * Post-process the given Bean Validation configuration,
+</p><p><a href="#L333">333</a>	 * adding to or overriding any of its settings.
+</p><p><a href="#L334">334</a>	 * &lt;p&gt;Invoked right before building the {@link ValidatorFactory}.
+</p><p><a href="#L335">335</a>	 * @param configuration the Configuration object, pre-populated with
+</p><p><a href="#L336">336</a>	 * settings driven by LocalValidatorFactoryBean's properties
+</p><p><a href="#L337">337</a>	 */
+</p><p><a href="#L338">338</a>	protected void postProcessConfiguration(Configuration&lt;?&gt; configuration) {
+</p><p><a href="#L339">339</a>	}
+</p><p><a href="#L340">340</a>
+</p><p><a href="#L341">341</a>
+</p><p><a href="#L342">342</a>	@Override
+</p><p><a href="#L343">343</a>	public Validator getValidator() {
+</p><p><a href="#L344">344</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L345">345</a>		return this.validatorFactory.getValidator();
+</p><p><a href="#L346">346</a>	}
+</p><p><a href="#L347">347</a>
+</p><p><a href="#L348">348</a>	@Override
+</p><p><a href="#L349">349</a>	public ValidatorContext usingContext() {
+</p><p><a href="#L350">350</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L351">351</a>		return this.validatorFactory.usingContext();
+</p><p><a href="#L352">352</a>	}
+</p><p><a href="#L353">353</a>
+</p><p><a href="#L354">354</a>	@Override
+</p><p><a href="#L355">355</a>	public MessageInterpolator getMessageInterpolator() {
+</p><p><a href="#L356">356</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L357">357</a>		return this.validatorFactory.getMessageInterpolator();
+</p><p><a href="#L358">358</a>	}
+</p><p><a href="#L359">359</a>
+</p><p><a href="#L360">360</a>	@Override
+</p><p><a href="#L361">361</a>	public TraversableResolver getTraversableResolver() {
+</p><p><a href="#L362">362</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L363">363</a>		return this.validatorFactory.getTraversableResolver();
+</p><p><a href="#L364">364</a>	}
+</p><p><a href="#L365">365</a>
+</p><p><a href="#L366">366</a>	@Override
+</p><p><a href="#L367">367</a>	public ConstraintValidatorFactory getConstraintValidatorFactory() {
+</p><p><a href="#L368">368</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L369">369</a>		return this.validatorFactory.getConstraintValidatorFactory();
+</p><p><a href="#L370">370</a>	}
+</p><p><a href="#L371">371</a>
+</p><p><a href="#L372">372</a>	@Override
+</p><p><a href="#L373">373</a>	public ParameterNameProvider getParameterNameProvider() {
+</p><p><a href="#L374">374</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L375">375</a>		return this.validatorFactory.getParameterNameProvider();
+</p><p><a href="#L376">376</a>	}
+</p><p><a href="#L377">377</a>
+</p><p><a href="#L378">378</a>	// Bean Validation 2.0: currently not implemented here since it would imply
+</p><p><a href="#L379">379</a>	// a hard dependency on the new javax.validation.ClockProvider interface.
+</p><p><a href="#L380">380</a>	// To be resolved once Spring Framework requires Bean Validation 2.0+.
+</p><p><a href="#L381">381</a>	// Obtain the native ValidatorFactory through unwrap(ValidatorFactory.class)
+</p><p><a href="#L382">382</a>	// instead which will fully support a getClockProvider() call as well.
+</p><p><a href="#L383">383</a>	/*
+</p><p><a href="#L384">384</a>	@Override
+</p><p><a href="#L385">385</a>	public javax.validation.ClockProvider getClockProvider() {
+</p><p><a href="#L386">386</a>		Assert.notNull(this.validatorFactory, "No target ValidatorFactory set");
+</p><p><a href="#L387">387</a>		return this.validatorFactory.getClockProvider();
+</p><p><a href="#L388">388</a>	}
+</p><p><a href="#L389">389</a>	*/
+</p><p><a href="#L390">390</a>
+</p><p><a href="#L391">391</a>	@Override
+</p><p><a href="#L392">392</a>	@SuppressWarnings("unchecked")
+</p><p><a href="#L393">393</a>	public &lt;T&gt; T unwrap(@Nullable Class&lt;T&gt; type) {
+</p><p><a href="#L394">394</a>		if (type == null || !ValidatorFactory.class.isAssignableFrom(type)) {
+</p><p><a href="#L395">395</a>			try {
+</p><p><a href="#L396">396</a>				return super.unwrap(type);
+</p><p><a href="#L397">397</a>			}
+</p><p><a href="#L398">398</a>			catch (ValidationException ex) {
+</p><p><a href="#L399">399</a>				// ignore - we'll try ValidatorFactory unwrapping next
+</p><p><a href="#L400">400</a>			}
+</p><p><a href="#L401">401</a>		}
+</p><p><a href="#L402">402</a>		if (this.validatorFactory != null) {
+</p><p><a href="#L403">403</a>			try {
+</p><p><a href="#L404">404</a>				return this.validatorFactory.unwrap(type);
+</p><p><a href="#L405">405</a>			}
+</p><p><a href="#L406">406</a>			catch (ValidationException ex) {
+</p><p><a href="#L407">407</a>				// ignore if just being asked for ValidatorFactory
+</p><p><a href="#L408">408</a>				if (ValidatorFactory.class == type) {
+</p><p><a href="#L409">409</a>					return (T) this.validatorFactory;
+</p><p><a href="#L410">410</a>				}
+</p><p><a href="#L411">411</a>				throw ex;
+</p><p><a href="#L412">412</a>			}
+</p><p><a href="#L413">413</a>		}
+</p><p><a href="#L414">414</a>		throw new ValidationException("Cannot unwrap to " + type);
+</p><p><a href="#L415">415</a>	}
+</p><p><a href="#L416">416</a>
+</p><p><a href="#L417">417</a>	public void close() {
+</p><p><a href="#L418">418</a>		if (this.validatorFactory != null) {
+</p><p><a href="#L419">419</a>			this.validatorFactory.close();
+</p><p><a href="#L420">420</a>		}
+</p><p><a href="#L421">421</a>	}
+</p><p><a href="#L422">422</a>
+</p><p><a href="#L423">423</a>	@Override
+</p><p><a href="#L424">424</a>	public void destroy() {
+</p><p><a href="#L425">425</a>		close();
+</p><p><a href="#L426">426</a>	}
+</p><p><a href="#L427">427</a>
+</p><p><a href="#L428">428</a>
+</p><p><a href="#L429">429</a>	/**
+</p><p><a href="#L430">430</a>	 * Inner class to avoid a hard-coded Hibernate Validator dependency.
+</p><p><a href="#L431">431</a>	 */
+</p><p><a href="#L432">432</a>	private static class HibernateValidatorDelegate {
+</p><p><a href="#L433">433</a>
+</p><p><a href="#L434">434</a>		public static MessageInterpolator buildMessageInterpolator(MessageSource messageSource) {
+</p><p><a href="#L435">435</a>			return new ResourceBundleMessageInterpolator(new MessageSourceResourceBundleLocator(messageSource));
+</p><p><a href="#L436">436</a>		}
+</p><p><a href="#L437">437</a>	}
+</p><p><a href="#L438">438</a>
+</p><p><a href="#L439">439</a>}
+</p></pre></body></html>
