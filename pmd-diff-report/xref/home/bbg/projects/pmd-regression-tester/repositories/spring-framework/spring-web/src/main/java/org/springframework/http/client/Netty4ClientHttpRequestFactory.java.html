@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2017 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.http.client;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.IOException;
+</p><p><a href="#L20">20</a>import java.net.URI;
+</p><p><a href="#L21">21</a>import java.util.concurrent.TimeUnit;
+</p><p><a href="#L22">22</a>import javax.net.ssl.SSLException;
+</p><p><a href="#L23">23</a>
+</p><p><a href="#L24">24</a>import io.netty.bootstrap.Bootstrap;
+</p><p><a href="#L25">25</a>import io.netty.channel.ChannelConfig;
+</p><p><a href="#L26">26</a>import io.netty.channel.ChannelInitializer;
+</p><p><a href="#L27">27</a>import io.netty.channel.ChannelPipeline;
+</p><p><a href="#L28">28</a>import io.netty.channel.EventLoopGroup;
+</p><p><a href="#L29">29</a>import io.netty.channel.nio.NioEventLoopGroup;
+</p><p><a href="#L30">30</a>import io.netty.channel.socket.SocketChannel;
+</p><p><a href="#L31">31</a>import io.netty.channel.socket.SocketChannelConfig;
+</p><p><a href="#L32">32</a>import io.netty.channel.socket.nio.NioSocketChannel;
+</p><p><a href="#L33">33</a>import io.netty.handler.codec.http.HttpClientCodec;
+</p><p><a href="#L34">34</a>import io.netty.handler.codec.http.HttpObjectAggregator;
+</p><p><a href="#L35">35</a>import io.netty.handler.ssl.SslContext;
+</p><p><a href="#L36">36</a>import io.netty.handler.ssl.SslContextBuilder;
+</p><p><a href="#L37">37</a>import io.netty.handler.timeout.ReadTimeoutHandler;
+</p><p><a href="#L38">38</a>
+</p><p><a href="#L39">39</a>import org.springframework.beans.factory.DisposableBean;
+</p><p><a href="#L40">40</a>import org.springframework.beans.factory.InitializingBean;
+</p><p><a href="#L41">41</a>import org.springframework.http.HttpMethod;
+</p><p><a href="#L42">42</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L43">43</a>import org.springframework.util.Assert;
+</p><p><a href="#L44">44</a>
+</p><p><a href="#L45">45</a>/**
+</p><p><a href="#L46">46</a> * {@link org.springframework.http.client.ClientHttpRequestFactory} implementation
+</p><p><a href="#L47">47</a> * that uses &lt;a href="http://netty.io/"&gt;Netty 4&lt;/a&gt; to create requests.
+</p><p><a href="#L48">48</a> *
+</p><p><a href="#L49">49</a> * &lt;p&gt;Allows to use a pre-configured {@link EventLoopGroup} instance: useful for
+</p><p><a href="#L50">50</a> * sharing across multiple clients.
+</p><p><a href="#L51">51</a> *
+</p><p><a href="#L52">52</a> * &lt;p&gt;Note that this implementation consistently closes the HTTP connection on each
+</p><p><a href="#L53">53</a> * request.
+</p><p><a href="#L54">54</a> *
+</p><p><a href="#L55">55</a> * @author Arjen Poutsma
+</p><p><a href="#L56">56</a> * @author Rossen Stoyanchev
+</p><p><a href="#L57">57</a> * @author Brian Clozel
+</p><p><a href="#L58">58</a> * @author Mark Paluch
+</p><p><a href="#L59">59</a> * @since 4.1.2
+</p><p><a href="#L60">60</a> * @deprecated as of Spring 5.0, in favor of
+</p><p><a href="#L61">61</a> * {@link org.springframework.http.client.reactive.ReactorClientHttpConnector}
+</p><p><a href="#L62">62</a> */
+</p><p><a href="#L63">63</a>@Deprecated
+</p><p><a href="#L64">64</a>public class Netty4ClientHttpRequestFactory implements ClientHttpRequestFactory,
+</p><p><a href="#L65">65</a>		AsyncClientHttpRequestFactory, InitializingBean, DisposableBean {
+</p><p><a href="#L66">66</a>
+</p><p><a href="#L67">67</a>	/**
+</p><p><a href="#L68">68</a>	 * The default maximum response size.
+</p><p><a href="#L69">69</a>	 * @see #setMaxResponseSize(int)
+</p><p><a href="#L70">70</a>	 */
+</p><p><a href="#L71">71</a>	public static final int DEFAULT_MAX_RESPONSE_SIZE = 1024 * 1024 * 10;
+</p><p><a href="#L72">72</a>
+</p><p><a href="#L73">73</a>
+</p><p><a href="#L74">74</a>	private final EventLoopGroup eventLoopGroup;
+</p><p><a href="#L75">75</a>
+</p><p><a href="#L76">76</a>	private final boolean defaultEventLoopGroup;
+</p><p><a href="#L77">77</a>
+</p><p><a href="#L78">78</a>	private int maxResponseSize = DEFAULT_MAX_RESPONSE_SIZE;
+</p><p><a href="#L79">79</a>
+</p><p><a href="#L80">80</a>	@Nullable
+</p><p><a href="#L81">81</a>	private SslContext sslContext;
+</p><p><a href="#L82">82</a>
+</p><p><a href="#L83">83</a>	private int connectTimeout = -1;
+</p><p><a href="#L84">84</a>
+</p><p><a href="#L85">85</a>	private int readTimeout = -1;
+</p><p><a href="#L86">86</a>
+</p><p><a href="#L87">87</a>	@Nullable
+</p><p><a href="#L88">88</a>	private volatile Bootstrap bootstrap;
+</p><p><a href="#L89">89</a>
+</p><p><a href="#L90">90</a>
+</p><p><a href="#L91">91</a>	/**
+</p><p><a href="#L92">92</a>	 * Create a new {@code Netty4ClientHttpRequestFactory} with a default
+</p><p><a href="#L93">93</a>	 * {@link NioEventLoopGroup}.
+</p><p><a href="#L94">94</a>	 */
+</p><p><a href="#L95">95</a>	public Netty4ClientHttpRequestFactory() {
+</p><p><a href="#L96">96</a>		int ioWorkerCount = Runtime.getRuntime().availableProcessors() * 2;
+</p><p><a href="#L97">97</a>		this.eventLoopGroup = new NioEventLoopGroup(ioWorkerCount);
+</p><p><a href="#L98">98</a>		this.defaultEventLoopGroup = true;
+</p><p><a href="#L99">99</a>	}
+</p><p><a href="#L100">100</a>
+</p><p><a href="#L101">101</a>	/**
+</p><p><a href="#L102">102</a>	 * Create a new {@code Netty4ClientHttpRequestFactory} with the given
+</p><p><a href="#L103">103</a>	 * {@link EventLoopGroup}.
+</p><p><a href="#L104">104</a>	 * &lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; the given group will &lt;strong&gt;not&lt;/strong&gt; be
+</p><p><a href="#L105">105</a>	 * {@linkplain EventLoopGroup#shutdownGracefully() shutdown} by this factory;
+</p><p><a href="#L106">106</a>	 * doing so becomes the responsibility of the caller.
+</p><p><a href="#L107">107</a>	 */
+</p><p><a href="#L108">108</a>	public Netty4ClientHttpRequestFactory(EventLoopGroup eventLoopGroup) {
+</p><p><a href="#L109">109</a>		Assert.notNull(eventLoopGroup, "EventLoopGroup must not be null");
+</p><p><a href="#L110">110</a>		this.eventLoopGroup = eventLoopGroup;
+</p><p><a href="#L111">111</a>		this.defaultEventLoopGroup = false;
+</p><p><a href="#L112">112</a>	}
+</p><p><a href="#L113">113</a>
+</p><p><a href="#L114">114</a>
+</p><p><a href="#L115">115</a>	/**
+</p><p><a href="#L116">116</a>	 * Set the default maximum response size.
+</p><p><a href="#L117">117</a>	 * &lt;p&gt;By default this is set to {@link #DEFAULT_MAX_RESPONSE_SIZE}.
+</p><p><a href="#L118">118</a>	 * @see HttpObjectAggregator#HttpObjectAggregator(int)
+</p><p><a href="#L119">119</a>	 * @since 4.1.5
+</p><p><a href="#L120">120</a>	 */
+</p><p><a href="#L121">121</a>	public void setMaxResponseSize(int maxResponseSize) {
+</p><p><a href="#L122">122</a>		this.maxResponseSize = maxResponseSize;
+</p><p><a href="#L123">123</a>	}
+</p><p><a href="#L124">124</a>
+</p><p><a href="#L125">125</a>	/**
+</p><p><a href="#L126">126</a>	 * Set the SSL context. When configured it is used to create and insert an
+</p><p><a href="#L127">127</a>	 * {@link io.netty.handler.ssl.SslHandler} in the channel pipeline.
+</p><p><a href="#L128">128</a>	 * &lt;p&gt;A default client SslContext is configured if none has been provided.
+</p><p><a href="#L129">129</a>	 */
+</p><p><a href="#L130">130</a>	public void setSslContext(SslContext sslContext) {
+</p><p><a href="#L131">131</a>		this.sslContext = sslContext;
+</p><p><a href="#L132">132</a>	}
+</p><p><a href="#L133">133</a>
+</p><p><a href="#L134">134</a>	/**
+</p><p><a href="#L135">135</a>	 * Set the underlying connect timeout (in milliseconds).
+</p><p><a href="#L136">136</a>	 * A timeout value of 0 specifies an infinite timeout.
+</p><p><a href="#L137">137</a>	 * @see ChannelConfig#setConnectTimeoutMillis(int)
+</p><p><a href="#L138">138</a>	 */
+</p><p><a href="#L139">139</a>	public void setConnectTimeout(int connectTimeout) {
+</p><p><a href="#L140">140</a>		this.connectTimeout = connectTimeout;
+</p><p><a href="#L141">141</a>	}
+</p><p><a href="#L142">142</a>
+</p><p><a href="#L143">143</a>	/**
+</p><p><a href="#L144">144</a>	 * Set the underlying URLConnection's read timeout (in milliseconds).
+</p><p><a href="#L145">145</a>	 * A timeout value of 0 specifies an infinite timeout.
+</p><p><a href="#L146">146</a>	 * @see ReadTimeoutHandler
+</p><p><a href="#L147">147</a>	 */
+</p><p><a href="#L148">148</a>	public void setReadTimeout(int readTimeout) {
+</p><p><a href="#L149">149</a>		this.readTimeout = readTimeout;
+</p><p><a href="#L150">150</a>	}
+</p><p><a href="#L151">151</a>
+</p><p><a href="#L152">152</a>
+</p><p><a href="#L153">153</a>	@Override
+</p><p><a href="#L154">154</a>	public void afterPropertiesSet() {
+</p><p><a href="#L155">155</a>		if (this.sslContext == null) {
+</p><p><a href="#L156">156</a>			this.sslContext = getDefaultClientSslContext();
+</p><p><a href="#L157">157</a>		}
+</p><p><a href="#L158">158</a>	}
+</p><p><a href="#L159">159</a>
+</p><p><a href="#L160">160</a>	private SslContext getDefaultClientSslContext() {
+</p><p><a href="#L161">161</a>		try {
+</p><p><a href="#L162">162</a>			return SslContextBuilder.forClient().build();
+</p><p><a href="#L163">163</a>		}
+</p><p><a href="#L164">164</a>		catch (SSLException ex) {
+</p><p><a href="#L165">165</a>			throw new IllegalStateException("Could not create default client SslContext", ex);
+</p><p><a href="#L166">166</a>		}
+</p><p><a href="#L167">167</a>	}
+</p><p><a href="#L168">168</a>
+</p><p><a href="#L169">169</a>
+</p><p><a href="#L170">170</a>	@Override
+</p><p><a href="#L171">171</a>	public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
+</p><p><a href="#L172">172</a>		return createRequestInternal(uri, httpMethod);
+</p><p><a href="#L173">173</a>	}
+</p><p><a href="#L174">174</a>
+</p><p><a href="#L175">175</a>	@Override
+</p><p><a href="#L176">176</a>	public AsyncClientHttpRequest createAsyncRequest(URI uri, HttpMethod httpMethod) throws IOException {
+</p><p><a href="#L177">177</a>		return createRequestInternal(uri, httpMethod);
+</p><p><a href="#L178">178</a>	}
+</p><p><a href="#L179">179</a>
+</p><p><a href="#L180">180</a>	private Netty4ClientHttpRequest createRequestInternal(URI uri, HttpMethod httpMethod) {
+</p><p><a href="#L181">181</a>		return new Netty4ClientHttpRequest(getBootstrap(uri), uri, httpMethod);
+</p><p><a href="#L182">182</a>	}
+</p><p><a href="#L183">183</a>
+</p><p><a href="#L184">184</a>	private Bootstrap getBootstrap(URI uri) {
+</p><p><a href="#L185">185</a>		boolean isSecure = (uri.getPort() == 443 || "https".equalsIgnoreCase(uri.getScheme()));
+</p><p><a href="#L186">186</a>		if (isSecure) {
+</p><p><a href="#L187">187</a>			return buildBootstrap(uri, true);
+</p><p><a href="#L188">188</a>		}
+</p><p><a href="#L189">189</a>		else {
+</p><p><a href="#L190">190</a>			Bootstrap bootstrap = this.bootstrap;
+</p><p><a href="#L191">191</a>			if (bootstrap == null) {
+</p><p><a href="#L192">192</a>				bootstrap = buildBootstrap(uri, false);
+</p><p><a href="#L193">193</a>				this.bootstrap = bootstrap;
+</p><p><a href="#L194">194</a>			}
+</p><p><a href="#L195">195</a>			return bootstrap;
+</p><p><a href="#L196">196</a>		}
+</p><p><a href="#L197">197</a>	}
+</p><p><a href="#L198">198</a>
+</p><p><a href="#L199">199</a>	private Bootstrap buildBootstrap(URI uri, boolean isSecure) {
+</p><p><a href="#L200">200</a>		Bootstrap bootstrap = new Bootstrap();
+</p><p><a href="#L201">201</a>		bootstrap.group(this.eventLoopGroup).channel(NioSocketChannel.class)
+</p><p><a href="#L202">202</a>				.handler(new ChannelInitializer&lt;SocketChannel&gt;() {
+</p><p><a href="#L203">203</a>					@Override
+</p><p><a href="#L204">204</a>					protected void initChannel(SocketChannel channel) throws Exception {
+</p><p><a href="#L205">205</a>						configureChannel(channel.config());
+</p><p><a href="#L206">206</a>						ChannelPipeline pipeline = channel.pipeline();
+</p><p><a href="#L207">207</a>						if (isSecure) {
+</p><p><a href="#L208">208</a>							Assert.notNull(sslContext, "sslContext should not be null");
+</p><p><a href="#L209">209</a>							pipeline.addLast(sslContext.newHandler(channel.alloc(), uri.getHost(), uri.getPort()));
+</p><p><a href="#L210">210</a>						}
+</p><p><a href="#L211">211</a>						pipeline.addLast(new HttpClientCodec());
+</p><p><a href="#L212">212</a>						pipeline.addLast(new HttpObjectAggregator(maxResponseSize));
+</p><p><a href="#L213">213</a>						if (readTimeout &gt; 0) {
+</p><p><a href="#L214">214</a>							pipeline.addLast(new ReadTimeoutHandler(readTimeout,
+</p><p><a href="#L215">215</a>									TimeUnit.MILLISECONDS));
+</p><p><a href="#L216">216</a>						}
+</p><p><a href="#L217">217</a>					}
+</p><p><a href="#L218">218</a>				});
+</p><p><a href="#L219">219</a>		return bootstrap;
+</p><p><a href="#L220">220</a>	}
+</p><p><a href="#L221">221</a>
+</p><p><a href="#L222">222</a>	/**
+</p><p><a href="#L223">223</a>	 * Template method for changing properties on the given {@link SocketChannelConfig}.
+</p><p><a href="#L224">224</a>	 * &lt;p&gt;The default implementation sets the connect timeout based on the set property.
+</p><p><a href="#L225">225</a>	 * @param config the channel configuration
+</p><p><a href="#L226">226</a>	 */
+</p><p><a href="#L227">227</a>	protected void configureChannel(SocketChannelConfig config) {
+</p><p><a href="#L228">228</a>		if (this.connectTimeout &gt;= 0) {
+</p><p><a href="#L229">229</a>			config.setConnectTimeoutMillis(this.connectTimeout);
+</p><p><a href="#L230">230</a>		}
+</p><p><a href="#L231">231</a>	}
+</p><p><a href="#L232">232</a>
+</p><p><a href="#L233">233</a>
+</p><p><a href="#L234">234</a>	@Override
+</p><p><a href="#L235">235</a>	public void destroy() throws InterruptedException {
+</p><p><a href="#L236">236</a>		if (this.defaultEventLoopGroup) {
+</p><p><a href="#L237">237</a>			// Clean up the EventLoopGroup if we created it in the constructor
+</p><p><a href="#L238">238</a>			this.eventLoopGroup.shutdownGracefully().sync();
+</p><p><a href="#L239">239</a>		}
+</p><p><a href="#L240">240</a>	}
+</p><p><a href="#L241">241</a>
+</p><p><a href="#L242">242</a>}
+</p></pre></body></html>

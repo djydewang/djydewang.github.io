@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2017 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.util.xml;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.util.Iterator;
+</p><p><a href="#L20">20</a>import javax.xml.namespace.QName;
+</p><p><a href="#L21">21</a>import javax.xml.stream.Location;
+</p><p><a href="#L22">22</a>import javax.xml.stream.XMLEventReader;
+</p><p><a href="#L23">23</a>import javax.xml.stream.XMLStreamConstants;
+</p><p><a href="#L24">24</a>import javax.xml.stream.XMLStreamException;
+</p><p><a href="#L25">25</a>import javax.xml.stream.events.Attribute;
+</p><p><a href="#L26">26</a>import javax.xml.stream.events.Characters;
+</p><p><a href="#L27">27</a>import javax.xml.stream.events.Comment;
+</p><p><a href="#L28">28</a>import javax.xml.stream.events.DTD;
+</p><p><a href="#L29">29</a>import javax.xml.stream.events.EndElement;
+</p><p><a href="#L30">30</a>import javax.xml.stream.events.EntityDeclaration;
+</p><p><a href="#L31">31</a>import javax.xml.stream.events.EntityReference;
+</p><p><a href="#L32">32</a>import javax.xml.stream.events.Namespace;
+</p><p><a href="#L33">33</a>import javax.xml.stream.events.NotationDeclaration;
+</p><p><a href="#L34">34</a>import javax.xml.stream.events.ProcessingInstruction;
+</p><p><a href="#L35">35</a>import javax.xml.stream.events.StartDocument;
+</p><p><a href="#L36">36</a>import javax.xml.stream.events.StartElement;
+</p><p><a href="#L37">37</a>import javax.xml.stream.events.XMLEvent;
+</p><p><a href="#L38">38</a>
+</p><p><a href="#L39">39</a>import org.xml.sax.Attributes;
+</p><p><a href="#L40">40</a>import org.xml.sax.SAXException;
+</p><p><a href="#L41">41</a>import org.xml.sax.ext.Locator2;
+</p><p><a href="#L42">42</a>import org.xml.sax.helpers.AttributesImpl;
+</p><p><a href="#L43">43</a>
+</p><p><a href="#L44">44</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L45">45</a>import org.springframework.util.Assert;
+</p><p><a href="#L46">46</a>import org.springframework.util.StringUtils;
+</p><p><a href="#L47">47</a>
+</p><p><a href="#L48">48</a>/**
+</p><p><a href="#L49">49</a> * SAX {@code XMLReader} that reads from a StAX {@code XMLEventReader}. Consumes {@code XMLEvents} from
+</p><p><a href="#L50">50</a> * an {@code XMLEventReader}, and calls the corresponding methods on the SAX callback interfaces.
+</p><p><a href="#L51">51</a> *
+</p><p><a href="#L52">52</a> * @author Arjen Poutsma
+</p><p><a href="#L53">53</a> * @since 3.0
+</p><p><a href="#L54">54</a> * @see XMLEventReader
+</p><p><a href="#L55">55</a> * @see #setContentHandler(org.xml.sax.ContentHandler)
+</p><p><a href="#L56">56</a> * @see #setDTDHandler(org.xml.sax.DTDHandler)
+</p><p><a href="#L57">57</a> * @see #setEntityResolver(org.xml.sax.EntityResolver)
+</p><p><a href="#L58">58</a> * @see #setErrorHandler(org.xml.sax.ErrorHandler)
+</p><p><a href="#L59">59</a> */
+</p><p><a href="#L60">60</a>@SuppressWarnings("rawtypes")
+</p><p><a href="#L61">61</a>class StaxEventXMLReader extends AbstractStaxXMLReader {
+</p><p><a href="#L62">62</a>
+</p><p><a href="#L63">63</a>	private static final String DEFAULT_XML_VERSION = "1.0";
+</p><p><a href="#L64">64</a>
+</p><p><a href="#L65">65</a>	private final XMLEventReader reader;
+</p><p><a href="#L66">66</a>
+</p><p><a href="#L67">67</a>	private String xmlVersion = DEFAULT_XML_VERSION;
+</p><p><a href="#L68">68</a>
+</p><p><a href="#L69">69</a>	@Nullable
+</p><p><a href="#L70">70</a>	private String encoding;
+</p><p><a href="#L71">71</a>
+</p><p><a href="#L72">72</a>
+</p><p><a href="#L73">73</a>	/**
+</p><p><a href="#L74">74</a>	 * Constructs a new instance of the {@code StaxEventXmlReader} that reads from the given
+</p><p><a href="#L75">75</a>	 * {@code XMLEventReader}. The supplied event reader must be in {@code XMLStreamConstants.START_DOCUMENT} or
+</p><p><a href="#L76">76</a>	 * {@code XMLStreamConstants.START_ELEMENT} state.
+</p><p><a href="#L77">77</a>	 * @param reader the {@code XMLEventReader} to read from
+</p><p><a href="#L78">78</a>	 * @throws IllegalStateException if the reader is not at the start of a document or element
+</p><p><a href="#L79">79</a>	 */
+</p><p><a href="#L80">80</a>	StaxEventXMLReader(XMLEventReader reader) {
+</p><p><a href="#L81">81</a>		Assert.notNull(reader, "XMLEventReader must not be null");
+</p><p><a href="#L82">82</a>		try {
+</p><p><a href="#L83">83</a>			XMLEvent event = reader.peek();
+</p><p><a href="#L84">84</a>			if (event != null &amp;&amp; !(event.isStartDocument() || event.isStartElement())) {
+</p><p><a href="#L85">85</a>				throw new IllegalStateException("XMLEventReader not at start of document or element");
+</p><p><a href="#L86">86</a>			}
+</p><p><a href="#L87">87</a>		}
+</p><p><a href="#L88">88</a>		catch (XMLStreamException ex) {
+</p><p><a href="#L89">89</a>			throw new IllegalStateException("Could not read first element: " + ex.getMessage());
+</p><p><a href="#L90">90</a>		}
+</p><p><a href="#L91">91</a>		this.reader = reader;
+</p><p><a href="#L92">92</a>	}
+</p><p><a href="#L93">93</a>
+</p><p><a href="#L94">94</a>
+</p><p><a href="#L95">95</a>	@Override
+</p><p><a href="#L96">96</a>	protected void parseInternal() throws SAXException, XMLStreamException {
+</p><p><a href="#L97">97</a>		boolean documentStarted = false;
+</p><p><a href="#L98">98</a>		boolean documentEnded = false;
+</p><p><a href="#L99">99</a>		int elementDepth = 0;
+</p><p><a href="#L100">100</a>		while (this.reader.hasNext() &amp;&amp; elementDepth &gt;= 0) {
+</p><p><a href="#L101">101</a>			XMLEvent event = this.reader.nextEvent();
+</p><p><a href="#L102">102</a>			if (!event.isStartDocument() &amp;&amp; !event.isEndDocument() &amp;&amp; !documentStarted) {
+</p><p><a href="#L103">103</a>				handleStartDocument(event);
+</p><p><a href="#L104">104</a>				documentStarted = true;
+</p><p><a href="#L105">105</a>			}
+</p><p><a href="#L106">106</a>			switch (event.getEventType()) {
+</p><p><a href="#L107">107</a>				case XMLStreamConstants.START_DOCUMENT:
+</p><p><a href="#L108">108</a>					handleStartDocument(event);
+</p><p><a href="#L109">109</a>					documentStarted = true;
+</p><p><a href="#L110">110</a>					break;
+</p><p><a href="#L111">111</a>				case XMLStreamConstants.START_ELEMENT:
+</p><p><a href="#L112">112</a>					elementDepth++;
+</p><p><a href="#L113">113</a>					handleStartElement(event.asStartElement());
+</p><p><a href="#L114">114</a>					break;
+</p><p><a href="#L115">115</a>				case XMLStreamConstants.END_ELEMENT:
+</p><p><a href="#L116">116</a>					elementDepth--;
+</p><p><a href="#L117">117</a>					if (elementDepth &gt;= 0) {
+</p><p><a href="#L118">118</a>						handleEndElement(event.asEndElement());
+</p><p><a href="#L119">119</a>					}
+</p><p><a href="#L120">120</a>					break;
+</p><p><a href="#L121">121</a>				case XMLStreamConstants.PROCESSING_INSTRUCTION:
+</p><p><a href="#L122">122</a>					handleProcessingInstruction((ProcessingInstruction) event);
+</p><p><a href="#L123">123</a>					break;
+</p><p><a href="#L124">124</a>				case XMLStreamConstants.CHARACTERS:
+</p><p><a href="#L125">125</a>				case XMLStreamConstants.SPACE:
+</p><p><a href="#L126">126</a>				case XMLStreamConstants.CDATA:
+</p><p><a href="#L127">127</a>					handleCharacters(event.asCharacters());
+</p><p><a href="#L128">128</a>					break;
+</p><p><a href="#L129">129</a>				case XMLStreamConstants.END_DOCUMENT:
+</p><p><a href="#L130">130</a>					handleEndDocument();
+</p><p><a href="#L131">131</a>					documentEnded = true;
+</p><p><a href="#L132">132</a>					break;
+</p><p><a href="#L133">133</a>				case XMLStreamConstants.NOTATION_DECLARATION:
+</p><p><a href="#L134">134</a>					handleNotationDeclaration((NotationDeclaration) event);
+</p><p><a href="#L135">135</a>					break;
+</p><p><a href="#L136">136</a>				case XMLStreamConstants.ENTITY_DECLARATION:
+</p><p><a href="#L137">137</a>					handleEntityDeclaration((EntityDeclaration) event);
+</p><p><a href="#L138">138</a>					break;
+</p><p><a href="#L139">139</a>				case XMLStreamConstants.COMMENT:
+</p><p><a href="#L140">140</a>					handleComment((Comment) event);
+</p><p><a href="#L141">141</a>					break;
+</p><p><a href="#L142">142</a>				case XMLStreamConstants.DTD:
+</p><p><a href="#L143">143</a>					handleDtd((DTD) event);
+</p><p><a href="#L144">144</a>					break;
+</p><p><a href="#L145">145</a>				case XMLStreamConstants.ENTITY_REFERENCE:
+</p><p><a href="#L146">146</a>					handleEntityReference((EntityReference) event);
+</p><p><a href="#L147">147</a>					break;
+</p><p><a href="#L148">148</a>			}
+</p><p><a href="#L149">149</a>		}
+</p><p><a href="#L150">150</a>		if (documentStarted &amp;&amp; !documentEnded) {
+</p><p><a href="#L151">151</a>			handleEndDocument();
+</p><p><a href="#L152">152</a>		}
+</p><p><a href="#L153">153</a>
+</p><p><a href="#L154">154</a>	}
+</p><p><a href="#L155">155</a>
+</p><p><a href="#L156">156</a>	private void handleStartDocument(final XMLEvent event) throws SAXException {
+</p><p><a href="#L157">157</a>		if (event.isStartDocument()) {
+</p><p><a href="#L158">158</a>			StartDocument startDocument = (StartDocument) event;
+</p><p><a href="#L159">159</a>			String xmlVersion = startDocument.getVersion();
+</p><p><a href="#L160">160</a>			if (StringUtils.hasLength(xmlVersion)) {
+</p><p><a href="#L161">161</a>				this.xmlVersion = xmlVersion;
+</p><p><a href="#L162">162</a>			}
+</p><p><a href="#L163">163</a>			if (startDocument.encodingSet()) {
+</p><p><a href="#L164">164</a>				this.encoding = startDocument.getCharacterEncodingScheme();
+</p><p><a href="#L165">165</a>			}
+</p><p><a href="#L166">166</a>		}
+</p><p><a href="#L167">167</a>		if (getContentHandler() != null) {
+</p><p><a href="#L168">168</a>			final Location location = event.getLocation();
+</p><p><a href="#L169">169</a>			getContentHandler().setDocumentLocator(new Locator2() {
+</p><p><a href="#L170">170</a>				@Override
+</p><p><a href="#L171">171</a>				public int getColumnNumber() {
+</p><p><a href="#L172">172</a>					return (location != null ? location.getColumnNumber() : -1);
+</p><p><a href="#L173">173</a>				}
+</p><p><a href="#L174">174</a>				@Override
+</p><p><a href="#L175">175</a>				public int getLineNumber() {
+</p><p><a href="#L176">176</a>					return (location != null ? location.getLineNumber() : -1);
+</p><p><a href="#L177">177</a>				}
+</p><p><a href="#L178">178</a>				@Override
+</p><p><a href="#L179">179</a>				@Nullable
+</p><p><a href="#L180">180</a>				public String getPublicId() {
+</p><p><a href="#L181">181</a>					return (location != null ? location.getPublicId() : null);
+</p><p><a href="#L182">182</a>				}
+</p><p><a href="#L183">183</a>				@Override
+</p><p><a href="#L184">184</a>				@Nullable
+</p><p><a href="#L185">185</a>				public String getSystemId() {
+</p><p><a href="#L186">186</a>					return (location != null ? location.getSystemId() : null);
+</p><p><a href="#L187">187</a>				}
+</p><p><a href="#L188">188</a>				@Override
+</p><p><a href="#L189">189</a>				public String getXMLVersion() {
+</p><p><a href="#L190">190</a>					return xmlVersion;
+</p><p><a href="#L191">191</a>				}
+</p><p><a href="#L192">192</a>				@Override
+</p><p><a href="#L193">193</a>				@Nullable
+</p><p><a href="#L194">194</a>				public String getEncoding() {
+</p><p><a href="#L195">195</a>					return encoding;
+</p><p><a href="#L196">196</a>				}
+</p><p><a href="#L197">197</a>			});
+</p><p><a href="#L198">198</a>			getContentHandler().startDocument();
+</p><p><a href="#L199">199</a>		}
+</p><p><a href="#L200">200</a>	}
+</p><p><a href="#L201">201</a>
+</p><p><a href="#L202">202</a>	private void handleStartElement(StartElement startElement) throws SAXException {
+</p><p><a href="#L203">203</a>		if (getContentHandler() != null) {
+</p><p><a href="#L204">204</a>			QName qName = startElement.getName();
+</p><p><a href="#L205">205</a>			if (hasNamespacesFeature()) {
+</p><p><a href="#L206">206</a>				for (Iterator i = startElement.getNamespaces(); i.hasNext();) {
+</p><p><a href="#L207">207</a>					Namespace namespace = (Namespace) i.next();
+</p><p><a href="#L208">208</a>					startPrefixMapping(namespace.getPrefix(), namespace.getNamespaceURI());
+</p><p><a href="#L209">209</a>				}
+</p><p><a href="#L210">210</a>				for (Iterator i = startElement.getAttributes(); i.hasNext();){
+</p><p><a href="#L211">211</a>					Attribute attribute = (Attribute) i.next();
+</p><p><a href="#L212">212</a>					QName attributeName = attribute.getName();
+</p><p><a href="#L213">213</a>					startPrefixMapping(attributeName.getPrefix(), attributeName.getNamespaceURI());
+</p><p><a href="#L214">214</a>				}
+</p><p><a href="#L215">215</a>
+</p><p><a href="#L216">216</a>				getContentHandler().startElement(qName.getNamespaceURI(), qName.getLocalPart(), toQualifiedName(qName),
+</p><p><a href="#L217">217</a>						getAttributes(startElement));
+</p><p><a href="#L218">218</a>			}
+</p><p><a href="#L219">219</a>			else {
+</p><p><a href="#L220">220</a>				getContentHandler().startElement("", "", toQualifiedName(qName), getAttributes(startElement));
+</p><p><a href="#L221">221</a>			}
+</p><p><a href="#L222">222</a>		}
+</p><p><a href="#L223">223</a>	}
+</p><p><a href="#L224">224</a>
+</p><p><a href="#L225">225</a>	private void handleCharacters(Characters characters) throws SAXException {
+</p><p><a href="#L226">226</a>		char[] data = characters.getData().toCharArray();
+</p><p><a href="#L227">227</a>		if (getContentHandler() != null &amp;&amp; characters.isIgnorableWhiteSpace()) {
+</p><p><a href="#L228">228</a>			getContentHandler().ignorableWhitespace(data, 0, data.length);
+</p><p><a href="#L229">229</a>			return;
+</p><p><a href="#L230">230</a>		}
+</p><p><a href="#L231">231</a>		if (characters.isCData() &amp;&amp; getLexicalHandler() != null) {
+</p><p><a href="#L232">232</a>			getLexicalHandler().startCDATA();
+</p><p><a href="#L233">233</a>		}
+</p><p><a href="#L234">234</a>		if (getContentHandler() != null) {
+</p><p><a href="#L235">235</a>			getContentHandler().characters(data, 0, data.length);
+</p><p><a href="#L236">236</a>		}
+</p><p><a href="#L237">237</a>		if (characters.isCData() &amp;&amp; getLexicalHandler() != null) {
+</p><p><a href="#L238">238</a>			getLexicalHandler().endCDATA();
+</p><p><a href="#L239">239</a>		}
+</p><p><a href="#L240">240</a>	}
+</p><p><a href="#L241">241</a>
+</p><p><a href="#L242">242</a>	private void handleEndElement(EndElement endElement) throws SAXException {
+</p><p><a href="#L243">243</a>		if (getContentHandler() != null) {
+</p><p><a href="#L244">244</a>			QName qName = endElement.getName();
+</p><p><a href="#L245">245</a>			if (hasNamespacesFeature()) {
+</p><p><a href="#L246">246</a>				getContentHandler().endElement(qName.getNamespaceURI(), qName.getLocalPart(), toQualifiedName(qName));
+</p><p><a href="#L247">247</a>				for (Iterator i = endElement.getNamespaces(); i.hasNext();) {
+</p><p><a href="#L248">248</a>					Namespace namespace = (Namespace) i.next();
+</p><p><a href="#L249">249</a>					endPrefixMapping(namespace.getPrefix());
+</p><p><a href="#L250">250</a>				}
+</p><p><a href="#L251">251</a>			}
+</p><p><a href="#L252">252</a>			else {
+</p><p><a href="#L253">253</a>				getContentHandler().endElement("", "", toQualifiedName(qName));
+</p><p><a href="#L254">254</a>			}
+</p><p><a href="#L255">255</a>
+</p><p><a href="#L256">256</a>		}
+</p><p><a href="#L257">257</a>	}
+</p><p><a href="#L258">258</a>
+</p><p><a href="#L259">259</a>	private void handleEndDocument() throws SAXException {
+</p><p><a href="#L260">260</a>		if (getContentHandler() != null) {
+</p><p><a href="#L261">261</a>			getContentHandler().endDocument();
+</p><p><a href="#L262">262</a>		}
+</p><p><a href="#L263">263</a>	}
+</p><p><a href="#L264">264</a>
+</p><p><a href="#L265">265</a>	private void handleNotationDeclaration(NotationDeclaration declaration) throws SAXException {
+</p><p><a href="#L266">266</a>		if (getDTDHandler() != null) {
+</p><p><a href="#L267">267</a>			getDTDHandler().notationDecl(declaration.getName(), declaration.getPublicId(), declaration.getSystemId());
+</p><p><a href="#L268">268</a>		}
+</p><p><a href="#L269">269</a>	}
+</p><p><a href="#L270">270</a>
+</p><p><a href="#L271">271</a>	private void handleEntityDeclaration(EntityDeclaration entityDeclaration) throws SAXException {
+</p><p><a href="#L272">272</a>		if (getDTDHandler() != null) {
+</p><p><a href="#L273">273</a>			getDTDHandler().unparsedEntityDecl(entityDeclaration.getName(), entityDeclaration.getPublicId(),
+</p><p><a href="#L274">274</a>					entityDeclaration.getSystemId(), entityDeclaration.getNotationName());
+</p><p><a href="#L275">275</a>		}
+</p><p><a href="#L276">276</a>	}
+</p><p><a href="#L277">277</a>
+</p><p><a href="#L278">278</a>	private void handleProcessingInstruction(ProcessingInstruction pi) throws SAXException {
+</p><p><a href="#L279">279</a>		if (getContentHandler() != null) {
+</p><p><a href="#L280">280</a>			getContentHandler().processingInstruction(pi.getTarget(), pi.getData());
+</p><p><a href="#L281">281</a>		}
+</p><p><a href="#L282">282</a>	}
+</p><p><a href="#L283">283</a>
+</p><p><a href="#L284">284</a>	private void handleComment(Comment comment) throws SAXException {
+</p><p><a href="#L285">285</a>		if (getLexicalHandler() != null) {
+</p><p><a href="#L286">286</a>			char[] ch = comment.getText().toCharArray();
+</p><p><a href="#L287">287</a>			getLexicalHandler().comment(ch, 0, ch.length);
+</p><p><a href="#L288">288</a>		}
+</p><p><a href="#L289">289</a>	}
+</p><p><a href="#L290">290</a>
+</p><p><a href="#L291">291</a>	private void handleDtd(DTD dtd) throws SAXException {
+</p><p><a href="#L292">292</a>		if (getLexicalHandler() != null) {
+</p><p><a href="#L293">293</a>			javax.xml.stream.Location location = dtd.getLocation();
+</p><p><a href="#L294">294</a>			getLexicalHandler().startDTD(null, location.getPublicId(), location.getSystemId());
+</p><p><a href="#L295">295</a>		}
+</p><p><a href="#L296">296</a>		if (getLexicalHandler() != null) {
+</p><p><a href="#L297">297</a>			getLexicalHandler().endDTD();
+</p><p><a href="#L298">298</a>		}
+</p><p><a href="#L299">299</a>
+</p><p><a href="#L300">300</a>	}
+</p><p><a href="#L301">301</a>
+</p><p><a href="#L302">302</a>	private void handleEntityReference(EntityReference reference) throws SAXException {
+</p><p><a href="#L303">303</a>		if (getLexicalHandler() != null) {
+</p><p><a href="#L304">304</a>			getLexicalHandler().startEntity(reference.getName());
+</p><p><a href="#L305">305</a>		}
+</p><p><a href="#L306">306</a>		if (getLexicalHandler() != null) {
+</p><p><a href="#L307">307</a>			getLexicalHandler().endEntity(reference.getName());
+</p><p><a href="#L308">308</a>		}
+</p><p><a href="#L309">309</a>
+</p><p><a href="#L310">310</a>	}
+</p><p><a href="#L311">311</a>
+</p><p><a href="#L312">312</a>	private Attributes getAttributes(StartElement event) {
+</p><p><a href="#L313">313</a>		AttributesImpl attributes = new AttributesImpl();
+</p><p><a href="#L314">314</a>		for (Iterator i = event.getAttributes(); i.hasNext();) {
+</p><p><a href="#L315">315</a>			Attribute attribute = (Attribute) i.next();
+</p><p><a href="#L316">316</a>			QName qName = attribute.getName();
+</p><p><a href="#L317">317</a>			String namespace = qName.getNamespaceURI();
+</p><p><a href="#L318">318</a>			if (namespace == null || !hasNamespacesFeature()) {
+</p><p><a href="#L319">319</a>				namespace = "";
+</p><p><a href="#L320">320</a>			}
+</p><p><a href="#L321">321</a>			String type = attribute.getDTDType();
+</p><p><a href="#L322">322</a>			if (type == null) {
+</p><p><a href="#L323">323</a>				type = "CDATA";
+</p><p><a href="#L324">324</a>			}
+</p><p><a href="#L325">325</a>			attributes.addAttribute(namespace, qName.getLocalPart(), toQualifiedName(qName), type, attribute.getValue());
+</p><p><a href="#L326">326</a>		}
+</p><p><a href="#L327">327</a>		if (hasNamespacePrefixesFeature()) {
+</p><p><a href="#L328">328</a>			for (Iterator i = event.getNamespaces(); i.hasNext();) {
+</p><p><a href="#L329">329</a>				Namespace namespace = (Namespace) i.next();
+</p><p><a href="#L330">330</a>				String prefix = namespace.getPrefix();
+</p><p><a href="#L331">331</a>				String namespaceUri = namespace.getNamespaceURI();
+</p><p><a href="#L332">332</a>				String qName;
+</p><p><a href="#L333">333</a>				if (StringUtils.hasLength(prefix)) {
+</p><p><a href="#L334">334</a>					qName = "xmlns:" + prefix;
+</p><p><a href="#L335">335</a>				}
+</p><p><a href="#L336">336</a>				else {
+</p><p><a href="#L337">337</a>					qName = "xmlns";
+</p><p><a href="#L338">338</a>				}
+</p><p><a href="#L339">339</a>				attributes.addAttribute("", "", qName, "CDATA", namespaceUri);
+</p><p><a href="#L340">340</a>			}
+</p><p><a href="#L341">341</a>		}
+</p><p><a href="#L342">342</a>
+</p><p><a href="#L343">343</a>		return attributes;
+</p><p><a href="#L344">344</a>	}
+</p><p><a href="#L345">345</a>
+</p><p><a href="#L346">346</a>}
+</p></pre></body></html>

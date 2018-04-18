@@ -1,0 +1,818 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2018 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.scheduling.quartz;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.IOException;
+</p><p><a href="#L20">20</a>import java.util.Map;
+</p><p><a href="#L21">21</a>import java.util.Properties;
+</p><p><a href="#L22">22</a>import java.util.concurrent.Executor;
+</p><p><a href="#L23">23</a>import java.util.concurrent.TimeUnit;
+</p><p><a href="#L24">24</a>import javax.sql.DataSource;
+</p><p><a href="#L25">25</a>
+</p><p><a href="#L26">26</a>import org.quartz.Scheduler;
+</p><p><a href="#L27">27</a>import org.quartz.SchedulerException;
+</p><p><a href="#L28">28</a>import org.quartz.SchedulerFactory;
+</p><p><a href="#L29">29</a>import org.quartz.impl.RemoteScheduler;
+</p><p><a href="#L30">30</a>import org.quartz.impl.SchedulerRepository;
+</p><p><a href="#L31">31</a>import org.quartz.impl.StdSchedulerFactory;
+</p><p><a href="#L32">32</a>import org.quartz.simpl.SimpleThreadPool;
+</p><p><a href="#L33">33</a>import org.quartz.spi.JobFactory;
+</p><p><a href="#L34">34</a>
+</p><p><a href="#L35">35</a>import org.springframework.beans.BeanUtils;
+</p><p><a href="#L36">36</a>import org.springframework.beans.factory.BeanNameAware;
+</p><p><a href="#L37">37</a>import org.springframework.beans.factory.DisposableBean;
+</p><p><a href="#L38">38</a>import org.springframework.beans.factory.FactoryBean;
+</p><p><a href="#L39">39</a>import org.springframework.beans.factory.InitializingBean;
+</p><p><a href="#L40">40</a>import org.springframework.context.ApplicationContext;
+</p><p><a href="#L41">41</a>import org.springframework.context.ApplicationContextAware;
+</p><p><a href="#L42">42</a>import org.springframework.context.SmartLifecycle;
+</p><p><a href="#L43">43</a>import org.springframework.core.io.Resource;
+</p><p><a href="#L44">44</a>import org.springframework.core.io.ResourceLoader;
+</p><p><a href="#L45">45</a>import org.springframework.core.io.support.PropertiesLoaderUtils;
+</p><p><a href="#L46">46</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L47">47</a>import org.springframework.scheduling.SchedulingException;
+</p><p><a href="#L48">48</a>import org.springframework.util.Assert;
+</p><p><a href="#L49">49</a>import org.springframework.util.CollectionUtils;
+</p><p><a href="#L50">50</a>
+</p><p><a href="#L51">51</a>/**
+</p><p><a href="#L52">52</a> * {@link FactoryBean} that creates and configures a Quartz {@link org.quartz.Scheduler},
+</p><p><a href="#L53">53</a> * manages its lifecycle as part of the Spring application context, and exposes the
+</p><p><a href="#L54">54</a> * Scheduler as bean reference for dependency injection.
+</p><p><a href="#L55">55</a> *
+</p><p><a href="#L56">56</a> * &lt;p&gt;Allows registration of JobDetails, Calendars and Triggers, automatically
+</p><p><a href="#L57">57</a> * starting the scheduler on initialization and shutting it down on destruction.
+</p><p><a href="#L58">58</a> * In scenarios that just require static registration of jobs at startup, there
+</p><p><a href="#L59">59</a> * is no need to access the Scheduler instance itself in application code.
+</p><p><a href="#L60">60</a> *
+</p><p><a href="#L61">61</a> * &lt;p&gt;For dynamic registration of jobs at runtime, use a bean reference to
+</p><p><a href="#L62">62</a> * this SchedulerFactoryBean to get direct access to the Quartz Scheduler
+</p><p><a href="#L63">63</a> * ({@code org.quartz.Scheduler}). This allows you to create new jobs
+</p><p><a href="#L64">64</a> * and triggers, and also to control and monitor the entire Scheduler.
+</p><p><a href="#L65">65</a> *
+</p><p><a href="#L66">66</a> * &lt;p&gt;Note that Quartz instantiates a new Job for each execution, in
+</p><p><a href="#L67">67</a> * contrast to Timer which uses a TimerTask instance that is shared
+</p><p><a href="#L68">68</a> * between repeated executions. Just JobDetail descriptors are shared.
+</p><p><a href="#L69">69</a> *
+</p><p><a href="#L70">70</a> * &lt;p&gt;When using persistent jobs, it is strongly recommended to perform all
+</p><p><a href="#L71">71</a> * operations on the Scheduler within Spring-managed (or plain JTA) transactions.
+</p><p><a href="#L72">72</a> * Else, database locking will not properly work and might even break.
+</p><p><a href="#L73">73</a> * (See {@link #setDataSource setDataSource} javadoc for details.)
+</p><p><a href="#L74">74</a> *
+</p><p><a href="#L75">75</a> * &lt;p&gt;The preferred way to achieve transactional execution is to demarcate
+</p><p><a href="#L76">76</a> * declarative transactions at the business facade level, which will
+</p><p><a href="#L77">77</a> * automatically apply to Scheduler operations performed within those scopes.
+</p><p><a href="#L78">78</a> * Alternatively, you may add transactional advice for the Scheduler itself.
+</p><p><a href="#L79">79</a> *
+</p><p><a href="#L80">80</a> * &lt;p&gt;Compatible with Quartz 2.1.4 and higher, as of Spring 4.1.
+</p><p><a href="#L81">81</a> *
+</p><p><a href="#L82">82</a> * @author Juergen Hoeller
+</p><p><a href="#L83">83</a> * @since 18.02.2004
+</p><p><a href="#L84">84</a> * @see #setDataSource
+</p><p><a href="#L85">85</a> * @see org.quartz.Scheduler
+</p><p><a href="#L86">86</a> * @see org.quartz.SchedulerFactory
+</p><p><a href="#L87">87</a> * @see org.quartz.impl.StdSchedulerFactory
+</p><p><a href="#L88">88</a> * @see org.springframework.transaction.interceptor.TransactionProxyFactoryBean
+</p><p><a href="#L89">89</a> */
+</p><p><a href="#L90">90</a>public class SchedulerFactoryBean extends SchedulerAccessor implements FactoryBean&lt;Scheduler&gt;,
+</p><p><a href="#L91">91</a>		BeanNameAware, ApplicationContextAware, InitializingBean, DisposableBean, SmartLifecycle {
+</p><p><a href="#L92">92</a>
+</p><p><a href="#L93">93</a>	public static final String PROP_THREAD_COUNT = "org.quartz.threadPool.threadCount";
+</p><p><a href="#L94">94</a>
+</p><p><a href="#L95">95</a>	public static final int DEFAULT_THREAD_COUNT = 10;
+</p><p><a href="#L96">96</a>
+</p><p><a href="#L97">97</a>
+</p><p><a href="#L98">98</a>	private static final ThreadLocal&lt;ResourceLoader&gt; configTimeResourceLoaderHolder = new ThreadLocal&lt;&gt;();
+</p><p><a href="#L99">99</a>
+</p><p><a href="#L100">100</a>	private static final ThreadLocal&lt;Executor&gt; configTimeTaskExecutorHolder = new ThreadLocal&lt;&gt;();
+</p><p><a href="#L101">101</a>
+</p><p><a href="#L102">102</a>	private static final ThreadLocal&lt;DataSource&gt; configTimeDataSourceHolder = new ThreadLocal&lt;&gt;();
+</p><p><a href="#L103">103</a>
+</p><p><a href="#L104">104</a>	private static final ThreadLocal&lt;DataSource&gt; configTimeNonTransactionalDataSourceHolder = new ThreadLocal&lt;&gt;();
+</p><p><a href="#L105">105</a>
+</p><p><a href="#L106">106</a>
+</p><p><a href="#L107">107</a>	/**
+</p><p><a href="#L108">108</a>	 * Return the {@link ResourceLoader} for the currently configured Quartz Scheduler,
+</p><p><a href="#L109">109</a>	 * to be used by {@link ResourceLoaderClassLoadHelper}.
+</p><p><a href="#L110">110</a>	 * &lt;p&gt;This instance will be set before initialization of the corresponding Scheduler,
+</p><p><a href="#L111">111</a>	 * and reset immediately afterwards. It is thus only available during configuration.
+</p><p><a href="#L112">112</a>	 * @see #setApplicationContext
+</p><p><a href="#L113">113</a>	 * @see ResourceLoaderClassLoadHelper
+</p><p><a href="#L114">114</a>	 */
+</p><p><a href="#L115">115</a>	@Nullable
+</p><p><a href="#L116">116</a>	public static ResourceLoader getConfigTimeResourceLoader() {
+</p><p><a href="#L117">117</a>		return configTimeResourceLoaderHolder.get();
+</p><p><a href="#L118">118</a>	}
+</p><p><a href="#L119">119</a>
+</p><p><a href="#L120">120</a>	/**
+</p><p><a href="#L121">121</a>	 * Return the {@link Executor} for the currently configured Quartz Scheduler,
+</p><p><a href="#L122">122</a>	 * to be used by {@link LocalTaskExecutorThreadPool}.
+</p><p><a href="#L123">123</a>	 * &lt;p&gt;This instance will be set before initialization of the corresponding Scheduler,
+</p><p><a href="#L124">124</a>	 * and reset immediately afterwards. It is thus only available during configuration.
+</p><p><a href="#L125">125</a>	 * @since 2.0
+</p><p><a href="#L126">126</a>	 * @see #setTaskExecutor
+</p><p><a href="#L127">127</a>	 * @see LocalTaskExecutorThreadPool
+</p><p><a href="#L128">128</a>	 */
+</p><p><a href="#L129">129</a>	@Nullable
+</p><p><a href="#L130">130</a>	public static Executor getConfigTimeTaskExecutor() {
+</p><p><a href="#L131">131</a>		return configTimeTaskExecutorHolder.get();
+</p><p><a href="#L132">132</a>	}
+</p><p><a href="#L133">133</a>
+</p><p><a href="#L134">134</a>	/**
+</p><p><a href="#L135">135</a>	 * Return the {@link DataSource} for the currently configured Quartz Scheduler,
+</p><p><a href="#L136">136</a>	 * to be used by {@link LocalDataSourceJobStore}.
+</p><p><a href="#L137">137</a>	 * &lt;p&gt;This instance will be set before initialization of the corresponding Scheduler,
+</p><p><a href="#L138">138</a>	 * and reset immediately afterwards. It is thus only available during configuration.
+</p><p><a href="#L139">139</a>	 * @since 1.1
+</p><p><a href="#L140">140</a>	 * @see #setDataSource
+</p><p><a href="#L141">141</a>	 * @see LocalDataSourceJobStore
+</p><p><a href="#L142">142</a>	 */
+</p><p><a href="#L143">143</a>	@Nullable
+</p><p><a href="#L144">144</a>	public static DataSource getConfigTimeDataSource() {
+</p><p><a href="#L145">145</a>		return configTimeDataSourceHolder.get();
+</p><p><a href="#L146">146</a>	}
+</p><p><a href="#L147">147</a>
+</p><p><a href="#L148">148</a>	/**
+</p><p><a href="#L149">149</a>	 * Return the non-transactional {@link DataSource} for the currently configured
+</p><p><a href="#L150">150</a>	 * Quartz Scheduler, to be used by {@link LocalDataSourceJobStore}.
+</p><p><a href="#L151">151</a>	 * &lt;p&gt;This instance will be set before initialization of the corresponding Scheduler,
+</p><p><a href="#L152">152</a>	 * and reset immediately afterwards. It is thus only available during configuration.
+</p><p><a href="#L153">153</a>	 * @since 1.1
+</p><p><a href="#L154">154</a>	 * @see #setNonTransactionalDataSource
+</p><p><a href="#L155">155</a>	 * @see LocalDataSourceJobStore
+</p><p><a href="#L156">156</a>	 */
+</p><p><a href="#L157">157</a>	@Nullable
+</p><p><a href="#L158">158</a>	public static DataSource getConfigTimeNonTransactionalDataSource() {
+</p><p><a href="#L159">159</a>		return configTimeNonTransactionalDataSourceHolder.get();
+</p><p><a href="#L160">160</a>	}
+</p><p><a href="#L161">161</a>
+</p><p><a href="#L162">162</a>
+</p><p><a href="#L163">163</a>	@Nullable
+</p><p><a href="#L164">164</a>	private SchedulerFactory schedulerFactory;
+</p><p><a href="#L165">165</a>
+</p><p><a href="#L166">166</a>	private Class&lt;? extends SchedulerFactory&gt; schedulerFactoryClass = StdSchedulerFactory.class;
+</p><p><a href="#L167">167</a>
+</p><p><a href="#L168">168</a>	@Nullable
+</p><p><a href="#L169">169</a>	private String schedulerName;
+</p><p><a href="#L170">170</a>
+</p><p><a href="#L171">171</a>	@Nullable
+</p><p><a href="#L172">172</a>	private Resource configLocation;
+</p><p><a href="#L173">173</a>
+</p><p><a href="#L174">174</a>	@Nullable
+</p><p><a href="#L175">175</a>	private Properties quartzProperties;
+</p><p><a href="#L176">176</a>
+</p><p><a href="#L177">177</a>	@Nullable
+</p><p><a href="#L178">178</a>	private Executor taskExecutor;
+</p><p><a href="#L179">179</a>
+</p><p><a href="#L180">180</a>	@Nullable
+</p><p><a href="#L181">181</a>	private DataSource dataSource;
+</p><p><a href="#L182">182</a>
+</p><p><a href="#L183">183</a>	@Nullable
+</p><p><a href="#L184">184</a>	private DataSource nonTransactionalDataSource;
+</p><p><a href="#L185">185</a>
+</p><p><a href="#L186">186</a>	@Nullable
+</p><p><a href="#L187">187</a>    private Map&lt;String, ?&gt; schedulerContextMap;
+</p><p><a href="#L188">188</a>
+</p><p><a href="#L189">189</a>	@Nullable
+</p><p><a href="#L190">190</a>	private ApplicationContext applicationContext;
+</p><p><a href="#L191">191</a>
+</p><p><a href="#L192">192</a>	@Nullable
+</p><p><a href="#L193">193</a>	private String applicationContextSchedulerContextKey;
+</p><p><a href="#L194">194</a>
+</p><p><a href="#L195">195</a>	@Nullable
+</p><p><a href="#L196">196</a>	private JobFactory jobFactory;
+</p><p><a href="#L197">197</a>
+</p><p><a href="#L198">198</a>	private boolean jobFactorySet = false;
+</p><p><a href="#L199">199</a>
+</p><p><a href="#L200">200</a>	private boolean autoStartup = true;
+</p><p><a href="#L201">201</a>
+</p><p><a href="#L202">202</a>	private int startupDelay = 0;
+</p><p><a href="#L203">203</a>
+</p><p><a href="#L204">204</a>	private int phase = Integer.MAX_VALUE;
+</p><p><a href="#L205">205</a>
+</p><p><a href="#L206">206</a>	private boolean exposeSchedulerInRepository = false;
+</p><p><a href="#L207">207</a>
+</p><p><a href="#L208">208</a>	private boolean waitForJobsToCompleteOnShutdown = false;
+</p><p><a href="#L209">209</a>
+</p><p><a href="#L210">210</a>	@Nullable
+</p><p><a href="#L211">211</a>	private Scheduler scheduler;
+</p><p><a href="#L212">212</a>
+</p><p><a href="#L213">213</a>
+</p><p><a href="#L214">214</a>	/**
+</p><p><a href="#L215">215</a>	 * Set an external Quartz {@link SchedulerFactory} instance to use.
+</p><p><a href="#L216">216</a>	 * &lt;p&gt;Default is an internal {@link StdSchedulerFactory} instance. If this method is
+</p><p><a href="#L217">217</a>	 * called, it overrides any class specified through {@link #setSchedulerFactoryClass}
+</p><p><a href="#L218">218</a>	 * as well as any settings specified through {@link #setConfigLocation},
+</p><p><a href="#L219">219</a>	 * {@link #setQuartzProperties}, {@link #setTaskExecutor} or {@link #setDataSource}.
+</p><p><a href="#L220">220</a>	 * &lt;p&gt;&lt;b&gt;NOTE:&lt;/b&gt; With an externally provided {@code SchedulerFactory} instance,
+</p><p><a href="#L221">221</a>	 * local settings such as {@link #setConfigLocation} or {@link #setQuartzProperties}
+</p><p><a href="#L222">222</a>	 * will be ignored here in {@code SchedulerFactoryBean}, expecting the external
+</p><p><a href="#L223">223</a>	 * {@code SchedulerFactory} instance to get initialized on its own.
+</p><p><a href="#L224">224</a>	 * @since 4.3.15
+</p><p><a href="#L225">225</a>	 * @see #setSchedulerFactoryClass
+</p><p><a href="#L226">226</a>	 */
+</p><p><a href="#L227">227</a>	public void setSchedulerFactory(SchedulerFactory schedulerFactory) {
+</p><p><a href="#L228">228</a>		this.schedulerFactory = schedulerFactory;
+</p><p><a href="#L229">229</a>	}
+</p><p><a href="#L230">230</a>
+</p><p><a href="#L231">231</a>	/**
+</p><p><a href="#L232">232</a>	 * Set the Quartz {@link SchedulerFactory} implementation to use.
+</p><p><a href="#L233">233</a>	 * &lt;p&gt;Default is the {@link StdSchedulerFactory} class, reading in the standard
+</p><p><a href="#L234">234</a>	 * {@code quartz.properties} from {@code quartz.jar}. For applying custom Quartz
+</p><p><a href="#L235">235</a>	 * properties, specify {@link #setConfigLocation "configLocation"} and/or
+</p><p><a href="#L236">236</a>	 * {@link #setQuartzProperties "quartzProperties"} etc on this local
+</p><p><a href="#L237">237</a>	 * {@code SchedulerFactoryBean} instance.
+</p><p><a href="#L238">238</a>	 * @see org.quartz.impl.StdSchedulerFactory
+</p><p><a href="#L239">239</a>	 * @see #setConfigLocation
+</p><p><a href="#L240">240</a>	 * @see #setQuartzProperties
+</p><p><a href="#L241">241</a>	 * @see #setTaskExecutor
+</p><p><a href="#L242">242</a>	 * @see #setDataSource
+</p><p><a href="#L243">243</a>	 */
+</p><p><a href="#L244">244</a>	public void setSchedulerFactoryClass(Class&lt;? extends SchedulerFactory&gt; schedulerFactoryClass) {
+</p><p><a href="#L245">245</a>		this.schedulerFactoryClass = schedulerFactoryClass;
+</p><p><a href="#L246">246</a>	}
+</p><p><a href="#L247">247</a>
+</p><p><a href="#L248">248</a>	/**
+</p><p><a href="#L249">249</a>	 * Set the name of the Scheduler to create via the SchedulerFactory.
+</p><p><a href="#L250">250</a>	 * &lt;p&gt;If not specified, the bean name will be used as default scheduler name.
+</p><p><a href="#L251">251</a>	 * @see #setBeanName
+</p><p><a href="#L252">252</a>	 * @see org.quartz.SchedulerFactory#getScheduler()
+</p><p><a href="#L253">253</a>	 * @see org.quartz.SchedulerFactory#getScheduler(String)
+</p><p><a href="#L254">254</a>	 */
+</p><p><a href="#L255">255</a>	public void setSchedulerName(String schedulerName) {
+</p><p><a href="#L256">256</a>		this.schedulerName = schedulerName;
+</p><p><a href="#L257">257</a>	}
+</p><p><a href="#L258">258</a>
+</p><p><a href="#L259">259</a>	/**
+</p><p><a href="#L260">260</a>	 * Set the location of the Quartz properties config file, for example
+</p><p><a href="#L261">261</a>	 * as classpath resource "classpath:quartz.properties".
+</p><p><a href="#L262">262</a>	 * &lt;p&gt;Note: Can be omitted when all necessary properties are specified
+</p><p><a href="#L263">263</a>	 * locally via this bean, or when relying on Quartz' default configuration.
+</p><p><a href="#L264">264</a>	 * @see #setQuartzProperties
+</p><p><a href="#L265">265</a>	 */
+</p><p><a href="#L266">266</a>	public void setConfigLocation(Resource configLocation) {
+</p><p><a href="#L267">267</a>		this.configLocation = configLocation;
+</p><p><a href="#L268">268</a>	}
+</p><p><a href="#L269">269</a>
+</p><p><a href="#L270">270</a>	/**
+</p><p><a href="#L271">271</a>	 * Set Quartz properties, like "org.quartz.threadPool.class".
+</p><p><a href="#L272">272</a>	 * &lt;p&gt;Can be used to override values in a Quartz properties config file,
+</p><p><a href="#L273">273</a>	 * or to specify all necessary properties locally.
+</p><p><a href="#L274">274</a>	 * @see #setConfigLocation
+</p><p><a href="#L275">275</a>	 */
+</p><p><a href="#L276">276</a>	public void setQuartzProperties(Properties quartzProperties) {
+</p><p><a href="#L277">277</a>		this.quartzProperties = quartzProperties;
+</p><p><a href="#L278">278</a>	}
+</p><p><a href="#L279">279</a>
+</p><p><a href="#L280">280</a>	/**
+</p><p><a href="#L281">281</a>	 * Set a Spring-managed {@link Executor} to use as Quartz backend.
+</p><p><a href="#L282">282</a>	 * Exposed as thread pool through the Quartz SPI.
+</p><p><a href="#L283">283</a>	 * &lt;p&gt;Can be used to assign a local JDK ThreadPoolExecutor or a CommonJ
+</p><p><a href="#L284">284</a>	 * WorkManager as Quartz backend, to avoid Quartz's manual thread creation.
+</p><p><a href="#L285">285</a>	 * &lt;p&gt;By default, a Quartz SimpleThreadPool will be used, configured through
+</p><p><a href="#L286">286</a>	 * the corresponding Quartz properties.
+</p><p><a href="#L287">287</a>	 * @since 2.0
+</p><p><a href="#L288">288</a>	 * @see #setQuartzProperties
+</p><p><a href="#L289">289</a>	 * @see LocalTaskExecutorThreadPool
+</p><p><a href="#L290">290</a>	 * @see org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
+</p><p><a href="#L291">291</a>	 * @see org.springframework.scheduling.commonj.WorkManagerTaskExecutor
+</p><p><a href="#L292">292</a>	 */
+</p><p><a href="#L293">293</a>	public void setTaskExecutor(Executor taskExecutor) {
+</p><p><a href="#L294">294</a>		this.taskExecutor = taskExecutor;
+</p><p><a href="#L295">295</a>	}
+</p><p><a href="#L296">296</a>
+</p><p><a href="#L297">297</a>	/**
+</p><p><a href="#L298">298</a>	 * Set the default {@link DataSource} to be used by the Scheduler.
+</p><p><a href="#L299">299</a>	 * If set, this will override corresponding settings in Quartz properties.
+</p><p><a href="#L300">300</a>	 * &lt;p&gt;Note: If this is set, the Quartz settings should not define
+</p><p><a href="#L301">301</a>	 * a job store "dataSource" to avoid meaningless double configuration.
+</p><p><a href="#L302">302</a>	 * &lt;p&gt;A Spring-specific subclass of Quartz' JobStoreCMT will be used.
+</p><p><a href="#L303">303</a>	 * It is therefore strongly recommended to perform all operations on
+</p><p><a href="#L304">304</a>	 * the Scheduler within Spring-managed (or plain JTA) transactions.
+</p><p><a href="#L305">305</a>	 * Else, database locking will not properly work and might even break
+</p><p><a href="#L306">306</a>	 * (e.g. if trying to obtain a lock on Oracle without a transaction).
+</p><p><a href="#L307">307</a>	 * &lt;p&gt;Supports both transactional and non-transactional DataSource access.
+</p><p><a href="#L308">308</a>	 * With a non-XA DataSource and local Spring transactions, a single DataSource
+</p><p><a href="#L309">309</a>	 * argument is sufficient. In case of an XA DataSource and global JTA transactions,
+</p><p><a href="#L310">310</a>	 * SchedulerFactoryBean's "nonTransactionalDataSource" property should be set,
+</p><p><a href="#L311">311</a>	 * passing in a non-XA DataSource that will not participate in global transactions.
+</p><p><a href="#L312">312</a>	 * @since 1.1
+</p><p><a href="#L313">313</a>	 * @see #setNonTransactionalDataSource
+</p><p><a href="#L314">314</a>	 * @see #setQuartzProperties
+</p><p><a href="#L315">315</a>	 * @see #setTransactionManager
+</p><p><a href="#L316">316</a>	 * @see LocalDataSourceJobStore
+</p><p><a href="#L317">317</a>	 */
+</p><p><a href="#L318">318</a>	public void setDataSource(DataSource dataSource) {
+</p><p><a href="#L319">319</a>		this.dataSource = dataSource;
+</p><p><a href="#L320">320</a>	}
+</p><p><a href="#L321">321</a>
+</p><p><a href="#L322">322</a>	/**
+</p><p><a href="#L323">323</a>	 * Set the {@link DataSource} to be used &lt;i&gt;for non-transactional access&lt;/i&gt;.
+</p><p><a href="#L324">324</a>	 * &lt;p&gt;This is only necessary if the default DataSource is an XA DataSource that will
+</p><p><a href="#L325">325</a>	 * always participate in transactions: A non-XA version of that DataSource should
+</p><p><a href="#L326">326</a>	 * be specified as "nonTransactionalDataSource" in such a scenario.
+</p><p><a href="#L327">327</a>	 * &lt;p&gt;This is not relevant with a local DataSource instance and Spring transactions.
+</p><p><a href="#L328">328</a>	 * Specifying a single default DataSource as "dataSource" is sufficient there.
+</p><p><a href="#L329">329</a>	 * @since 1.1
+</p><p><a href="#L330">330</a>	 * @see #setDataSource
+</p><p><a href="#L331">331</a>	 * @see LocalDataSourceJobStore
+</p><p><a href="#L332">332</a>	 */
+</p><p><a href="#L333">333</a>	public void setNonTransactionalDataSource(DataSource nonTransactionalDataSource) {
+</p><p><a href="#L334">334</a>		this.nonTransactionalDataSource = nonTransactionalDataSource;
+</p><p><a href="#L335">335</a>	}
+</p><p><a href="#L336">336</a>
+</p><p><a href="#L337">337</a>	/**
+</p><p><a href="#L338">338</a>	 * Register objects in the Scheduler context via a given Map.
+</p><p><a href="#L339">339</a>	 * These objects will be available to any Job that runs in this Scheduler.
+</p><p><a href="#L340">340</a>	 * &lt;p&gt;Note: When using persistent Jobs whose JobDetail will be kept in the
+</p><p><a href="#L341">341</a>	 * database, do not put Spring-managed beans or an ApplicationContext
+</p><p><a href="#L342">342</a>	 * reference into the JobDataMap but rather into the SchedulerContext.
+</p><p><a href="#L343">343</a>	 * @param schedulerContextAsMap Map with String keys and any objects as
+</p><p><a href="#L344">344</a>	 * values (for example Spring-managed beans)
+</p><p><a href="#L345">345</a>	 * @see JobDetailFactoryBean#setJobDataAsMap
+</p><p><a href="#L346">346</a>	 */
+</p><p><a href="#L347">347</a>	public void setSchedulerContextAsMap(Map&lt;String, ?&gt; schedulerContextAsMap) {
+</p><p><a href="#L348">348</a>		this.schedulerContextMap = schedulerContextAsMap;
+</p><p><a href="#L349">349</a>	}
+</p><p><a href="#L350">350</a>
+</p><p><a href="#L351">351</a>	/**
+</p><p><a href="#L352">352</a>	 * Set the key of an {@link ApplicationContext} reference to expose in the
+</p><p><a href="#L353">353</a>	 * SchedulerContext, for example "applicationContext". Default is none.
+</p><p><a href="#L354">354</a>	 * Only applicable when running in a Spring ApplicationContext.
+</p><p><a href="#L355">355</a>	 * &lt;p&gt;Note: When using persistent Jobs whose JobDetail will be kept in the
+</p><p><a href="#L356">356</a>	 * database, do not put an ApplicationContext reference into the JobDataMap
+</p><p><a href="#L357">357</a>	 * but rather into the SchedulerContext.
+</p><p><a href="#L358">358</a>	 * &lt;p&gt;In case of a QuartzJobBean, the reference will be applied to the Job
+</p><p><a href="#L359">359</a>	 * instance as bean property. An "applicationContext" attribute will
+</p><p><a href="#L360">360</a>	 * correspond to a "setApplicationContext" method in that scenario.
+</p><p><a href="#L361">361</a>	 * &lt;p&gt;Note that BeanFactory callback interfaces like ApplicationContextAware
+</p><p><a href="#L362">362</a>	 * are not automatically applied to Quartz Job instances, because Quartz
+</p><p><a href="#L363">363</a>	 * itself is responsible for the lifecycle of its Jobs.
+</p><p><a href="#L364">364</a>	 * @see JobDetailFactoryBean#setApplicationContextJobDataKey
+</p><p><a href="#L365">365</a>	 * @see org.springframework.context.ApplicationContext
+</p><p><a href="#L366">366</a>	 */
+</p><p><a href="#L367">367</a>	public void setApplicationContextSchedulerContextKey(String applicationContextSchedulerContextKey) {
+</p><p><a href="#L368">368</a>		this.applicationContextSchedulerContextKey = applicationContextSchedulerContextKey;
+</p><p><a href="#L369">369</a>	}
+</p><p><a href="#L370">370</a>
+</p><p><a href="#L371">371</a>	/**
+</p><p><a href="#L372">372</a>	 * Set the Quartz {@link JobFactory} to use for this Scheduler.
+</p><p><a href="#L373">373</a>	 * &lt;p&gt;Default is Spring's {@link AdaptableJobFactory}, which supports
+</p><p><a href="#L374">374</a>	 * {@link java.lang.Runnable} objects as well as standard Quartz
+</p><p><a href="#L375">375</a>	 * {@link org.quartz.Job} instances. Note that this default only applies
+</p><p><a href="#L376">376</a>	 * to a &lt;i&gt;local&lt;/i&gt; Scheduler, not to a RemoteScheduler (where setting
+</p><p><a href="#L377">377</a>	 * a custom JobFactory is not supported by Quartz).
+</p><p><a href="#L378">378</a>	 * &lt;p&gt;Specify an instance of Spring's {@link SpringBeanJobFactory} here
+</p><p><a href="#L379">379</a>	 * (typically as an inner bean definition) to automatically populate a job's
+</p><p><a href="#L380">380</a>	 * bean properties from the specified job data map and scheduler context.
+</p><p><a href="#L381">381</a>	 * @since 2.0
+</p><p><a href="#L382">382</a>	 * @see AdaptableJobFactory
+</p><p><a href="#L383">383</a>	 * @see SpringBeanJobFactory
+</p><p><a href="#L384">384</a>	 */
+</p><p><a href="#L385">385</a>	public void setJobFactory(JobFactory jobFactory) {
+</p><p><a href="#L386">386</a>		this.jobFactory = jobFactory;
+</p><p><a href="#L387">387</a>		this.jobFactorySet = true;
+</p><p><a href="#L388">388</a>	}
+</p><p><a href="#L389">389</a>
+</p><p><a href="#L390">390</a>	/**
+</p><p><a href="#L391">391</a>	 * Set whether to automatically start the scheduler after initialization.
+</p><p><a href="#L392">392</a>	 * &lt;p&gt;Default is "true"; set this to "false" to allow for manual startup.
+</p><p><a href="#L393">393</a>	 */
+</p><p><a href="#L394">394</a>	public void setAutoStartup(boolean autoStartup) {
+</p><p><a href="#L395">395</a>		this.autoStartup = autoStartup;
+</p><p><a href="#L396">396</a>	}
+</p><p><a href="#L397">397</a>
+</p><p><a href="#L398">398</a>	/**
+</p><p><a href="#L399">399</a>	 * Return whether this scheduler is configured for auto-startup. If "true",
+</p><p><a href="#L400">400</a>	 * the scheduler will start after the context is refreshed and after the
+</p><p><a href="#L401">401</a>	 * start delay, if any.
+</p><p><a href="#L402">402</a>	 */
+</p><p><a href="#L403">403</a>	@Override
+</p><p><a href="#L404">404</a>	public boolean isAutoStartup() {
+</p><p><a href="#L405">405</a>		return this.autoStartup;
+</p><p><a href="#L406">406</a>	}
+</p><p><a href="#L407">407</a>
+</p><p><a href="#L408">408</a>	/**
+</p><p><a href="#L409">409</a>	 * Specify the phase in which this scheduler should be started and stopped.
+</p><p><a href="#L410">410</a>	 * The startup order proceeds from lowest to highest, and the shutdown order
+</p><p><a href="#L411">411</a>	 * is the reverse of that. By default this value is {@code Integer.MAX_VALUE}
+</p><p><a href="#L412">412</a>	 * meaning that this scheduler starts as late as possible and stops as soon
+</p><p><a href="#L413">413</a>	 * as possible.
+</p><p><a href="#L414">414</a>	 * @since 3.0
+</p><p><a href="#L415">415</a>	 */
+</p><p><a href="#L416">416</a>	public void setPhase(int phase) {
+</p><p><a href="#L417">417</a>		this.phase = phase;
+</p><p><a href="#L418">418</a>	}
+</p><p><a href="#L419">419</a>
+</p><p><a href="#L420">420</a>	/**
+</p><p><a href="#L421">421</a>	 * Return the phase in which this scheduler will be started and stopped.
+</p><p><a href="#L422">422</a>	 */
+</p><p><a href="#L423">423</a>	@Override
+</p><p><a href="#L424">424</a>	public int getPhase() {
+</p><p><a href="#L425">425</a>		return this.phase;
+</p><p><a href="#L426">426</a>	}
+</p><p><a href="#L427">427</a>
+</p><p><a href="#L428">428</a>	/**
+</p><p><a href="#L429">429</a>	 * Set the number of seconds to wait after initialization before
+</p><p><a href="#L430">430</a>	 * starting the scheduler asynchronously. Default is 0, meaning
+</p><p><a href="#L431">431</a>	 * immediate synchronous startup on initialization of this bean.
+</p><p><a href="#L432">432</a>	 * &lt;p&gt;Setting this to 10 or 20 seconds makes sense if no jobs
+</p><p><a href="#L433">433</a>	 * should be run before the entire application has started up.
+</p><p><a href="#L434">434</a>	 */
+</p><p><a href="#L435">435</a>	public void setStartupDelay(int startupDelay) {
+</p><p><a href="#L436">436</a>		this.startupDelay = startupDelay;
+</p><p><a href="#L437">437</a>	}
+</p><p><a href="#L438">438</a>
+</p><p><a href="#L439">439</a>	/**
+</p><p><a href="#L440">440</a>	 * Set whether to expose the Spring-managed {@link Scheduler} instance in the
+</p><p><a href="#L441">441</a>	 * Quartz {@link SchedulerRepository}. Default is "false", since the Spring-managed
+</p><p><a href="#L442">442</a>	 * Scheduler is usually exclusively intended for access within the Spring context.
+</p><p><a href="#L443">443</a>	 * &lt;p&gt;Switch this flag to "true" in order to expose the Scheduler globally.
+</p><p><a href="#L444">444</a>	 * This is not recommended unless you have an existing Spring application that
+</p><p><a href="#L445">445</a>	 * relies on this behavior. Note that such global exposure was the accidental
+</p><p><a href="#L446">446</a>	 * default in earlier Spring versions; this has been fixed as of Spring 2.5.6.
+</p><p><a href="#L447">447</a>	 */
+</p><p><a href="#L448">448</a>	public void setExposeSchedulerInRepository(boolean exposeSchedulerInRepository) {
+</p><p><a href="#L449">449</a>		this.exposeSchedulerInRepository = exposeSchedulerInRepository;
+</p><p><a href="#L450">450</a>	}
+</p><p><a href="#L451">451</a>
+</p><p><a href="#L452">452</a>	/**
+</p><p><a href="#L453">453</a>	 * Set whether to wait for running jobs to complete on shutdown.
+</p><p><a href="#L454">454</a>	 * &lt;p&gt;Default is "false". Switch this to "true" if you prefer
+</p><p><a href="#L455">455</a>	 * fully completed jobs at the expense of a longer shutdown phase.
+</p><p><a href="#L456">456</a>	 * @see org.quartz.Scheduler#shutdown(boolean)
+</p><p><a href="#L457">457</a>	 */
+</p><p><a href="#L458">458</a>	public void setWaitForJobsToCompleteOnShutdown(boolean waitForJobsToCompleteOnShutdown) {
+</p><p><a href="#L459">459</a>		this.waitForJobsToCompleteOnShutdown = waitForJobsToCompleteOnShutdown;
+</p><p><a href="#L460">460</a>	}
+</p><p><a href="#L461">461</a>
+</p><p><a href="#L462">462</a>	@Override
+</p><p><a href="#L463">463</a>	public void setBeanName(String name) {
+</p><p><a href="#L464">464</a>		if (this.schedulerName == null) {
+</p><p><a href="#L465">465</a>			this.schedulerName = name;
+</p><p><a href="#L466">466</a>		}
+</p><p><a href="#L467">467</a>	}
+</p><p><a href="#L468">468</a>
+</p><p><a href="#L469">469</a>	@Override
+</p><p><a href="#L470">470</a>	public void setApplicationContext(ApplicationContext applicationContext) {
+</p><p><a href="#L471">471</a>		this.applicationContext = applicationContext;
+</p><p><a href="#L472">472</a>	}
+</p><p><a href="#L473">473</a>
+</p><p><a href="#L474">474</a>
+</p><p><a href="#L475">475</a>	//---------------------------------------------------------------------
+</p><p><a href="#L476">476</a>	// Implementation of InitializingBean interface
+</p><p><a href="#L477">477</a>	//---------------------------------------------------------------------
+</p><p><a href="#L478">478</a>
+</p><p><a href="#L479">479</a>	@Override
+</p><p><a href="#L480">480</a>	public void afterPropertiesSet() throws Exception {
+</p><p><a href="#L481">481</a>		if (this.dataSource == null &amp;&amp; this.nonTransactionalDataSource != null) {
+</p><p><a href="#L482">482</a>			this.dataSource = this.nonTransactionalDataSource;
+</p><p><a href="#L483">483</a>		}
+</p><p><a href="#L484">484</a>
+</p><p><a href="#L485">485</a>		if (this.applicationContext != null &amp;&amp; this.resourceLoader == null) {
+</p><p><a href="#L486">486</a>			this.resourceLoader = this.applicationContext;
+</p><p><a href="#L487">487</a>		}
+</p><p><a href="#L488">488</a>
+</p><p><a href="#L489">489</a>		// Initialize the SchedulerFactory instance...
+</p><p><a href="#L490">490</a>		SchedulerFactory schedulerFactory = prepareSchedulerFactory();
+</p><p><a href="#L491">491</a>
+</p><p><a href="#L492">492</a>		if (this.resourceLoader != null) {
+</p><p><a href="#L493">493</a>			// Make given ResourceLoader available for SchedulerFactory configuration.
+</p><p><a href="#L494">494</a>			configTimeResourceLoaderHolder.set(this.resourceLoader);
+</p><p><a href="#L495">495</a>		}
+</p><p><a href="#L496">496</a>		if (this.taskExecutor != null) {
+</p><p><a href="#L497">497</a>			// Make given TaskExecutor available for SchedulerFactory configuration.
+</p><p><a href="#L498">498</a>			configTimeTaskExecutorHolder.set(this.taskExecutor);
+</p><p><a href="#L499">499</a>		}
+</p><p><a href="#L500">500</a>		if (this.dataSource != null) {
+</p><p><a href="#L501">501</a>			// Make given DataSource available for SchedulerFactory configuration.
+</p><p><a href="#L502">502</a>			configTimeDataSourceHolder.set(this.dataSource);
+</p><p><a href="#L503">503</a>		}
+</p><p><a href="#L504">504</a>		if (this.nonTransactionalDataSource != null) {
+</p><p><a href="#L505">505</a>			// Make given non-transactional DataSource available for SchedulerFactory configuration.
+</p><p><a href="#L506">506</a>			configTimeNonTransactionalDataSourceHolder.set(this.nonTransactionalDataSource);
+</p><p><a href="#L507">507</a>		}
+</p><p><a href="#L508">508</a>
+</p><p><a href="#L509">509</a>		// Get Scheduler instance from SchedulerFactory.
+</p><p><a href="#L510">510</a>		try {
+</p><p><a href="#L511">511</a>			this.scheduler = createScheduler(schedulerFactory, this.schedulerName);
+</p><p><a href="#L512">512</a>			populateSchedulerContext();
+</p><p><a href="#L513">513</a>
+</p><p><a href="#L514">514</a>			if (!this.jobFactorySet &amp;&amp; !(this.scheduler instanceof RemoteScheduler)) {
+</p><p><a href="#L515">515</a>				// Use AdaptableJobFactory as default for a local Scheduler, unless when
+</p><p><a href="#L516">516</a>				// explicitly given a null value through the "jobFactory" bean property.
+</p><p><a href="#L517">517</a>				this.jobFactory = new AdaptableJobFactory();
+</p><p><a href="#L518">518</a>			}
+</p><p><a href="#L519">519</a>			if (this.jobFactory != null) {
+</p><p><a href="#L520">520</a>				if (this.jobFactory instanceof SchedulerContextAware) {
+</p><p><a href="#L521">521</a>					((SchedulerContextAware) this.jobFactory).setSchedulerContext(this.scheduler.getContext());
+</p><p><a href="#L522">522</a>				}
+</p><p><a href="#L523">523</a>				this.scheduler.setJobFactory(this.jobFactory);
+</p><p><a href="#L524">524</a>			}
+</p><p><a href="#L525">525</a>		}
+</p><p><a href="#L526">526</a>
+</p><p><a href="#L527">527</a>		finally {
+</p><p><a href="#L528">528</a>			if (this.resourceLoader != null) {
+</p><p><a href="#L529">529</a>				configTimeResourceLoaderHolder.remove();
+</p><p><a href="#L530">530</a>			}
+</p><p><a href="#L531">531</a>			if (this.taskExecutor != null) {
+</p><p><a href="#L532">532</a>				configTimeTaskExecutorHolder.remove();
+</p><p><a href="#L533">533</a>			}
+</p><p><a href="#L534">534</a>			if (this.dataSource != null) {
+</p><p><a href="#L535">535</a>				configTimeDataSourceHolder.remove();
+</p><p><a href="#L536">536</a>			}
+</p><p><a href="#L537">537</a>			if (this.nonTransactionalDataSource != null) {
+</p><p><a href="#L538">538</a>				configTimeNonTransactionalDataSourceHolder.remove();
+</p><p><a href="#L539">539</a>			}
+</p><p><a href="#L540">540</a>		}
+</p><p><a href="#L541">541</a>
+</p><p><a href="#L542">542</a>		registerListeners();
+</p><p><a href="#L543">543</a>		registerJobsAndTriggers();
+</p><p><a href="#L544">544</a>	}
+</p><p><a href="#L545">545</a>
+</p><p><a href="#L546">546</a>
+</p><p><a href="#L547">547</a>	/**
+</p><p><a href="#L548">548</a>	 * Create a SchedulerFactory if necessary and apply locally defined Quartz properties to it.
+</p><p><a href="#L549">549</a>	 * @return the initialized SchedulerFactory
+</p><p><a href="#L550">550</a>	 */
+</p><p><a href="#L551">551</a>	private SchedulerFactory prepareSchedulerFactory() throws SchedulerException, IOException {
+</p><p><a href="#L552">552</a>		SchedulerFactory schedulerFactory = this.schedulerFactory;
+</p><p><a href="#L553">553</a>		if (schedulerFactory == null) {
+</p><p><a href="#L554">554</a>			// Create local SchedulerFactory instance (typically a StdSchedulerFactory)
+</p><p><a href="#L555">555</a>			schedulerFactory = BeanUtils.instantiateClass(this.schedulerFactoryClass);
+</p><p><a href="#L556">556</a>			if (schedulerFactory instanceof StdSchedulerFactory) {
+</p><p><a href="#L557">557</a>				initSchedulerFactory((StdSchedulerFactory) schedulerFactory);
+</p><p><a href="#L558">558</a>			}
+</p><p><a href="#L559">559</a>			else if (this.configLocation != null || this.quartzProperties != null ||
+</p><p><a href="#L560">560</a>					this.taskExecutor != null || this.dataSource != null) {
+</p><p><a href="#L561">561</a>				throw new IllegalArgumentException(
+</p><p><a href="#L562">562</a>						"StdSchedulerFactory required for applying Quartz properties: " + schedulerFactory);
+</p><p><a href="#L563">563</a>			}
+</p><p><a href="#L564">564</a>			// Otherwise, no local settings to be applied via StdSchedulerFactory.initialize(Properties)
+</p><p><a href="#L565">565</a>		}
+</p><p><a href="#L566">566</a>		// Otherwise, assume that externally provided factory has been initialized with appropriate settings
+</p><p><a href="#L567">567</a>		return schedulerFactory;
+</p><p><a href="#L568">568</a>	}
+</p><p><a href="#L569">569</a>
+</p><p><a href="#L570">570</a>	/**
+</p><p><a href="#L571">571</a>	 * Initialize the given SchedulerFactory, applying locally defined Quartz properties to it.
+</p><p><a href="#L572">572</a>	 * @param schedulerFactory the SchedulerFactory to initialize
+</p><p><a href="#L573">573</a>	 */
+</p><p><a href="#L574">574</a>	private void initSchedulerFactory(StdSchedulerFactory schedulerFactory) throws SchedulerException, IOException {
+</p><p><a href="#L575">575</a>		Properties mergedProps = new Properties();
+</p><p><a href="#L576">576</a>		if (this.resourceLoader != null) {
+</p><p><a href="#L577">577</a>			mergedProps.setProperty(StdSchedulerFactory.PROP_SCHED_CLASS_LOAD_HELPER_CLASS,
+</p><p><a href="#L578">578</a>					ResourceLoaderClassLoadHelper.class.getName());
+</p><p><a href="#L579">579</a>		}
+</p><p><a href="#L580">580</a>
+</p><p><a href="#L581">581</a>		if (this.taskExecutor != null) {
+</p><p><a href="#L582">582</a>			mergedProps.setProperty(StdSchedulerFactory.PROP_THREAD_POOL_CLASS,
+</p><p><a href="#L583">583</a>					LocalTaskExecutorThreadPool.class.getName());
+</p><p><a href="#L584">584</a>		}
+</p><p><a href="#L585">585</a>		else {
+</p><p><a href="#L586">586</a>			// Set necessary default properties here, as Quartz will not apply
+</p><p><a href="#L587">587</a>			// its default configuration when explicitly given properties.
+</p><p><a href="#L588">588</a>			mergedProps.setProperty(StdSchedulerFactory.PROP_THREAD_POOL_CLASS, SimpleThreadPool.class.getName());
+</p><p><a href="#L589">589</a>			mergedProps.setProperty(PROP_THREAD_COUNT, Integer.toString(DEFAULT_THREAD_COUNT));
+</p><p><a href="#L590">590</a>		}
+</p><p><a href="#L591">591</a>
+</p><p><a href="#L592">592</a>		if (this.configLocation != null) {
+</p><p><a href="#L593">593</a>			if (logger.isInfoEnabled()) {
+</p><p><a href="#L594">594</a>				logger.info("Loading Quartz config from [" + this.configLocation + "]");
+</p><p><a href="#L595">595</a>			}
+</p><p><a href="#L596">596</a>			PropertiesLoaderUtils.fillProperties(mergedProps, this.configLocation);
+</p><p><a href="#L597">597</a>		}
+</p><p><a href="#L598">598</a>
+</p><p><a href="#L599">599</a>		CollectionUtils.mergePropertiesIntoMap(this.quartzProperties, mergedProps);
+</p><p><a href="#L600">600</a>		if (this.dataSource != null) {
+</p><p><a href="#L601">601</a>			mergedProps.put(StdSchedulerFactory.PROP_JOB_STORE_CLASS, LocalDataSourceJobStore.class.getName());
+</p><p><a href="#L602">602</a>		}
+</p><p><a href="#L603">603</a>		if (this.schedulerName != null) {
+</p><p><a href="#L604">604</a>			mergedProps.put(StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME, this.schedulerName);
+</p><p><a href="#L605">605</a>		}
+</p><p><a href="#L606">606</a>
+</p><p><a href="#L607">607</a>		schedulerFactory.initialize(mergedProps);
+</p><p><a href="#L608">608</a>	}
+</p><p><a href="#L609">609</a>
+</p><p><a href="#L610">610</a>	/**
+</p><p><a href="#L611">611</a>	 * Create the Scheduler instance for the given factory and scheduler name.
+</p><p><a href="#L612">612</a>	 * Called by {@link #afterPropertiesSet}.
+</p><p><a href="#L613">613</a>	 * &lt;p&gt;The default implementation invokes SchedulerFactory's {@code getScheduler}
+</p><p><a href="#L614">614</a>	 * method. Can be overridden for custom Scheduler creation.
+</p><p><a href="#L615">615</a>	 * @param schedulerFactory the factory to create the Scheduler with
+</p><p><a href="#L616">616</a>	 * @param schedulerName the name of the scheduler to create
+</p><p><a href="#L617">617</a>	 * @return the Scheduler instance
+</p><p><a href="#L618">618</a>	 * @throws SchedulerException if thrown by Quartz methods
+</p><p><a href="#L619">619</a>	 * @see #afterPropertiesSet
+</p><p><a href="#L620">620</a>	 * @see org.quartz.SchedulerFactory#getScheduler
+</p><p><a href="#L621">621</a>	 */
+</p><p><a href="#L622">622</a>	protected Scheduler createScheduler(SchedulerFactory schedulerFactory, @Nullable String schedulerName)
+</p><p><a href="#L623">623</a>			throws SchedulerException {
+</p><p><a href="#L624">624</a>
+</p><p><a href="#L625">625</a>		// Override thread context ClassLoader to work around naive Quartz ClassLoadHelper loading.
+</p><p><a href="#L626">626</a>		Thread currentThread = Thread.currentThread();
+</p><p><a href="#L627">627</a>		ClassLoader threadContextClassLoader = currentThread.getContextClassLoader();
+</p><p><a href="#L628">628</a>		boolean overrideClassLoader = (this.resourceLoader != null &amp;&amp;
+</p><p><a href="#L629">629</a>				this.resourceLoader.getClassLoader() != threadContextClassLoader);
+</p><p><a href="#L630">630</a>		if (overrideClassLoader) {
+</p><p><a href="#L631">631</a>			currentThread.setContextClassLoader(this.resourceLoader.getClassLoader());
+</p><p><a href="#L632">632</a>		}
+</p><p><a href="#L633">633</a>		try {
+</p><p><a href="#L634">634</a>			SchedulerRepository repository = SchedulerRepository.getInstance();
+</p><p><a href="#L635">635</a>			synchronized (repository) {
+</p><p><a href="#L636">636</a>				Scheduler existingScheduler = (schedulerName != null ? repository.lookup(schedulerName) : null);
+</p><p><a href="#L637">637</a>				Scheduler newScheduler = schedulerFactory.getScheduler();
+</p><p><a href="#L638">638</a>				if (newScheduler == existingScheduler) {
+</p><p><a href="#L639">639</a>					throw new IllegalStateException("Active Scheduler of name '" + schedulerName + "' already registered " +
+</p><p><a href="#L640">640</a>							"in Quartz SchedulerRepository. Cannot create a new Spring-managed Scheduler of the same name!");
+</p><p><a href="#L641">641</a>				}
+</p><p><a href="#L642">642</a>				if (!this.exposeSchedulerInRepository) {
+</p><p><a href="#L643">643</a>					// Need to remove it in this case, since Quartz shares the Scheduler instance by default!
+</p><p><a href="#L644">644</a>					SchedulerRepository.getInstance().remove(newScheduler.getSchedulerName());
+</p><p><a href="#L645">645</a>				}
+</p><p><a href="#L646">646</a>				return newScheduler;
+</p><p><a href="#L647">647</a>			}
+</p><p><a href="#L648">648</a>		}
+</p><p><a href="#L649">649</a>		finally {
+</p><p><a href="#L650">650</a>			if (overrideClassLoader) {
+</p><p><a href="#L651">651</a>				// Reset original thread context ClassLoader.
+</p><p><a href="#L652">652</a>				currentThread.setContextClassLoader(threadContextClassLoader);
+</p><p><a href="#L653">653</a>			}
+</p><p><a href="#L654">654</a>		}
+</p><p><a href="#L655">655</a>	}
+</p><p><a href="#L656">656</a>
+</p><p><a href="#L657">657</a>	/**
+</p><p><a href="#L658">658</a>	 * Expose the specified context attributes and/or the current
+</p><p><a href="#L659">659</a>	 * ApplicationContext in the Quartz SchedulerContext.
+</p><p><a href="#L660">660</a>	 */
+</p><p><a href="#L661">661</a>	private void populateSchedulerContext() throws SchedulerException {
+</p><p><a href="#L662">662</a>		// Put specified objects into Scheduler context.
+</p><p><a href="#L663">663</a>		if (this.schedulerContextMap != null) {
+</p><p><a href="#L664">664</a>			getScheduler().getContext().putAll(this.schedulerContextMap);
+</p><p><a href="#L665">665</a>		}
+</p><p><a href="#L666">666</a>
+</p><p><a href="#L667">667</a>		// Register ApplicationContext in Scheduler context.
+</p><p><a href="#L668">668</a>		if (this.applicationContextSchedulerContextKey != null) {
+</p><p><a href="#L669">669</a>			if (this.applicationContext == null) {
+</p><p><a href="#L670">670</a>				throw new IllegalStateException(
+</p><p><a href="#L671">671</a>					"SchedulerFactoryBean needs to be set up in an ApplicationContext " +
+</p><p><a href="#L672">672</a>					"to be able to handle an 'applicationContextSchedulerContextKey'");
+</p><p><a href="#L673">673</a>			}
+</p><p><a href="#L674">674</a>			getScheduler().getContext().put(this.applicationContextSchedulerContextKey, this.applicationContext);
+</p><p><a href="#L675">675</a>		}
+</p><p><a href="#L676">676</a>	}
+</p><p><a href="#L677">677</a>
+</p><p><a href="#L678">678</a>
+</p><p><a href="#L679">679</a>	/**
+</p><p><a href="#L680">680</a>	 * Start the Quartz Scheduler, respecting the "startupDelay" setting.
+</p><p><a href="#L681">681</a>	 * @param scheduler the Scheduler to start
+</p><p><a href="#L682">682</a>	 * @param startupDelay the number of seconds to wait before starting
+</p><p><a href="#L683">683</a>	 * the Scheduler asynchronously
+</p><p><a href="#L684">684</a>	 */
+</p><p><a href="#L685">685</a>	protected void startScheduler(final Scheduler scheduler, final int startupDelay) throws SchedulerException {
+</p><p><a href="#L686">686</a>		if (startupDelay &lt;= 0) {
+</p><p><a href="#L687">687</a>			logger.info("Starting Quartz Scheduler now");
+</p><p><a href="#L688">688</a>			scheduler.start();
+</p><p><a href="#L689">689</a>		}
+</p><p><a href="#L690">690</a>		else {
+</p><p><a href="#L691">691</a>			if (logger.isInfoEnabled()) {
+</p><p><a href="#L692">692</a>				logger.info("Will start Quartz Scheduler [" + scheduler.getSchedulerName() +
+</p><p><a href="#L693">693</a>						"] in " + startupDelay + " seconds");
+</p><p><a href="#L694">694</a>			}
+</p><p><a href="#L695">695</a>			// Not using the Quartz startDelayed method since we explicitly want a daemon
+</p><p><a href="#L696">696</a>			// thread here, not keeping the JVM alive in case of all other threads ending.
+</p><p><a href="#L697">697</a>			Thread schedulerThread = new Thread() {
+</p><p><a href="#L698">698</a>				@Override
+</p><p><a href="#L699">699</a>				public void run() {
+</p><p><a href="#L700">700</a>					try {
+</p><p><a href="#L701">701</a>						Thread.sleep(TimeUnit.SECONDS.toMillis(startupDelay));
+</p><p><a href="#L702">702</a>					}
+</p><p><a href="#L703">703</a>					catch (InterruptedException ex) {
+</p><p><a href="#L704">704</a>						Thread.currentThread().interrupt();
+</p><p><a href="#L705">705</a>						// simply proceed
+</p><p><a href="#L706">706</a>					}
+</p><p><a href="#L707">707</a>					if (logger.isInfoEnabled()) {
+</p><p><a href="#L708">708</a>						logger.info("Starting Quartz Scheduler now, after delay of " + startupDelay + " seconds");
+</p><p><a href="#L709">709</a>					}
+</p><p><a href="#L710">710</a>					try {
+</p><p><a href="#L711">711</a>						scheduler.start();
+</p><p><a href="#L712">712</a>					}
+</p><p><a href="#L713">713</a>					catch (SchedulerException ex) {
+</p><p><a href="#L714">714</a>						throw new SchedulingException("Could not start Quartz Scheduler after delay", ex);
+</p><p><a href="#L715">715</a>					}
+</p><p><a href="#L716">716</a>				}
+</p><p><a href="#L717">717</a>			};
+</p><p><a href="#L718">718</a>			schedulerThread.setName("Quartz Scheduler [" + scheduler.getSchedulerName() + "]");
+</p><p><a href="#L719">719</a>			schedulerThread.setDaemon(true);
+</p><p><a href="#L720">720</a>			schedulerThread.start();
+</p><p><a href="#L721">721</a>		}
+</p><p><a href="#L722">722</a>	}
+</p><p><a href="#L723">723</a>
+</p><p><a href="#L724">724</a>
+</p><p><a href="#L725">725</a>	//---------------------------------------------------------------------
+</p><p><a href="#L726">726</a>	// Implementation of FactoryBean interface
+</p><p><a href="#L727">727</a>	//---------------------------------------------------------------------
+</p><p><a href="#L728">728</a>
+</p><p><a href="#L729">729</a>	@Override
+</p><p><a href="#L730">730</a>	public Scheduler getScheduler() {
+</p><p><a href="#L731">731</a>		Assert.state(this.scheduler != null, "No Scheduler set");
+</p><p><a href="#L732">732</a>		return this.scheduler;
+</p><p><a href="#L733">733</a>	}
+</p><p><a href="#L734">734</a>
+</p><p><a href="#L735">735</a>	@Override
+</p><p><a href="#L736">736</a>	@Nullable
+</p><p><a href="#L737">737</a>	public Scheduler getObject() {
+</p><p><a href="#L738">738</a>		return this.scheduler;
+</p><p><a href="#L739">739</a>	}
+</p><p><a href="#L740">740</a>
+</p><p><a href="#L741">741</a>	@Override
+</p><p><a href="#L742">742</a>	public Class&lt;? extends Scheduler&gt; getObjectType() {
+</p><p><a href="#L743">743</a>		return (this.scheduler != null) ? this.scheduler.getClass() : Scheduler.class;
+</p><p><a href="#L744">744</a>	}
+</p><p><a href="#L745">745</a>
+</p><p><a href="#L746">746</a>	@Override
+</p><p><a href="#L747">747</a>	public boolean isSingleton() {
+</p><p><a href="#L748">748</a>		return true;
+</p><p><a href="#L749">749</a>	}
+</p><p><a href="#L750">750</a>
+</p><p><a href="#L751">751</a>
+</p><p><a href="#L752">752</a>	//---------------------------------------------------------------------
+</p><p><a href="#L753">753</a>	// Implementation of SmartLifecycle interface
+</p><p><a href="#L754">754</a>	//---------------------------------------------------------------------
+</p><p><a href="#L755">755</a>
+</p><p><a href="#L756">756</a>	@Override
+</p><p><a href="#L757">757</a>	public void start() throws SchedulingException {
+</p><p><a href="#L758">758</a>		if (this.scheduler != null) {
+</p><p><a href="#L759">759</a>			try {
+</p><p><a href="#L760">760</a>				startScheduler(this.scheduler, this.startupDelay);
+</p><p><a href="#L761">761</a>			}
+</p><p><a href="#L762">762</a>			catch (SchedulerException ex) {
+</p><p><a href="#L763">763</a>				throw new SchedulingException("Could not start Quartz Scheduler", ex);
+</p><p><a href="#L764">764</a>			}
+</p><p><a href="#L765">765</a>		}
+</p><p><a href="#L766">766</a>	}
+</p><p><a href="#L767">767</a>
+</p><p><a href="#L768">768</a>	@Override
+</p><p><a href="#L769">769</a>	public void stop() throws SchedulingException {
+</p><p><a href="#L770">770</a>		if (this.scheduler != null) {
+</p><p><a href="#L771">771</a>			try {
+</p><p><a href="#L772">772</a>				this.scheduler.standby();
+</p><p><a href="#L773">773</a>			}
+</p><p><a href="#L774">774</a>			catch (SchedulerException ex) {
+</p><p><a href="#L775">775</a>				throw new SchedulingException("Could not stop Quartz Scheduler", ex);
+</p><p><a href="#L776">776</a>			}
+</p><p><a href="#L777">777</a>		}
+</p><p><a href="#L778">778</a>	}
+</p><p><a href="#L779">779</a>
+</p><p><a href="#L780">780</a>	@Override
+</p><p><a href="#L781">781</a>	public void stop(Runnable callback) throws SchedulingException {
+</p><p><a href="#L782">782</a>		stop();
+</p><p><a href="#L783">783</a>		callback.run();
+</p><p><a href="#L784">784</a>	}
+</p><p><a href="#L785">785</a>
+</p><p><a href="#L786">786</a>	@Override
+</p><p><a href="#L787">787</a>	public boolean isRunning() throws SchedulingException {
+</p><p><a href="#L788">788</a>		if (this.scheduler != null) {
+</p><p><a href="#L789">789</a>			try {
+</p><p><a href="#L790">790</a>				return !this.scheduler.isInStandbyMode();
+</p><p><a href="#L791">791</a>			}
+</p><p><a href="#L792">792</a>			catch (SchedulerException ex) {
+</p><p><a href="#L793">793</a>				return false;
+</p><p><a href="#L794">794</a>			}
+</p><p><a href="#L795">795</a>		}
+</p><p><a href="#L796">796</a>		return false;
+</p><p><a href="#L797">797</a>	}
+</p><p><a href="#L798">798</a>
+</p><p><a href="#L799">799</a>
+</p><p><a href="#L800">800</a>	//---------------------------------------------------------------------
+</p><p><a href="#L801">801</a>	// Implementation of DisposableBean interface
+</p><p><a href="#L802">802</a>	//---------------------------------------------------------------------
+</p><p><a href="#L803">803</a>
+</p><p><a href="#L804">804</a>	/**
+</p><p><a href="#L805">805</a>	 * Shut down the Quartz scheduler on bean factory shutdown,
+</p><p><a href="#L806">806</a>	 * stopping all scheduled jobs.
+</p><p><a href="#L807">807</a>	 */
+</p><p><a href="#L808">808</a>	@Override
+</p><p><a href="#L809">809</a>	public void destroy() throws SchedulerException {
+</p><p><a href="#L810">810</a>		if (this.scheduler != null) {
+</p><p><a href="#L811">811</a>			logger.info("Shutting down Quartz Scheduler");
+</p><p><a href="#L812">812</a>			this.scheduler.shutdown(this.waitForJobsToCompleteOnShutdown);
+</p><p><a href="#L813">813</a>		}
+</p><p><a href="#L814">814</a>	}
+</p><p><a href="#L815">815</a>
+</p><p><a href="#L816">816</a>}
+</p></pre></body></html>

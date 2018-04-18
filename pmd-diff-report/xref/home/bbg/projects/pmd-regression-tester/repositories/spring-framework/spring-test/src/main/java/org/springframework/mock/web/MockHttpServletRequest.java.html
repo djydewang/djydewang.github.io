@@ -1,0 +1,1350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2018 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.mock.web;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.BufferedReader;
+</p><p><a href="#L20">20</a>import java.io.ByteArrayInputStream;
+</p><p><a href="#L21">21</a>import java.io.IOException;
+</p><p><a href="#L22">22</a>import java.io.InputStream;
+</p><p><a href="#L23">23</a>import java.io.InputStreamReader;
+</p><p><a href="#L24">24</a>import java.io.Reader;
+</p><p><a href="#L25">25</a>import java.io.StringReader;
+</p><p><a href="#L26">26</a>import java.io.UnsupportedEncodingException;
+</p><p><a href="#L27">27</a>import java.security.Principal;
+</p><p><a href="#L28">28</a>import java.text.ParseException;
+</p><p><a href="#L29">29</a>import java.text.SimpleDateFormat;
+</p><p><a href="#L30">30</a>import java.util.Arrays;
+</p><p><a href="#L31">31</a>import java.util.Collection;
+</p><p><a href="#L32">32</a>import java.util.Collections;
+</p><p><a href="#L33">33</a>import java.util.Date;
+</p><p><a href="#L34">34</a>import java.util.Enumeration;
+</p><p><a href="#L35">35</a>import java.util.HashSet;
+</p><p><a href="#L36">36</a>import java.util.LinkedHashMap;
+</p><p><a href="#L37">37</a>import java.util.LinkedHashSet;
+</p><p><a href="#L38">38</a>import java.util.LinkedList;
+</p><p><a href="#L39">39</a>import java.util.List;
+</p><p><a href="#L40">40</a>import java.util.Locale;
+</p><p><a href="#L41">41</a>import java.util.Map;
+</p><p><a href="#L42">42</a>import java.util.Set;
+</p><p><a href="#L43">43</a>import java.util.TimeZone;
+</p><p><a href="#L44">44</a>import javax.servlet.AsyncContext;
+</p><p><a href="#L45">45</a>import javax.servlet.DispatcherType;
+</p><p><a href="#L46">46</a>import javax.servlet.RequestDispatcher;
+</p><p><a href="#L47">47</a>import javax.servlet.ServletContext;
+</p><p><a href="#L48">48</a>import javax.servlet.ServletException;
+</p><p><a href="#L49">49</a>import javax.servlet.ServletInputStream;
+</p><p><a href="#L50">50</a>import javax.servlet.ServletRequest;
+</p><p><a href="#L51">51</a>import javax.servlet.ServletResponse;
+</p><p><a href="#L52">52</a>import javax.servlet.http.Cookie;
+</p><p><a href="#L53">53</a>import javax.servlet.http.HttpServletRequest;
+</p><p><a href="#L54">54</a>import javax.servlet.http.HttpServletResponse;
+</p><p><a href="#L55">55</a>import javax.servlet.http.HttpSession;
+</p><p><a href="#L56">56</a>import javax.servlet.http.HttpUpgradeHandler;
+</p><p><a href="#L57">57</a>import javax.servlet.http.Part;
+</p><p><a href="#L58">58</a>
+</p><p><a href="#L59">59</a>import org.springframework.http.HttpHeaders;
+</p><p><a href="#L60">60</a>import org.springframework.http.MediaType;
+</p><p><a href="#L61">61</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L62">62</a>import org.springframework.util.Assert;
+</p><p><a href="#L63">63</a>import org.springframework.util.LinkedCaseInsensitiveMap;
+</p><p><a href="#L64">64</a>import org.springframework.util.LinkedMultiValueMap;
+</p><p><a href="#L65">65</a>import org.springframework.util.MultiValueMap;
+</p><p><a href="#L66">66</a>import org.springframework.util.ObjectUtils;
+</p><p><a href="#L67">67</a>import org.springframework.util.StreamUtils;
+</p><p><a href="#L68">68</a>import org.springframework.util.StringUtils;
+</p><p><a href="#L69">69</a>
+</p><p><a href="#L70">70</a>/**
+</p><p><a href="#L71">71</a> * Mock implementation of the {@link javax.servlet.http.HttpServletRequest} interface.
+</p><p><a href="#L72">72</a> *
+</p><p><a href="#L73">73</a> * &lt;p&gt;The default, preferred {@link Locale} for the &lt;em&gt;server&lt;/em&gt; mocked by this request
+</p><p><a href="#L74">74</a> * is {@link Locale#ENGLISH}. This value can be changed via {@link #addPreferredLocale}
+</p><p><a href="#L75">75</a> * or {@link #setPreferredLocales}.
+</p><p><a href="#L76">76</a> *
+</p><p><a href="#L77">77</a> * &lt;p&gt;As of Spring Framework 5.0, this set of mocks is designed on a Servlet 4.0 baseline.
+</p><p><a href="#L78">78</a> *
+</p><p><a href="#L79">79</a> * @author Juergen Hoeller
+</p><p><a href="#L80">80</a> * @author Rod Johnson
+</p><p><a href="#L81">81</a> * @author Rick Evans
+</p><p><a href="#L82">82</a> * @author Mark Fisher
+</p><p><a href="#L83">83</a> * @author Chris Beams
+</p><p><a href="#L84">84</a> * @author Sam Brannen
+</p><p><a href="#L85">85</a> * @author Brian Clozel
+</p><p><a href="#L86">86</a> * @since 1.0.2
+</p><p><a href="#L87">87</a> */
+</p><p><a href="#L88">88</a>public class MockHttpServletRequest implements HttpServletRequest {
+</p><p><a href="#L89">89</a>
+</p><p><a href="#L90">90</a>	private static final String HTTP = "http";
+</p><p><a href="#L91">91</a>
+</p><p><a href="#L92">92</a>	private static final String HTTPS = "https";
+</p><p><a href="#L93">93</a>
+</p><p><a href="#L94">94</a>	private static final String CHARSET_PREFIX = "charset=";
+</p><p><a href="#L95">95</a>
+</p><p><a href="#L96">96</a>	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+</p><p><a href="#L97">97</a>
+</p><p><a href="#L98">98</a>	private static final ServletInputStream EMPTY_SERVLET_INPUT_STREAM =
+</p><p><a href="#L99">99</a>			new DelegatingServletInputStream(StreamUtils.emptyInput());
+</p><p><a href="#L100">100</a>
+</p><p><a href="#L101">101</a>	private static final BufferedReader EMPTY_BUFFERED_READER =
+</p><p><a href="#L102">102</a>			new BufferedReader(new StringReader(""));
+</p><p><a href="#L103">103</a>
+</p><p><a href="#L104">104</a>	/**
+</p><p><a href="#L105">105</a>	 * Date formats as specified in the HTTP RFC
+</p><p><a href="#L106">106</a>	 * @see &lt;a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.1"&gt;Section 7.1.1.1 of RFC 7231&lt;/a&gt;
+</p><p><a href="#L107">107</a>	 */
+</p><p><a href="#L108">108</a>	private static final String[] DATE_FORMATS = new String[] {
+</p><p><a href="#L109">109</a>			"EEE, dd MMM yyyy HH:mm:ss zzz",
+</p><p><a href="#L110">110</a>			"EEE, dd-MMM-yy HH:mm:ss zzz",
+</p><p><a href="#L111">111</a>			"EEE MMM dd HH:mm:ss yyyy"
+</p><p><a href="#L112">112</a>	};
+</p><p><a href="#L113">113</a>
+</p><p><a href="#L114">114</a>
+</p><p><a href="#L115">115</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L116">116</a>	// Public constants
+</p><p><a href="#L117">117</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L118">118</a>
+</p><p><a href="#L119">119</a>	/**
+</p><p><a href="#L120">120</a>	 * The default protocol: 'HTTP/1.1'.
+</p><p><a href="#L121">121</a>	 * @since 4.3.7
+</p><p><a href="#L122">122</a>	 */
+</p><p><a href="#L123">123</a>	public static final String DEFAULT_PROTOCOL = "HTTP/1.1";
+</p><p><a href="#L124">124</a>
+</p><p><a href="#L125">125</a>	/**
+</p><p><a href="#L126">126</a>	 * The default scheme: 'http'.
+</p><p><a href="#L127">127</a>	 * @since 4.3.7
+</p><p><a href="#L128">128</a>	 */
+</p><p><a href="#L129">129</a>	public static final String DEFAULT_SCHEME = HTTP;
+</p><p><a href="#L130">130</a>
+</p><p><a href="#L131">131</a>	/**
+</p><p><a href="#L132">132</a>	 * The default server address: '127.0.0.1'.
+</p><p><a href="#L133">133</a>	 */
+</p><p><a href="#L134">134</a>	public static final String DEFAULT_SERVER_ADDR = "127.0.0.1";
+</p><p><a href="#L135">135</a>
+</p><p><a href="#L136">136</a>	/**
+</p><p><a href="#L137">137</a>	 * The default server name: 'localhost'.
+</p><p><a href="#L138">138</a>	 */
+</p><p><a href="#L139">139</a>	public static final String DEFAULT_SERVER_NAME = "localhost";
+</p><p><a href="#L140">140</a>
+</p><p><a href="#L141">141</a>	/**
+</p><p><a href="#L142">142</a>	 * The default server port: '80'.
+</p><p><a href="#L143">143</a>	 */
+</p><p><a href="#L144">144</a>	public static final int DEFAULT_SERVER_PORT = 80;
+</p><p><a href="#L145">145</a>
+</p><p><a href="#L146">146</a>	/**
+</p><p><a href="#L147">147</a>	 * The default remote address: '127.0.0.1'.
+</p><p><a href="#L148">148</a>	 */
+</p><p><a href="#L149">149</a>	public static final String DEFAULT_REMOTE_ADDR = "127.0.0.1";
+</p><p><a href="#L150">150</a>
+</p><p><a href="#L151">151</a>	/**
+</p><p><a href="#L152">152</a>	 * The default remote host: 'localhost'.
+</p><p><a href="#L153">153</a>	 */
+</p><p><a href="#L154">154</a>	public static final String DEFAULT_REMOTE_HOST = "localhost";
+</p><p><a href="#L155">155</a>
+</p><p><a href="#L156">156</a>
+</p><p><a href="#L157">157</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L158">158</a>	// Lifecycle properties
+</p><p><a href="#L159">159</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L160">160</a>
+</p><p><a href="#L161">161</a>	private final ServletContext servletContext;
+</p><p><a href="#L162">162</a>
+</p><p><a href="#L163">163</a>	private boolean active = true;
+</p><p><a href="#L164">164</a>
+</p><p><a href="#L165">165</a>
+</p><p><a href="#L166">166</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L167">167</a>	// ServletRequest properties
+</p><p><a href="#L168">168</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L169">169</a>
+</p><p><a href="#L170">170</a>	private final Map&lt;String, Object&gt; attributes = new LinkedHashMap&lt;&gt;();
+</p><p><a href="#L171">171</a>
+</p><p><a href="#L172">172</a>	@Nullable
+</p><p><a href="#L173">173</a>	private String characterEncoding;
+</p><p><a href="#L174">174</a>
+</p><p><a href="#L175">175</a>	@Nullable
+</p><p><a href="#L176">176</a>	private byte[] content;
+</p><p><a href="#L177">177</a>
+</p><p><a href="#L178">178</a>	@Nullable
+</p><p><a href="#L179">179</a>	private String contentType;
+</p><p><a href="#L180">180</a>
+</p><p><a href="#L181">181</a>	private final Map&lt;String, String[]&gt; parameters = new LinkedHashMap&lt;&gt;(16);
+</p><p><a href="#L182">182</a>
+</p><p><a href="#L183">183</a>	private String protocol = DEFAULT_PROTOCOL;
+</p><p><a href="#L184">184</a>
+</p><p><a href="#L185">185</a>	private String scheme = DEFAULT_SCHEME;
+</p><p><a href="#L186">186</a>
+</p><p><a href="#L187">187</a>	private String serverName = DEFAULT_SERVER_NAME;
+</p><p><a href="#L188">188</a>
+</p><p><a href="#L189">189</a>	private int serverPort = DEFAULT_SERVER_PORT;
+</p><p><a href="#L190">190</a>
+</p><p><a href="#L191">191</a>	private String remoteAddr = DEFAULT_REMOTE_ADDR;
+</p><p><a href="#L192">192</a>
+</p><p><a href="#L193">193</a>	private String remoteHost = DEFAULT_REMOTE_HOST;
+</p><p><a href="#L194">194</a>
+</p><p><a href="#L195">195</a>	/** List of locales in descending order */
+</p><p><a href="#L196">196</a>	private final List&lt;Locale&gt; locales = new LinkedList&lt;&gt;();
+</p><p><a href="#L197">197</a>
+</p><p><a href="#L198">198</a>	private boolean secure = false;
+</p><p><a href="#L199">199</a>
+</p><p><a href="#L200">200</a>	private int remotePort = DEFAULT_SERVER_PORT;
+</p><p><a href="#L201">201</a>
+</p><p><a href="#L202">202</a>	private String localName = DEFAULT_SERVER_NAME;
+</p><p><a href="#L203">203</a>
+</p><p><a href="#L204">204</a>	private String localAddr = DEFAULT_SERVER_ADDR;
+</p><p><a href="#L205">205</a>
+</p><p><a href="#L206">206</a>	private int localPort = DEFAULT_SERVER_PORT;
+</p><p><a href="#L207">207</a>
+</p><p><a href="#L208">208</a>	private boolean asyncStarted = false;
+</p><p><a href="#L209">209</a>
+</p><p><a href="#L210">210</a>	private boolean asyncSupported = false;
+</p><p><a href="#L211">211</a>
+</p><p><a href="#L212">212</a>	@Nullable
+</p><p><a href="#L213">213</a>	private MockAsyncContext asyncContext;
+</p><p><a href="#L214">214</a>
+</p><p><a href="#L215">215</a>	private DispatcherType dispatcherType = DispatcherType.REQUEST;
+</p><p><a href="#L216">216</a>
+</p><p><a href="#L217">217</a>
+</p><p><a href="#L218">218</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L219">219</a>	// HttpServletRequest properties
+</p><p><a href="#L220">220</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L221">221</a>
+</p><p><a href="#L222">222</a>	@Nullable
+</p><p><a href="#L223">223</a>	private String authType;
+</p><p><a href="#L224">224</a>
+</p><p><a href="#L225">225</a>	@Nullable
+</p><p><a href="#L226">226</a>	private Cookie[] cookies;
+</p><p><a href="#L227">227</a>
+</p><p><a href="#L228">228</a>	private final Map&lt;String, HeaderValueHolder&gt; headers = new LinkedCaseInsensitiveMap&lt;&gt;();
+</p><p><a href="#L229">229</a>
+</p><p><a href="#L230">230</a>	@Nullable
+</p><p><a href="#L231">231</a>	private String method;
+</p><p><a href="#L232">232</a>
+</p><p><a href="#L233">233</a>	@Nullable
+</p><p><a href="#L234">234</a>	private String pathInfo;
+</p><p><a href="#L235">235</a>
+</p><p><a href="#L236">236</a>	private String contextPath = "";
+</p><p><a href="#L237">237</a>
+</p><p><a href="#L238">238</a>	@Nullable
+</p><p><a href="#L239">239</a>	private String queryString;
+</p><p><a href="#L240">240</a>
+</p><p><a href="#L241">241</a>	@Nullable
+</p><p><a href="#L242">242</a>	private String remoteUser;
+</p><p><a href="#L243">243</a>
+</p><p><a href="#L244">244</a>	private final Set&lt;String&gt; userRoles = new HashSet&lt;&gt;();
+</p><p><a href="#L245">245</a>
+</p><p><a href="#L246">246</a>	@Nullable
+</p><p><a href="#L247">247</a>	private Principal userPrincipal;
+</p><p><a href="#L248">248</a>
+</p><p><a href="#L249">249</a>	@Nullable
+</p><p><a href="#L250">250</a>	private String requestedSessionId;
+</p><p><a href="#L251">251</a>
+</p><p><a href="#L252">252</a>	@Nullable
+</p><p><a href="#L253">253</a>	private String requestURI;
+</p><p><a href="#L254">254</a>
+</p><p><a href="#L255">255</a>	private String servletPath = "";
+</p><p><a href="#L256">256</a>
+</p><p><a href="#L257">257</a>	@Nullable
+</p><p><a href="#L258">258</a>	private HttpSession session;
+</p><p><a href="#L259">259</a>
+</p><p><a href="#L260">260</a>	private boolean requestedSessionIdValid = true;
+</p><p><a href="#L261">261</a>
+</p><p><a href="#L262">262</a>	private boolean requestedSessionIdFromCookie = true;
+</p><p><a href="#L263">263</a>
+</p><p><a href="#L264">264</a>	private boolean requestedSessionIdFromURL = false;
+</p><p><a href="#L265">265</a>
+</p><p><a href="#L266">266</a>	private final MultiValueMap&lt;String, Part&gt; parts = new LinkedMultiValueMap&lt;&gt;();
+</p><p><a href="#L267">267</a>
+</p><p><a href="#L268">268</a>
+</p><p><a href="#L269">269</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L270">270</a>	// Constructors
+</p><p><a href="#L271">271</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L272">272</a>
+</p><p><a href="#L273">273</a>	/**
+</p><p><a href="#L274">274</a>	 * Create a new {@code MockHttpServletRequest} with a default
+</p><p><a href="#L275">275</a>	 * {@link MockServletContext}.
+</p><p><a href="#L276">276</a>	 * @see #MockHttpServletRequest(ServletContext, String, String)
+</p><p><a href="#L277">277</a>	 */
+</p><p><a href="#L278">278</a>	public MockHttpServletRequest() {
+</p><p><a href="#L279">279</a>		this(null, "", "");
+</p><p><a href="#L280">280</a>	}
+</p><p><a href="#L281">281</a>
+</p><p><a href="#L282">282</a>	/**
+</p><p><a href="#L283">283</a>	 * Create a new {@code MockHttpServletRequest} with a default
+</p><p><a href="#L284">284</a>	 * {@link MockServletContext}.
+</p><p><a href="#L285">285</a>	 * @param method the request method (may be {@code null})
+</p><p><a href="#L286">286</a>	 * @param requestURI the request URI (may be {@code null})
+</p><p><a href="#L287">287</a>	 * @see #setMethod
+</p><p><a href="#L288">288</a>	 * @see #setRequestURI
+</p><p><a href="#L289">289</a>	 * @see #MockHttpServletRequest(ServletContext, String, String)
+</p><p><a href="#L290">290</a>	 */
+</p><p><a href="#L291">291</a>	public MockHttpServletRequest(@Nullable String method, @Nullable String requestURI) {
+</p><p><a href="#L292">292</a>		this(null, method, requestURI);
+</p><p><a href="#L293">293</a>	}
+</p><p><a href="#L294">294</a>
+</p><p><a href="#L295">295</a>	/**
+</p><p><a href="#L296">296</a>	 * Create a new {@code MockHttpServletRequest} with the supplied {@link ServletContext}.
+</p><p><a href="#L297">297</a>	 * @param servletContext the ServletContext that the request runs in
+</p><p><a href="#L298">298</a>	 * (may be {@code null} to use a default {@link MockServletContext})
+</p><p><a href="#L299">299</a>	 * @see #MockHttpServletRequest(ServletContext, String, String)
+</p><p><a href="#L300">300</a>	 */
+</p><p><a href="#L301">301</a>	public MockHttpServletRequest(@Nullable ServletContext servletContext) {
+</p><p><a href="#L302">302</a>		this(servletContext, "", "");
+</p><p><a href="#L303">303</a>	}
+</p><p><a href="#L304">304</a>
+</p><p><a href="#L305">305</a>	/**
+</p><p><a href="#L306">306</a>	 * Create a new {@code MockHttpServletRequest} with the supplied {@link ServletContext},
+</p><p><a href="#L307">307</a>	 * {@code method}, and {@code requestURI}.
+</p><p><a href="#L308">308</a>	 * &lt;p&gt;The preferred locale will be set to {@link Locale#ENGLISH}.
+</p><p><a href="#L309">309</a>	 * @param servletContext the ServletContext that the request runs in (may be
+</p><p><a href="#L310">310</a>	 * {@code null} to use a default {@link MockServletContext})
+</p><p><a href="#L311">311</a>	 * @param method the request method (may be {@code null})
+</p><p><a href="#L312">312</a>	 * @param requestURI the request URI (may be {@code null})
+</p><p><a href="#L313">313</a>	 * @see #setMethod
+</p><p><a href="#L314">314</a>	 * @see #setRequestURI
+</p><p><a href="#L315">315</a>	 * @see #setPreferredLocales
+</p><p><a href="#L316">316</a>	 * @see MockServletContext
+</p><p><a href="#L317">317</a>	 */
+</p><p><a href="#L318">318</a>	public MockHttpServletRequest(@Nullable ServletContext servletContext, @Nullable String method, @Nullable String requestURI) {
+</p><p><a href="#L319">319</a>		this.servletContext = (servletContext != null ? servletContext : new MockServletContext());
+</p><p><a href="#L320">320</a>		this.method = method;
+</p><p><a href="#L321">321</a>		this.requestURI = requestURI;
+</p><p><a href="#L322">322</a>		this.locales.add(Locale.ENGLISH);
+</p><p><a href="#L323">323</a>	}
+</p><p><a href="#L324">324</a>
+</p><p><a href="#L325">325</a>
+</p><p><a href="#L326">326</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L327">327</a>	// Lifecycle methods
+</p><p><a href="#L328">328</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L329">329</a>
+</p><p><a href="#L330">330</a>	/**
+</p><p><a href="#L331">331</a>	 * Return the ServletContext that this request is associated with. (Not
+</p><p><a href="#L332">332</a>	 * available in the standard HttpServletRequest interface for some reason.)
+</p><p><a href="#L333">333</a>	 */
+</p><p><a href="#L334">334</a>	@Override
+</p><p><a href="#L335">335</a>	public ServletContext getServletContext() {
+</p><p><a href="#L336">336</a>		return this.servletContext;
+</p><p><a href="#L337">337</a>	}
+</p><p><a href="#L338">338</a>
+</p><p><a href="#L339">339</a>	/**
+</p><p><a href="#L340">340</a>	 * Return whether this request is still active (that is, not completed yet).
+</p><p><a href="#L341">341</a>	 */
+</p><p><a href="#L342">342</a>	public boolean isActive() {
+</p><p><a href="#L343">343</a>		return this.active;
+</p><p><a href="#L344">344</a>	}
+</p><p><a href="#L345">345</a>
+</p><p><a href="#L346">346</a>	/**
+</p><p><a href="#L347">347</a>	 * Mark this request as completed, keeping its state.
+</p><p><a href="#L348">348</a>	 */
+</p><p><a href="#L349">349</a>	public void close() {
+</p><p><a href="#L350">350</a>		this.active = false;
+</p><p><a href="#L351">351</a>	}
+</p><p><a href="#L352">352</a>
+</p><p><a href="#L353">353</a>	/**
+</p><p><a href="#L354">354</a>	 * Invalidate this request, clearing its state.
+</p><p><a href="#L355">355</a>	 */
+</p><p><a href="#L356">356</a>	public void invalidate() {
+</p><p><a href="#L357">357</a>		close();
+</p><p><a href="#L358">358</a>		clearAttributes();
+</p><p><a href="#L359">359</a>	}
+</p><p><a href="#L360">360</a>
+</p><p><a href="#L361">361</a>	/**
+</p><p><a href="#L362">362</a>	 * Check whether this request is still active (that is, not completed yet),
+</p><p><a href="#L363">363</a>	 * throwing an IllegalStateException if not active anymore.
+</p><p><a href="#L364">364</a>	 */
+</p><p><a href="#L365">365</a>	protected void checkActive() throws IllegalStateException {
+</p><p><a href="#L366">366</a>		Assert.state(this.active, "Request is not active anymore");
+</p><p><a href="#L367">367</a>	}
+</p><p><a href="#L368">368</a>
+</p><p><a href="#L369">369</a>
+</p><p><a href="#L370">370</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L371">371</a>	// ServletRequest interface
+</p><p><a href="#L372">372</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L373">373</a>
+</p><p><a href="#L374">374</a>	@Override
+</p><p><a href="#L375">375</a>	public Object getAttribute(String name) {
+</p><p><a href="#L376">376</a>		checkActive();
+</p><p><a href="#L377">377</a>		return this.attributes.get(name);
+</p><p><a href="#L378">378</a>	}
+</p><p><a href="#L379">379</a>
+</p><p><a href="#L380">380</a>	@Override
+</p><p><a href="#L381">381</a>	public Enumeration&lt;String&gt; getAttributeNames() {
+</p><p><a href="#L382">382</a>		checkActive();
+</p><p><a href="#L383">383</a>		return Collections.enumeration(new LinkedHashSet&lt;&gt;(this.attributes.keySet()));
+</p><p><a href="#L384">384</a>	}
+</p><p><a href="#L385">385</a>
+</p><p><a href="#L386">386</a>	@Override
+</p><p><a href="#L387">387</a>	@Nullable
+</p><p><a href="#L388">388</a>	public String getCharacterEncoding() {
+</p><p><a href="#L389">389</a>		return this.characterEncoding;
+</p><p><a href="#L390">390</a>	}
+</p><p><a href="#L391">391</a>
+</p><p><a href="#L392">392</a>	@Override
+</p><p><a href="#L393">393</a>	public void setCharacterEncoding(@Nullable String characterEncoding) {
+</p><p><a href="#L394">394</a>		this.characterEncoding = characterEncoding;
+</p><p><a href="#L395">395</a>		updateContentTypeHeader();
+</p><p><a href="#L396">396</a>	}
+</p><p><a href="#L397">397</a>
+</p><p><a href="#L398">398</a>	private void updateContentTypeHeader() {
+</p><p><a href="#L399">399</a>		if (StringUtils.hasLength(this.contentType)) {
+</p><p><a href="#L400">400</a>			StringBuilder sb = new StringBuilder(this.contentType);
+</p><p><a href="#L401">401</a>			if (!this.contentType.toLowerCase().contains(CHARSET_PREFIX) &amp;&amp;
+</p><p><a href="#L402">402</a>					StringUtils.hasLength(this.characterEncoding)) {
+</p><p><a href="#L403">403</a>				sb.append(";").append(CHARSET_PREFIX).append(this.characterEncoding);
+</p><p><a href="#L404">404</a>			}
+</p><p><a href="#L405">405</a>			doAddHeaderValue(HttpHeaders.CONTENT_TYPE, sb.toString(), true);
+</p><p><a href="#L406">406</a>		}
+</p><p><a href="#L407">407</a>	}
+</p><p><a href="#L408">408</a>
+</p><p><a href="#L409">409</a>	/**
+</p><p><a href="#L410">410</a>	 * Set the content of the request body as a byte array.
+</p><p><a href="#L411">411</a>	 * &lt;p&gt;If the supplied byte array represents text such as XML or JSON, the
+</p><p><a href="#L412">412</a>	 * {@link #setCharacterEncoding character encoding} should typically be
+</p><p><a href="#L413">413</a>	 * set as well.
+</p><p><a href="#L414">414</a>	 * @see #setCharacterEncoding(String)
+</p><p><a href="#L415">415</a>	 * @see #getContentAsByteArray()
+</p><p><a href="#L416">416</a>	 * @see #getContentAsString()
+</p><p><a href="#L417">417</a>	 */
+</p><p><a href="#L418">418</a>	public void setContent(@Nullable byte[] content) {
+</p><p><a href="#L419">419</a>		this.content = content;
+</p><p><a href="#L420">420</a>	}
+</p><p><a href="#L421">421</a>
+</p><p><a href="#L422">422</a>	/**
+</p><p><a href="#L423">423</a>	 * Get the content of the request body as a byte array.
+</p><p><a href="#L424">424</a>	 * @return the content as a byte array (potentially {@code null})
+</p><p><a href="#L425">425</a>	 * @since 5.0
+</p><p><a href="#L426">426</a>	 * @see #setContent(byte[])
+</p><p><a href="#L427">427</a>	 * @see #getContentAsString()
+</p><p><a href="#L428">428</a>	 */
+</p><p><a href="#L429">429</a>	@Nullable
+</p><p><a href="#L430">430</a>	public byte[] getContentAsByteArray() {
+</p><p><a href="#L431">431</a>		return this.content;
+</p><p><a href="#L432">432</a>	}
+</p><p><a href="#L433">433</a>
+</p><p><a href="#L434">434</a>	/**
+</p><p><a href="#L435">435</a>	 * Get the content of the request body as a {@code String}, using the configured
+</p><p><a href="#L436">436</a>	 * {@linkplain #getCharacterEncoding character encoding}.
+</p><p><a href="#L437">437</a>	 * @return the content as a {@code String}, potentially {@code null}
+</p><p><a href="#L438">438</a>	 * @throws IllegalStateException if the character encoding has not been set
+</p><p><a href="#L439">439</a>	 * @throws UnsupportedEncodingException if the character encoding is not supported
+</p><p><a href="#L440">440</a>	 * @since 5.0
+</p><p><a href="#L441">441</a>	 * @see #setContent(byte[])
+</p><p><a href="#L442">442</a>	 * @see #setCharacterEncoding(String)
+</p><p><a href="#L443">443</a>	 * @see #getContentAsByteArray()
+</p><p><a href="#L444">444</a>	 */
+</p><p><a href="#L445">445</a>	@Nullable
+</p><p><a href="#L446">446</a>	public String getContentAsString() throws IllegalStateException, UnsupportedEncodingException {
+</p><p><a href="#L447">447</a>		Assert.state(this.characterEncoding != null,
+</p><p><a href="#L448">448</a>				"Cannot get content as a String for a null character encoding. " +
+</p><p><a href="#L449">449</a>				"Consider setting the characterEncoding in the request.");
+</p><p><a href="#L450">450</a>
+</p><p><a href="#L451">451</a>		if (this.content == null) {
+</p><p><a href="#L452">452</a>			return null;
+</p><p><a href="#L453">453</a>		}
+</p><p><a href="#L454">454</a>		return new String(this.content, this.characterEncoding);
+</p><p><a href="#L455">455</a>	}
+</p><p><a href="#L456">456</a>
+</p><p><a href="#L457">457</a>	@Override
+</p><p><a href="#L458">458</a>	public int getContentLength() {
+</p><p><a href="#L459">459</a>		return (this.content != null ? this.content.length : -1);
+</p><p><a href="#L460">460</a>	}
+</p><p><a href="#L461">461</a>
+</p><p><a href="#L462">462</a>	@Override
+</p><p><a href="#L463">463</a>	public long getContentLengthLong() {
+</p><p><a href="#L464">464</a>		return getContentLength();
+</p><p><a href="#L465">465</a>	}
+</p><p><a href="#L466">466</a>
+</p><p><a href="#L467">467</a>	public void setContentType(@Nullable String contentType) {
+</p><p><a href="#L468">468</a>		this.contentType = contentType;
+</p><p><a href="#L469">469</a>		if (contentType != null) {
+</p><p><a href="#L470">470</a>			try {
+</p><p><a href="#L471">471</a>				MediaType mediaType = MediaType.parseMediaType(contentType);
+</p><p><a href="#L472">472</a>				if (mediaType.getCharset() != null) {
+</p><p><a href="#L473">473</a>					this.characterEncoding = mediaType.getCharset().name();
+</p><p><a href="#L474">474</a>				}
+</p><p><a href="#L475">475</a>			}
+</p><p><a href="#L476">476</a>			catch (IllegalArgumentException ex) {
+</p><p><a href="#L477">477</a>				// Try to get charset value anyway
+</p><p><a href="#L478">478</a>				int charsetIndex = contentType.toLowerCase().indexOf(CHARSET_PREFIX);
+</p><p><a href="#L479">479</a>				if (charsetIndex != -1) {
+</p><p><a href="#L480">480</a>					this.characterEncoding = contentType.substring(charsetIndex + CHARSET_PREFIX.length());
+</p><p><a href="#L481">481</a>				}
+</p><p><a href="#L482">482</a>			}
+</p><p><a href="#L483">483</a>			updateContentTypeHeader();
+</p><p><a href="#L484">484</a>		}
+</p><p><a href="#L485">485</a>	}
+</p><p><a href="#L486">486</a>
+</p><p><a href="#L487">487</a>	@Override
+</p><p><a href="#L488">488</a>	@Nullable
+</p><p><a href="#L489">489</a>	public String getContentType() {
+</p><p><a href="#L490">490</a>		return this.contentType;
+</p><p><a href="#L491">491</a>	}
+</p><p><a href="#L492">492</a>
+</p><p><a href="#L493">493</a>	@Override
+</p><p><a href="#L494">494</a>	public ServletInputStream getInputStream() {
+</p><p><a href="#L495">495</a>		if (this.content != null) {
+</p><p><a href="#L496">496</a>			return new DelegatingServletInputStream(new ByteArrayInputStream(this.content));
+</p><p><a href="#L497">497</a>		}
+</p><p><a href="#L498">498</a>		else {
+</p><p><a href="#L499">499</a>			return EMPTY_SERVLET_INPUT_STREAM;
+</p><p><a href="#L500">500</a>		}
+</p><p><a href="#L501">501</a>	}
+</p><p><a href="#L502">502</a>
+</p><p><a href="#L503">503</a>	/**
+</p><p><a href="#L504">504</a>	 * Set a single value for the specified HTTP parameter.
+</p><p><a href="#L505">505</a>	 * &lt;p&gt;If there are already one or more values registered for the given
+</p><p><a href="#L506">506</a>	 * parameter name, they will be replaced.
+</p><p><a href="#L507">507</a>	 */
+</p><p><a href="#L508">508</a>	public void setParameter(String name, String value) {
+</p><p><a href="#L509">509</a>		setParameter(name, new String[] {value});
+</p><p><a href="#L510">510</a>	}
+</p><p><a href="#L511">511</a>
+</p><p><a href="#L512">512</a>	/**
+</p><p><a href="#L513">513</a>	 * Set an array of values for the specified HTTP parameter.
+</p><p><a href="#L514">514</a>	 * &lt;p&gt;If there are already one or more values registered for the given
+</p><p><a href="#L515">515</a>	 * parameter name, they will be replaced.
+</p><p><a href="#L516">516</a>	 */
+</p><p><a href="#L517">517</a>	public void setParameter(String name, String... values) {
+</p><p><a href="#L518">518</a>		Assert.notNull(name, "Parameter name must not be null");
+</p><p><a href="#L519">519</a>		this.parameters.put(name, values);
+</p><p><a href="#L520">520</a>	}
+</p><p><a href="#L521">521</a>
+</p><p><a href="#L522">522</a>	/**
+</p><p><a href="#L523">523</a>	 * Set all provided parameters &lt;strong&gt;replacing&lt;/strong&gt; any existing
+</p><p><a href="#L524">524</a>	 * values for the provided parameter names. To add without replacing
+</p><p><a href="#L525">525</a>	 * existing values, use {@link #addParameters(java.util.Map)}.
+</p><p><a href="#L526">526</a>	 */
+</p><p><a href="#L527">527</a>	public void setParameters(Map&lt;String, ?&gt; params) {
+</p><p><a href="#L528">528</a>		Assert.notNull(params, "Parameter map must not be null");
+</p><p><a href="#L529">529</a>		for (String key : params.keySet()) {
+</p><p><a href="#L530">530</a>			Object value = params.get(key);
+</p><p><a href="#L531">531</a>			if (value instanceof String) {
+</p><p><a href="#L532">532</a>				setParameter(key, (String) value);
+</p><p><a href="#L533">533</a>			}
+</p><p><a href="#L534">534</a>			else if (value instanceof String[]) {
+</p><p><a href="#L535">535</a>				setParameter(key, (String[]) value);
+</p><p><a href="#L536">536</a>			}
+</p><p><a href="#L537">537</a>			else {
+</p><p><a href="#L538">538</a>				throw new IllegalArgumentException(
+</p><p><a href="#L539">539</a>						"Parameter map value must be single value " + " or array of type [" + String.class.getName() + "]");
+</p><p><a href="#L540">540</a>			}
+</p><p><a href="#L541">541</a>		}
+</p><p><a href="#L542">542</a>	}
+</p><p><a href="#L543">543</a>
+</p><p><a href="#L544">544</a>	/**
+</p><p><a href="#L545">545</a>	 * Add a single value for the specified HTTP parameter.
+</p><p><a href="#L546">546</a>	 * &lt;p&gt;If there are already one or more values registered for the given
+</p><p><a href="#L547">547</a>	 * parameter name, the given value will be added to the end of the list.
+</p><p><a href="#L548">548</a>	 */
+</p><p><a href="#L549">549</a>	public void addParameter(String name, @Nullable String value) {
+</p><p><a href="#L550">550</a>		addParameter(name, new String[] {value});
+</p><p><a href="#L551">551</a>	}
+</p><p><a href="#L552">552</a>
+</p><p><a href="#L553">553</a>	/**
+</p><p><a href="#L554">554</a>	 * Add an array of values for the specified HTTP parameter.
+</p><p><a href="#L555">555</a>	 * &lt;p&gt;If there are already one or more values registered for the given
+</p><p><a href="#L556">556</a>	 * parameter name, the given values will be added to the end of the list.
+</p><p><a href="#L557">557</a>	 */
+</p><p><a href="#L558">558</a>	public void addParameter(String name, String... values) {
+</p><p><a href="#L559">559</a>		Assert.notNull(name, "Parameter name must not be null");
+</p><p><a href="#L560">560</a>		String[] oldArr = this.parameters.get(name);
+</p><p><a href="#L561">561</a>		if (oldArr != null) {
+</p><p><a href="#L562">562</a>			String[] newArr = new String[oldArr.length + values.length];
+</p><p><a href="#L563">563</a>			System.arraycopy(oldArr, 0, newArr, 0, oldArr.length);
+</p><p><a href="#L564">564</a>			System.arraycopy(values, 0, newArr, oldArr.length, values.length);
+</p><p><a href="#L565">565</a>			this.parameters.put(name, newArr);
+</p><p><a href="#L566">566</a>		}
+</p><p><a href="#L567">567</a>		else {
+</p><p><a href="#L568">568</a>			this.parameters.put(name, values);
+</p><p><a href="#L569">569</a>		}
+</p><p><a href="#L570">570</a>	}
+</p><p><a href="#L571">571</a>
+</p><p><a href="#L572">572</a>	/**
+</p><p><a href="#L573">573</a>	 * Adds all provided parameters &lt;strong&gt;without&lt;/strong&gt; replacing any
+</p><p><a href="#L574">574</a>	 * existing values. To replace existing values, use
+</p><p><a href="#L575">575</a>	 * {@link #setParameters(java.util.Map)}.
+</p><p><a href="#L576">576</a>	 */
+</p><p><a href="#L577">577</a>	public void addParameters(Map&lt;String, ?&gt; params) {
+</p><p><a href="#L578">578</a>		Assert.notNull(params, "Parameter map must not be null");
+</p><p><a href="#L579">579</a>		for (String key : params.keySet()) {
+</p><p><a href="#L580">580</a>			Object value = params.get(key);
+</p><p><a href="#L581">581</a>			if (value instanceof String) {
+</p><p><a href="#L582">582</a>				addParameter(key, (String) value);
+</p><p><a href="#L583">583</a>			}
+</p><p><a href="#L584">584</a>			else if (value instanceof String[]) {
+</p><p><a href="#L585">585</a>				addParameter(key, (String[]) value);
+</p><p><a href="#L586">586</a>			}
+</p><p><a href="#L587">587</a>			else {
+</p><p><a href="#L588">588</a>				throw new IllegalArgumentException("Parameter map value must be single value " +
+</p><p><a href="#L589">589</a>						" or array of type [" + String.class.getName() + "]");
+</p><p><a href="#L590">590</a>			}
+</p><p><a href="#L591">591</a>		}
+</p><p><a href="#L592">592</a>	}
+</p><p><a href="#L593">593</a>
+</p><p><a href="#L594">594</a>	/**
+</p><p><a href="#L595">595</a>	 * Remove already registered values for the specified HTTP parameter, if any.
+</p><p><a href="#L596">596</a>	 */
+</p><p><a href="#L597">597</a>	public void removeParameter(String name) {
+</p><p><a href="#L598">598</a>		Assert.notNull(name, "Parameter name must not be null");
+</p><p><a href="#L599">599</a>		this.parameters.remove(name);
+</p><p><a href="#L600">600</a>	}
+</p><p><a href="#L601">601</a>
+</p><p><a href="#L602">602</a>	/**
+</p><p><a href="#L603">603</a>	 * Removes all existing parameters.
+</p><p><a href="#L604">604</a>	 */
+</p><p><a href="#L605">605</a>	public void removeAllParameters() {
+</p><p><a href="#L606">606</a>		this.parameters.clear();
+</p><p><a href="#L607">607</a>	}
+</p><p><a href="#L608">608</a>
+</p><p><a href="#L609">609</a>	@Override
+</p><p><a href="#L610">610</a>	@Nullable
+</p><p><a href="#L611">611</a>	public String getParameter(String name) {
+</p><p><a href="#L612">612</a>		Assert.notNull(name, "Parameter name must not be null");
+</p><p><a href="#L613">613</a>		String[] arr = this.parameters.get(name);
+</p><p><a href="#L614">614</a>		return (arr != null &amp;&amp; arr.length &gt; 0 ? arr[0] : null);
+</p><p><a href="#L615">615</a>	}
+</p><p><a href="#L616">616</a>
+</p><p><a href="#L617">617</a>	@Override
+</p><p><a href="#L618">618</a>	public Enumeration&lt;String&gt; getParameterNames() {
+</p><p><a href="#L619">619</a>		return Collections.enumeration(this.parameters.keySet());
+</p><p><a href="#L620">620</a>	}
+</p><p><a href="#L621">621</a>
+</p><p><a href="#L622">622</a>	@Override
+</p><p><a href="#L623">623</a>	public String[] getParameterValues(String name) {
+</p><p><a href="#L624">624</a>		Assert.notNull(name, "Parameter name must not be null");
+</p><p><a href="#L625">625</a>		return this.parameters.get(name);
+</p><p><a href="#L626">626</a>	}
+</p><p><a href="#L627">627</a>
+</p><p><a href="#L628">628</a>	@Override
+</p><p><a href="#L629">629</a>	public Map&lt;String, String[]&gt; getParameterMap() {
+</p><p><a href="#L630">630</a>		return Collections.unmodifiableMap(this.parameters);
+</p><p><a href="#L631">631</a>	}
+</p><p><a href="#L632">632</a>
+</p><p><a href="#L633">633</a>	public void setProtocol(String protocol) {
+</p><p><a href="#L634">634</a>		this.protocol = protocol;
+</p><p><a href="#L635">635</a>	}
+</p><p><a href="#L636">636</a>
+</p><p><a href="#L637">637</a>	@Override
+</p><p><a href="#L638">638</a>	public String getProtocol() {
+</p><p><a href="#L639">639</a>		return this.protocol;
+</p><p><a href="#L640">640</a>	}
+</p><p><a href="#L641">641</a>
+</p><p><a href="#L642">642</a>	public void setScheme(String scheme) {
+</p><p><a href="#L643">643</a>		this.scheme = scheme;
+</p><p><a href="#L644">644</a>	}
+</p><p><a href="#L645">645</a>
+</p><p><a href="#L646">646</a>	@Override
+</p><p><a href="#L647">647</a>	public String getScheme() {
+</p><p><a href="#L648">648</a>		return this.scheme;
+</p><p><a href="#L649">649</a>	}
+</p><p><a href="#L650">650</a>
+</p><p><a href="#L651">651</a>	public void setServerName(String serverName) {
+</p><p><a href="#L652">652</a>		this.serverName = serverName;
+</p><p><a href="#L653">653</a>	}
+</p><p><a href="#L654">654</a>
+</p><p><a href="#L655">655</a>	@Override
+</p><p><a href="#L656">656</a>	public String getServerName() {
+</p><p><a href="#L657">657</a>		String host = getHeader(HttpHeaders.HOST);
+</p><p><a href="#L658">658</a>		if (host != null) {
+</p><p><a href="#L659">659</a>			host = host.trim();
+</p><p><a href="#L660">660</a>			if (host.startsWith("[")) {
+</p><p><a href="#L661">661</a>				host = host.substring(1, host.indexOf(']'));
+</p><p><a href="#L662">662</a>			}
+</p><p><a href="#L663">663</a>			else if (host.contains(":")) {
+</p><p><a href="#L664">664</a>				host = host.substring(0, host.indexOf(':'));
+</p><p><a href="#L665">665</a>			}
+</p><p><a href="#L666">666</a>			return host;
+</p><p><a href="#L667">667</a>		}
+</p><p><a href="#L668">668</a>
+</p><p><a href="#L669">669</a>		// else
+</p><p><a href="#L670">670</a>		return this.serverName;
+</p><p><a href="#L671">671</a>	}
+</p><p><a href="#L672">672</a>
+</p><p><a href="#L673">673</a>	public void setServerPort(int serverPort) {
+</p><p><a href="#L674">674</a>		this.serverPort = serverPort;
+</p><p><a href="#L675">675</a>	}
+</p><p><a href="#L676">676</a>
+</p><p><a href="#L677">677</a>	@Override
+</p><p><a href="#L678">678</a>	public int getServerPort() {
+</p><p><a href="#L679">679</a>		String host = getHeader(HttpHeaders.HOST);
+</p><p><a href="#L680">680</a>		if (host != null) {
+</p><p><a href="#L681">681</a>			host = host.trim();
+</p><p><a href="#L682">682</a>			int idx;
+</p><p><a href="#L683">683</a>			if (host.startsWith("[")) {
+</p><p><a href="#L684">684</a>				idx = host.indexOf(':', host.indexOf(']'));
+</p><p><a href="#L685">685</a>			}
+</p><p><a href="#L686">686</a>			else {
+</p><p><a href="#L687">687</a>				idx = host.indexOf(':');
+</p><p><a href="#L688">688</a>			}
+</p><p><a href="#L689">689</a>			if (idx != -1) {
+</p><p><a href="#L690">690</a>				return Integer.parseInt(host.substring(idx + 1));
+</p><p><a href="#L691">691</a>			}
+</p><p><a href="#L692">692</a>		}
+</p><p><a href="#L693">693</a>
+</p><p><a href="#L694">694</a>		// else
+</p><p><a href="#L695">695</a>		return this.serverPort;
+</p><p><a href="#L696">696</a>	}
+</p><p><a href="#L697">697</a>
+</p><p><a href="#L698">698</a>	@Override
+</p><p><a href="#L699">699</a>	public BufferedReader getReader() throws UnsupportedEncodingException {
+</p><p><a href="#L700">700</a>		if (this.content != null) {
+</p><p><a href="#L701">701</a>			InputStream sourceStream = new ByteArrayInputStream(this.content);
+</p><p><a href="#L702">702</a>			Reader sourceReader = (this.characterEncoding != null) ?
+</p><p><a href="#L703">703</a>					new InputStreamReader(sourceStream, this.characterEncoding) :
+</p><p><a href="#L704">704</a>					new InputStreamReader(sourceStream);
+</p><p><a href="#L705">705</a>			return new BufferedReader(sourceReader);
+</p><p><a href="#L706">706</a>		}
+</p><p><a href="#L707">707</a>		else {
+</p><p><a href="#L708">708</a>			return EMPTY_BUFFERED_READER;
+</p><p><a href="#L709">709</a>		}
+</p><p><a href="#L710">710</a>	}
+</p><p><a href="#L711">711</a>
+</p><p><a href="#L712">712</a>	public void setRemoteAddr(String remoteAddr) {
+</p><p><a href="#L713">713</a>		this.remoteAddr = remoteAddr;
+</p><p><a href="#L714">714</a>	}
+</p><p><a href="#L715">715</a>
+</p><p><a href="#L716">716</a>	@Override
+</p><p><a href="#L717">717</a>	public String getRemoteAddr() {
+</p><p><a href="#L718">718</a>		return this.remoteAddr;
+</p><p><a href="#L719">719</a>	}
+</p><p><a href="#L720">720</a>
+</p><p><a href="#L721">721</a>	public void setRemoteHost(String remoteHost) {
+</p><p><a href="#L722">722</a>		this.remoteHost = remoteHost;
+</p><p><a href="#L723">723</a>	}
+</p><p><a href="#L724">724</a>
+</p><p><a href="#L725">725</a>	@Override
+</p><p><a href="#L726">726</a>	public String getRemoteHost() {
+</p><p><a href="#L727">727</a>		return this.remoteHost;
+</p><p><a href="#L728">728</a>	}
+</p><p><a href="#L729">729</a>
+</p><p><a href="#L730">730</a>	@Override
+</p><p><a href="#L731">731</a>	public void setAttribute(String name, @Nullable Object value) {
+</p><p><a href="#L732">732</a>		checkActive();
+</p><p><a href="#L733">733</a>		Assert.notNull(name, "Attribute name must not be null");
+</p><p><a href="#L734">734</a>		if (value != null) {
+</p><p><a href="#L735">735</a>			this.attributes.put(name, value);
+</p><p><a href="#L736">736</a>		}
+</p><p><a href="#L737">737</a>		else {
+</p><p><a href="#L738">738</a>			this.attributes.remove(name);
+</p><p><a href="#L739">739</a>		}
+</p><p><a href="#L740">740</a>	}
+</p><p><a href="#L741">741</a>
+</p><p><a href="#L742">742</a>	@Override
+</p><p><a href="#L743">743</a>	public void removeAttribute(String name) {
+</p><p><a href="#L744">744</a>		checkActive();
+</p><p><a href="#L745">745</a>		Assert.notNull(name, "Attribute name must not be null");
+</p><p><a href="#L746">746</a>		this.attributes.remove(name);
+</p><p><a href="#L747">747</a>	}
+</p><p><a href="#L748">748</a>
+</p><p><a href="#L749">749</a>	/**
+</p><p><a href="#L750">750</a>	 * Clear all of this request's attributes.
+</p><p><a href="#L751">751</a>	 */
+</p><p><a href="#L752">752</a>	public void clearAttributes() {
+</p><p><a href="#L753">753</a>		this.attributes.clear();
+</p><p><a href="#L754">754</a>	}
+</p><p><a href="#L755">755</a>
+</p><p><a href="#L756">756</a>	/**
+</p><p><a href="#L757">757</a>	 * Add a new preferred locale, before any existing locales.
+</p><p><a href="#L758">758</a>	 * @see #setPreferredLocales
+</p><p><a href="#L759">759</a>	 */
+</p><p><a href="#L760">760</a>	public void addPreferredLocale(Locale locale) {
+</p><p><a href="#L761">761</a>		Assert.notNull(locale, "Locale must not be null");
+</p><p><a href="#L762">762</a>		this.locales.add(0, locale);
+</p><p><a href="#L763">763</a>		updateAcceptLanguageHeader();
+</p><p><a href="#L764">764</a>	}
+</p><p><a href="#L765">765</a>
+</p><p><a href="#L766">766</a>	/**
+</p><p><a href="#L767">767</a>	 * Set the list of preferred locales, in descending order, effectively replacing
+</p><p><a href="#L768">768</a>	 * any existing locales.
+</p><p><a href="#L769">769</a>	 * @see #addPreferredLocale
+</p><p><a href="#L770">770</a>	 * @since 3.2
+</p><p><a href="#L771">771</a>	 */
+</p><p><a href="#L772">772</a>	public void setPreferredLocales(List&lt;Locale&gt; locales) {
+</p><p><a href="#L773">773</a>		Assert.notEmpty(locales, "Locale list must not be empty");
+</p><p><a href="#L774">774</a>		this.locales.clear();
+</p><p><a href="#L775">775</a>		this.locales.addAll(locales);
+</p><p><a href="#L776">776</a>		updateAcceptLanguageHeader();
+</p><p><a href="#L777">777</a>	}
+</p><p><a href="#L778">778</a>
+</p><p><a href="#L779">779</a>	private void updateAcceptLanguageHeader() {
+</p><p><a href="#L780">780</a>		HttpHeaders headers = new HttpHeaders();
+</p><p><a href="#L781">781</a>		headers.setAcceptLanguageAsLocales(this.locales);
+</p><p><a href="#L782">782</a>		doAddHeaderValue(HttpHeaders.ACCEPT_LANGUAGE, headers.getFirst(HttpHeaders.ACCEPT_LANGUAGE), true);
+</p><p><a href="#L783">783</a>	}
+</p><p><a href="#L784">784</a>
+</p><p><a href="#L785">785</a>	/**
+</p><p><a href="#L786">786</a>	 * Return the first preferred {@linkplain Locale locale} configured
+</p><p><a href="#L787">787</a>	 * in this mock request.
+</p><p><a href="#L788">788</a>	 * &lt;p&gt;If no locales have been explicitly configured, the default,
+</p><p><a href="#L789">789</a>	 * preferred {@link Locale} for the &lt;em&gt;server&lt;/em&gt; mocked by this
+</p><p><a href="#L790">790</a>	 * request is {@link Locale#ENGLISH}.
+</p><p><a href="#L791">791</a>	 * &lt;p&gt;In contrast to the Servlet specification, this mock implementation
+</p><p><a href="#L792">792</a>	 * does &lt;strong&gt;not&lt;/strong&gt; take into consideration any locales
+</p><p><a href="#L793">793</a>	 * specified via the {@code Accept-Language} header.
+</p><p><a href="#L794">794</a>	 * @see javax.servlet.ServletRequest#getLocale()
+</p><p><a href="#L795">795</a>	 * @see #addPreferredLocale(Locale)
+</p><p><a href="#L796">796</a>	 * @see #setPreferredLocales(List)
+</p><p><a href="#L797">797</a>	 */
+</p><p><a href="#L798">798</a>	@Override
+</p><p><a href="#L799">799</a>	public Locale getLocale() {
+</p><p><a href="#L800">800</a>		return this.locales.get(0);
+</p><p><a href="#L801">801</a>	}
+</p><p><a href="#L802">802</a>
+</p><p><a href="#L803">803</a>	/**
+</p><p><a href="#L804">804</a>	 * Return an {@linkplain Enumeration enumeration} of the preferred
+</p><p><a href="#L805">805</a>	 * {@linkplain Locale locales} configured in this mock request.
+</p><p><a href="#L806">806</a>	 * &lt;p&gt;If no locales have been explicitly configured, the default,
+</p><p><a href="#L807">807</a>	 * preferred {@link Locale} for the &lt;em&gt;server&lt;/em&gt; mocked by this
+</p><p><a href="#L808">808</a>	 * request is {@link Locale#ENGLISH}.
+</p><p><a href="#L809">809</a>	 * &lt;p&gt;In contrast to the Servlet specification, this mock implementation
+</p><p><a href="#L810">810</a>	 * does &lt;strong&gt;not&lt;/strong&gt; take into consideration any locales
+</p><p><a href="#L811">811</a>	 * specified via the {@code Accept-Language} header.
+</p><p><a href="#L812">812</a>	 * @see javax.servlet.ServletRequest#getLocales()
+</p><p><a href="#L813">813</a>	 * @see #addPreferredLocale(Locale)
+</p><p><a href="#L814">814</a>	 * @see #setPreferredLocales(List)
+</p><p><a href="#L815">815</a>	 */
+</p><p><a href="#L816">816</a>	@Override
+</p><p><a href="#L817">817</a>	public Enumeration&lt;Locale&gt; getLocales() {
+</p><p><a href="#L818">818</a>		return Collections.enumeration(this.locales);
+</p><p><a href="#L819">819</a>	}
+</p><p><a href="#L820">820</a>
+</p><p><a href="#L821">821</a>	/**
+</p><p><a href="#L822">822</a>	 * Set the boolean {@code secure} flag indicating whether the mock request
+</p><p><a href="#L823">823</a>	 * was made using a secure channel, such as HTTPS.
+</p><p><a href="#L824">824</a>	 * @see #isSecure()
+</p><p><a href="#L825">825</a>	 * @see #getScheme()
+</p><p><a href="#L826">826</a>	 * @see #setScheme(String)
+</p><p><a href="#L827">827</a>	 */
+</p><p><a href="#L828">828</a>	public void setSecure(boolean secure) {
+</p><p><a href="#L829">829</a>		this.secure = secure;
+</p><p><a href="#L830">830</a>	}
+</p><p><a href="#L831">831</a>
+</p><p><a href="#L832">832</a>	/**
+</p><p><a href="#L833">833</a>	 * Return {@code true} if the {@link #setSecure secure} flag has been set
+</p><p><a href="#L834">834</a>	 * to {@code true} or if the {@link #getScheme scheme} is {@code https}.
+</p><p><a href="#L835">835</a>	 * @see javax.servlet.ServletRequest#isSecure()
+</p><p><a href="#L836">836</a>	 */
+</p><p><a href="#L837">837</a>	@Override
+</p><p><a href="#L838">838</a>	public boolean isSecure() {
+</p><p><a href="#L839">839</a>		return (this.secure || HTTPS.equalsIgnoreCase(this.scheme));
+</p><p><a href="#L840">840</a>	}
+</p><p><a href="#L841">841</a>
+</p><p><a href="#L842">842</a>	@Override
+</p><p><a href="#L843">843</a>	public RequestDispatcher getRequestDispatcher(String path) {
+</p><p><a href="#L844">844</a>		return new MockRequestDispatcher(path);
+</p><p><a href="#L845">845</a>	}
+</p><p><a href="#L846">846</a>
+</p><p><a href="#L847">847</a>	@Override
+</p><p><a href="#L848">848</a>	@Deprecated
+</p><p><a href="#L849">849</a>	public String getRealPath(String path) {
+</p><p><a href="#L850">850</a>		return this.servletContext.getRealPath(path);
+</p><p><a href="#L851">851</a>	}
+</p><p><a href="#L852">852</a>
+</p><p><a href="#L853">853</a>	public void setRemotePort(int remotePort) {
+</p><p><a href="#L854">854</a>		this.remotePort = remotePort;
+</p><p><a href="#L855">855</a>	}
+</p><p><a href="#L856">856</a>
+</p><p><a href="#L857">857</a>	@Override
+</p><p><a href="#L858">858</a>	public int getRemotePort() {
+</p><p><a href="#L859">859</a>		return this.remotePort;
+</p><p><a href="#L860">860</a>	}
+</p><p><a href="#L861">861</a>
+</p><p><a href="#L862">862</a>	public void setLocalName(String localName) {
+</p><p><a href="#L863">863</a>		this.localName = localName;
+</p><p><a href="#L864">864</a>	}
+</p><p><a href="#L865">865</a>
+</p><p><a href="#L866">866</a>	@Override
+</p><p><a href="#L867">867</a>	public String getLocalName() {
+</p><p><a href="#L868">868</a>		return this.localName;
+</p><p><a href="#L869">869</a>	}
+</p><p><a href="#L870">870</a>
+</p><p><a href="#L871">871</a>	public void setLocalAddr(String localAddr) {
+</p><p><a href="#L872">872</a>		this.localAddr = localAddr;
+</p><p><a href="#L873">873</a>	}
+</p><p><a href="#L874">874</a>
+</p><p><a href="#L875">875</a>	@Override
+</p><p><a href="#L876">876</a>	public String getLocalAddr() {
+</p><p><a href="#L877">877</a>		return this.localAddr;
+</p><p><a href="#L878">878</a>	}
+</p><p><a href="#L879">879</a>
+</p><p><a href="#L880">880</a>	public void setLocalPort(int localPort) {
+</p><p><a href="#L881">881</a>		this.localPort = localPort;
+</p><p><a href="#L882">882</a>	}
+</p><p><a href="#L883">883</a>
+</p><p><a href="#L884">884</a>	@Override
+</p><p><a href="#L885">885</a>	public int getLocalPort() {
+</p><p><a href="#L886">886</a>		return this.localPort;
+</p><p><a href="#L887">887</a>	}
+</p><p><a href="#L888">888</a>
+</p><p><a href="#L889">889</a>	@Override
+</p><p><a href="#L890">890</a>	public AsyncContext startAsync() {
+</p><p><a href="#L891">891</a>		return startAsync(this, null);
+</p><p><a href="#L892">892</a>	}
+</p><p><a href="#L893">893</a>
+</p><p><a href="#L894">894</a>	@Override
+</p><p><a href="#L895">895</a>	public AsyncContext startAsync(ServletRequest request, @Nullable ServletResponse response) {
+</p><p><a href="#L896">896</a>		Assert.state(this.asyncSupported, "Async not supported");
+</p><p><a href="#L897">897</a>		this.asyncStarted = true;
+</p><p><a href="#L898">898</a>		this.asyncContext = new MockAsyncContext(request, response);
+</p><p><a href="#L899">899</a>		return this.asyncContext;
+</p><p><a href="#L900">900</a>	}
+</p><p><a href="#L901">901</a>
+</p><p><a href="#L902">902</a>	public void setAsyncStarted(boolean asyncStarted) {
+</p><p><a href="#L903">903</a>		this.asyncStarted = asyncStarted;
+</p><p><a href="#L904">904</a>	}
+</p><p><a href="#L905">905</a>
+</p><p><a href="#L906">906</a>	@Override
+</p><p><a href="#L907">907</a>	public boolean isAsyncStarted() {
+</p><p><a href="#L908">908</a>		return this.asyncStarted;
+</p><p><a href="#L909">909</a>	}
+</p><p><a href="#L910">910</a>
+</p><p><a href="#L911">911</a>	public void setAsyncSupported(boolean asyncSupported) {
+</p><p><a href="#L912">912</a>		this.asyncSupported = asyncSupported;
+</p><p><a href="#L913">913</a>	}
+</p><p><a href="#L914">914</a>
+</p><p><a href="#L915">915</a>	@Override
+</p><p><a href="#L916">916</a>	public boolean isAsyncSupported() {
+</p><p><a href="#L917">917</a>		return this.asyncSupported;
+</p><p><a href="#L918">918</a>	}
+</p><p><a href="#L919">919</a>
+</p><p><a href="#L920">920</a>	public void setAsyncContext(@Nullable MockAsyncContext asyncContext) {
+</p><p><a href="#L921">921</a>		this.asyncContext = asyncContext;
+</p><p><a href="#L922">922</a>	}
+</p><p><a href="#L923">923</a>
+</p><p><a href="#L924">924</a>	@Override
+</p><p><a href="#L925">925</a>	@Nullable
+</p><p><a href="#L926">926</a>	public AsyncContext getAsyncContext() {
+</p><p><a href="#L927">927</a>		return this.asyncContext;
+</p><p><a href="#L928">928</a>	}
+</p><p><a href="#L929">929</a>
+</p><p><a href="#L930">930</a>	public void setDispatcherType(DispatcherType dispatcherType) {
+</p><p><a href="#L931">931</a>		this.dispatcherType = dispatcherType;
+</p><p><a href="#L932">932</a>	}
+</p><p><a href="#L933">933</a>
+</p><p><a href="#L934">934</a>	@Override
+</p><p><a href="#L935">935</a>	public DispatcherType getDispatcherType() {
+</p><p><a href="#L936">936</a>		return this.dispatcherType;
+</p><p><a href="#L937">937</a>	}
+</p><p><a href="#L938">938</a>
+</p><p><a href="#L939">939</a>
+</p><p><a href="#L940">940</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L941">941</a>	// HttpServletRequest interface
+</p><p><a href="#L942">942</a>	// ---------------------------------------------------------------------
+</p><p><a href="#L943">943</a>
+</p><p><a href="#L944">944</a>	public void setAuthType(@Nullable String authType) {
+</p><p><a href="#L945">945</a>		this.authType = authType;
+</p><p><a href="#L946">946</a>	}
+</p><p><a href="#L947">947</a>
+</p><p><a href="#L948">948</a>	@Override
+</p><p><a href="#L949">949</a>	@Nullable
+</p><p><a href="#L950">950</a>	public String getAuthType() {
+</p><p><a href="#L951">951</a>		return this.authType;
+</p><p><a href="#L952">952</a>	}
+</p><p><a href="#L953">953</a>
+</p><p><a href="#L954">954</a>	public void setCookies(@Nullable Cookie... cookies) {
+</p><p><a href="#L955">955</a>		this.cookies = (ObjectUtils.isEmpty(cookies) ? null : cookies);
+</p><p><a href="#L956">956</a>		this.headers.remove(HttpHeaders.COOKIE);
+</p><p><a href="#L957">957</a>		if (this.cookies != null) {
+</p><p><a href="#L958">958</a>			Arrays.stream(this.cookies)
+</p><p><a href="#L959">959</a>					.map(c -&gt; c.getName() + '=' + (c.getValue() == null ? "" : c.getValue()))
+</p><p><a href="#L960">960</a>					.forEach(value -&gt; doAddHeaderValue(HttpHeaders.COOKIE, value, false));
+</p><p><a href="#L961">961</a>		}
+</p><p><a href="#L962">962</a>	}
+</p><p><a href="#L963">963</a>
+</p><p><a href="#L964">964</a>	@Override
+</p><p><a href="#L965">965</a>	@Nullable
+</p><p><a href="#L966">966</a>	public Cookie[] getCookies() {
+</p><p><a href="#L967">967</a>		return this.cookies;
+</p><p><a href="#L968">968</a>	}
+</p><p><a href="#L969">969</a>
+</p><p><a href="#L970">970</a>	/**
+</p><p><a href="#L971">971</a>	 * Add a header entry for the given name.
+</p><p><a href="#L972">972</a>	 * &lt;p&gt;While this method can take any {@code Object} as a parameter, it
+</p><p><a href="#L973">973</a>	 * is recommended to use the following types:
+</p><p><a href="#L974">974</a>	 * &lt;ul&gt;
+</p><p><a href="#L975">975</a>	 * &lt;li&gt;String or any Object to be converted using {@code toString()}; see {@link #getHeader}.&lt;/li&gt;
+</p><p><a href="#L976">976</a>	 * &lt;li&gt;String, Number, or Date for date headers; see {@link #getDateHeader}.&lt;/li&gt;
+</p><p><a href="#L977">977</a>	 * &lt;li&gt;String or Number for integer headers; see {@link #getIntHeader}.&lt;/li&gt;
+</p><p><a href="#L978">978</a>	 * &lt;li&gt;{@code String[]} or {@code Collection&lt;String&gt;} for multiple values; see {@link #getHeaders}.&lt;/li&gt;
+</p><p><a href="#L979">979</a>	 * &lt;/ul&gt;
+</p><p><a href="#L980">980</a>	 * @see #getHeaderNames
+</p><p><a href="#L981">981</a>	 * @see #getHeaders
+</p><p><a href="#L982">982</a>	 * @see #getHeader
+</p><p><a href="#L983">983</a>	 * @see #getDateHeader
+</p><p><a href="#L984">984</a>	 */
+</p><p><a href="#L985">985</a>	public void addHeader(String name, Object value) {
+</p><p><a href="#L986">986</a>		if (HttpHeaders.CONTENT_TYPE.equalsIgnoreCase(name) &amp;&amp;
+</p><p><a href="#L987">987</a>				!this.headers.containsKey(HttpHeaders.CONTENT_TYPE)) {
+</p><p><a href="#L988">988</a>			setContentType(value.toString());
+</p><p><a href="#L989">989</a>		}
+</p><p><a href="#L990">990</a>		else if (HttpHeaders.ACCEPT_LANGUAGE.equalsIgnoreCase(name) &amp;&amp;
+</p><p><a href="#L991">991</a>				!this.headers.containsKey(HttpHeaders.ACCEPT_LANGUAGE)) {
+</p><p><a href="#L992">992</a>			try {
+</p><p><a href="#L993">993</a>				HttpHeaders headers = new HttpHeaders();
+</p><p><a href="#L994">994</a>				headers.add(HttpHeaders.ACCEPT_LANGUAGE, value.toString());
+</p><p><a href="#L995">995</a>				setPreferredLocales(headers.getAcceptLanguageAsLocales());
+</p><p><a href="#L996">996</a>			}
+</p><p><a href="#L997">997</a>			catch (IllegalArgumentException ex) {
+</p><p><a href="#L998">998</a>				// Invalid Accept-Language format -&gt; store plain header instead
+</p><p><a href="#L999">999</a>				doAddHeaderValue(name, value, true);
+</p><p><a href="#L1000">1000</a>			}
+</p><p><a href="#L1001">1001</a>		}
+</p><p><a href="#L1002">1002</a>		else {
+</p><p><a href="#L1003">1003</a>			doAddHeaderValue(name, value, false);
+</p><p><a href="#L1004">1004</a>		}
+</p><p><a href="#L1005">1005</a>	}
+</p><p><a href="#L1006">1006</a>
+</p><p><a href="#L1007">1007</a>	private void doAddHeaderValue(String name, @Nullable Object value, boolean replace) {
+</p><p><a href="#L1008">1008</a>		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
+</p><p><a href="#L1009">1009</a>		Assert.notNull(value, "Header value must not be null");
+</p><p><a href="#L1010">1010</a>		if (header == null || replace) {
+</p><p><a href="#L1011">1011</a>			header = new HeaderValueHolder();
+</p><p><a href="#L1012">1012</a>			this.headers.put(name, header);
+</p><p><a href="#L1013">1013</a>		}
+</p><p><a href="#L1014">1014</a>		if (value instanceof Collection) {
+</p><p><a href="#L1015">1015</a>			header.addValues((Collection&lt;?&gt;) value);
+</p><p><a href="#L1016">1016</a>		}
+</p><p><a href="#L1017">1017</a>		else if (value.getClass().isArray()) {
+</p><p><a href="#L1018">1018</a>			header.addValueArray(value);
+</p><p><a href="#L1019">1019</a>		}
+</p><p><a href="#L1020">1020</a>		else {
+</p><p><a href="#L1021">1021</a>			header.addValue(value);
+</p><p><a href="#L1022">1022</a>		}
+</p><p><a href="#L1023">1023</a>	}
+</p><p><a href="#L1024">1024</a>
+</p><p><a href="#L1025">1025</a>	/**
+</p><p><a href="#L1026">1026</a>	 * Return the long timestamp for the date header with the given {@code name}.
+</p><p><a href="#L1027">1027</a>	 * &lt;p&gt;If the internal value representation is a String, this method will try
+</p><p><a href="#L1028">1028</a>	 * to parse it as a date using the supported date formats:
+</p><p><a href="#L1029">1029</a>	 * &lt;ul&gt;
+</p><p><a href="#L1030">1030</a>	 * &lt;li&gt;"EEE, dd MMM yyyy HH:mm:ss zzz"&lt;/li&gt;
+</p><p><a href="#L1031">1031</a>	 * &lt;li&gt;"EEE, dd-MMM-yy HH:mm:ss zzz"&lt;/li&gt;
+</p><p><a href="#L1032">1032</a>	 * &lt;li&gt;"EEE MMM dd HH:mm:ss yyyy"&lt;/li&gt;
+</p><p><a href="#L1033">1033</a>	 * &lt;/ul&gt;
+</p><p><a href="#L1034">1034</a>	 * @param name the header name
+</p><p><a href="#L1035">1035</a>	 * @see &lt;a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.1"&gt;Section 7.1.1.1 of RFC 7231&lt;/a&gt;
+</p><p><a href="#L1036">1036</a>	 */
+</p><p><a href="#L1037">1037</a>	@Override
+</p><p><a href="#L1038">1038</a>	public long getDateHeader(String name) {
+</p><p><a href="#L1039">1039</a>		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
+</p><p><a href="#L1040">1040</a>		Object value = (header != null ? header.getValue() : null);
+</p><p><a href="#L1041">1041</a>		if (value instanceof Date) {
+</p><p><a href="#L1042">1042</a>			return ((Date) value).getTime();
+</p><p><a href="#L1043">1043</a>		}
+</p><p><a href="#L1044">1044</a>		else if (value instanceof Number) {
+</p><p><a href="#L1045">1045</a>			return ((Number) value).longValue();
+</p><p><a href="#L1046">1046</a>		}
+</p><p><a href="#L1047">1047</a>		else if (value instanceof String) {
+</p><p><a href="#L1048">1048</a>			return parseDateHeader(name, (String) value);
+</p><p><a href="#L1049">1049</a>		}
+</p><p><a href="#L1050">1050</a>		else if (value != null) {
+</p><p><a href="#L1051">1051</a>			throw new IllegalArgumentException(
+</p><p><a href="#L1052">1052</a>					"Value for header '" + name + "' is not a Date, Number, or String: " + value);
+</p><p><a href="#L1053">1053</a>		}
+</p><p><a href="#L1054">1054</a>		else {
+</p><p><a href="#L1055">1055</a>			return -1L;
+</p><p><a href="#L1056">1056</a>		}
+</p><p><a href="#L1057">1057</a>	}
+</p><p><a href="#L1058">1058</a>
+</p><p><a href="#L1059">1059</a>	private long parseDateHeader(String name, String value) {
+</p><p><a href="#L1060">1060</a>		for (String dateFormat : DATE_FORMATS) {
+</p><p><a href="#L1061">1061</a>			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.US);
+</p><p><a href="#L1062">1062</a>			simpleDateFormat.setTimeZone(GMT);
+</p><p><a href="#L1063">1063</a>			try {
+</p><p><a href="#L1064">1064</a>				return simpleDateFormat.parse(value).getTime();
+</p><p><a href="#L1065">1065</a>			}
+</p><p><a href="#L1066">1066</a>			catch (ParseException ex) {
+</p><p><a href="#L1067">1067</a>				// ignore
+</p><p><a href="#L1068">1068</a>			}
+</p><p><a href="#L1069">1069</a>		}
+</p><p><a href="#L1070">1070</a>		throw new IllegalArgumentException("Cannot parse date value '" + value + "' for '" + name + "' header");
+</p><p><a href="#L1071">1071</a>	}
+</p><p><a href="#L1072">1072</a>
+</p><p><a href="#L1073">1073</a>	@Override
+</p><p><a href="#L1074">1074</a>	@Nullable
+</p><p><a href="#L1075">1075</a>	public String getHeader(String name) {
+</p><p><a href="#L1076">1076</a>		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
+</p><p><a href="#L1077">1077</a>		return (header != null ? header.getStringValue() : null);
+</p><p><a href="#L1078">1078</a>	}
+</p><p><a href="#L1079">1079</a>
+</p><p><a href="#L1080">1080</a>	@Override
+</p><p><a href="#L1081">1081</a>	public Enumeration&lt;String&gt; getHeaders(String name) {
+</p><p><a href="#L1082">1082</a>		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
+</p><p><a href="#L1083">1083</a>		return Collections.enumeration(header != null ? header.getStringValues() : new LinkedList&lt;&gt;());
+</p><p><a href="#L1084">1084</a>	}
+</p><p><a href="#L1085">1085</a>
+</p><p><a href="#L1086">1086</a>	@Override
+</p><p><a href="#L1087">1087</a>	public Enumeration&lt;String&gt; getHeaderNames() {
+</p><p><a href="#L1088">1088</a>		return Collections.enumeration(this.headers.keySet());
+</p><p><a href="#L1089">1089</a>	}
+</p><p><a href="#L1090">1090</a>
+</p><p><a href="#L1091">1091</a>	@Override
+</p><p><a href="#L1092">1092</a>	public int getIntHeader(String name) {
+</p><p><a href="#L1093">1093</a>		HeaderValueHolder header = HeaderValueHolder.getByName(this.headers, name);
+</p><p><a href="#L1094">1094</a>		Object value = (header != null ? header.getValue() : null);
+</p><p><a href="#L1095">1095</a>		if (value instanceof Number) {
+</p><p><a href="#L1096">1096</a>			return ((Number) value).intValue();
+</p><p><a href="#L1097">1097</a>		}
+</p><p><a href="#L1098">1098</a>		else if (value instanceof String) {
+</p><p><a href="#L1099">1099</a>			return Integer.parseInt((String) value);
+</p><p><a href="#L1100">1100</a>		}
+</p><p><a href="#L1101">1101</a>		else if (value != null) {
+</p><p><a href="#L1102">1102</a>			throw new NumberFormatException("Value for header '" + name + "' is not a Number: " + value);
+</p><p><a href="#L1103">1103</a>		}
+</p><p><a href="#L1104">1104</a>		else {
+</p><p><a href="#L1105">1105</a>			return -1;
+</p><p><a href="#L1106">1106</a>		}
+</p><p><a href="#L1107">1107</a>	}
+</p><p><a href="#L1108">1108</a>
+</p><p><a href="#L1109">1109</a>	public void setMethod(@Nullable String method) {
+</p><p><a href="#L1110">1110</a>		this.method = method;
+</p><p><a href="#L1111">1111</a>	}
+</p><p><a href="#L1112">1112</a>
+</p><p><a href="#L1113">1113</a>	@Override
+</p><p><a href="#L1114">1114</a>	@Nullable
+</p><p><a href="#L1115">1115</a>	public String getMethod() {
+</p><p><a href="#L1116">1116</a>		return this.method;
+</p><p><a href="#L1117">1117</a>	}
+</p><p><a href="#L1118">1118</a>
+</p><p><a href="#L1119">1119</a>	public void setPathInfo(@Nullable String pathInfo) {
+</p><p><a href="#L1120">1120</a>		this.pathInfo = pathInfo;
+</p><p><a href="#L1121">1121</a>	}
+</p><p><a href="#L1122">1122</a>
+</p><p><a href="#L1123">1123</a>	@Override
+</p><p><a href="#L1124">1124</a>	@Nullable
+</p><p><a href="#L1125">1125</a>	public String getPathInfo() {
+</p><p><a href="#L1126">1126</a>		return this.pathInfo;
+</p><p><a href="#L1127">1127</a>	}
+</p><p><a href="#L1128">1128</a>
+</p><p><a href="#L1129">1129</a>	@Override
+</p><p><a href="#L1130">1130</a>	@Nullable
+</p><p><a href="#L1131">1131</a>	public String getPathTranslated() {
+</p><p><a href="#L1132">1132</a>		return (this.pathInfo != null ? getRealPath(this.pathInfo) : null);
+</p><p><a href="#L1133">1133</a>	}
+</p><p><a href="#L1134">1134</a>
+</p><p><a href="#L1135">1135</a>	public void setContextPath(String contextPath) {
+</p><p><a href="#L1136">1136</a>		this.contextPath = contextPath;
+</p><p><a href="#L1137">1137</a>	}
+</p><p><a href="#L1138">1138</a>
+</p><p><a href="#L1139">1139</a>	@Override
+</p><p><a href="#L1140">1140</a>	public String getContextPath() {
+</p><p><a href="#L1141">1141</a>		return this.contextPath;
+</p><p><a href="#L1142">1142</a>	}
+</p><p><a href="#L1143">1143</a>
+</p><p><a href="#L1144">1144</a>	public void setQueryString(@Nullable String queryString) {
+</p><p><a href="#L1145">1145</a>		this.queryString = queryString;
+</p><p><a href="#L1146">1146</a>	}
+</p><p><a href="#L1147">1147</a>
+</p><p><a href="#L1148">1148</a>	@Override
+</p><p><a href="#L1149">1149</a>	@Nullable
+</p><p><a href="#L1150">1150</a>	public String getQueryString() {
+</p><p><a href="#L1151">1151</a>		return this.queryString;
+</p><p><a href="#L1152">1152</a>	}
+</p><p><a href="#L1153">1153</a>
+</p><p><a href="#L1154">1154</a>	public void setRemoteUser(@Nullable String remoteUser) {
+</p><p><a href="#L1155">1155</a>		this.remoteUser = remoteUser;
+</p><p><a href="#L1156">1156</a>	}
+</p><p><a href="#L1157">1157</a>
+</p><p><a href="#L1158">1158</a>	@Override
+</p><p><a href="#L1159">1159</a>	@Nullable
+</p><p><a href="#L1160">1160</a>	public String getRemoteUser() {
+</p><p><a href="#L1161">1161</a>		return this.remoteUser;
+</p><p><a href="#L1162">1162</a>	}
+</p><p><a href="#L1163">1163</a>
+</p><p><a href="#L1164">1164</a>	public void addUserRole(String role) {
+</p><p><a href="#L1165">1165</a>		this.userRoles.add(role);
+</p><p><a href="#L1166">1166</a>	}
+</p><p><a href="#L1167">1167</a>
+</p><p><a href="#L1168">1168</a>	@Override
+</p><p><a href="#L1169">1169</a>	public boolean isUserInRole(String role) {
+</p><p><a href="#L1170">1170</a>		return (this.userRoles.contains(role) || (this.servletContext instanceof MockServletContext &amp;&amp;
+</p><p><a href="#L1171">1171</a>				((MockServletContext) this.servletContext).getDeclaredRoles().contains(role)));
+</p><p><a href="#L1172">1172</a>	}
+</p><p><a href="#L1173">1173</a>
+</p><p><a href="#L1174">1174</a>	public void setUserPrincipal(@Nullable Principal userPrincipal) {
+</p><p><a href="#L1175">1175</a>		this.userPrincipal = userPrincipal;
+</p><p><a href="#L1176">1176</a>	}
+</p><p><a href="#L1177">1177</a>
+</p><p><a href="#L1178">1178</a>	@Override
+</p><p><a href="#L1179">1179</a>	@Nullable
+</p><p><a href="#L1180">1180</a>	public Principal getUserPrincipal() {
+</p><p><a href="#L1181">1181</a>		return this.userPrincipal;
+</p><p><a href="#L1182">1182</a>	}
+</p><p><a href="#L1183">1183</a>
+</p><p><a href="#L1184">1184</a>	public void setRequestedSessionId(@Nullable String requestedSessionId) {
+</p><p><a href="#L1185">1185</a>		this.requestedSessionId = requestedSessionId;
+</p><p><a href="#L1186">1186</a>	}
+</p><p><a href="#L1187">1187</a>
+</p><p><a href="#L1188">1188</a>	@Override
+</p><p><a href="#L1189">1189</a>	@Nullable
+</p><p><a href="#L1190">1190</a>	public String getRequestedSessionId() {
+</p><p><a href="#L1191">1191</a>		return this.requestedSessionId;
+</p><p><a href="#L1192">1192</a>	}
+</p><p><a href="#L1193">1193</a>
+</p><p><a href="#L1194">1194</a>	public void setRequestURI(@Nullable String requestURI) {
+</p><p><a href="#L1195">1195</a>		this.requestURI = requestURI;
+</p><p><a href="#L1196">1196</a>	}
+</p><p><a href="#L1197">1197</a>
+</p><p><a href="#L1198">1198</a>	@Override
+</p><p><a href="#L1199">1199</a>	@Nullable
+</p><p><a href="#L1200">1200</a>	public String getRequestURI() {
+</p><p><a href="#L1201">1201</a>		return this.requestURI;
+</p><p><a href="#L1202">1202</a>	}
+</p><p><a href="#L1203">1203</a>
+</p><p><a href="#L1204">1204</a>	@Override
+</p><p><a href="#L1205">1205</a>	public StringBuffer getRequestURL() {
+</p><p><a href="#L1206">1206</a>		String scheme = getScheme();
+</p><p><a href="#L1207">1207</a>		String server = getServerName();
+</p><p><a href="#L1208">1208</a>		int port = getServerPort();
+</p><p><a href="#L1209">1209</a>		String uri = getRequestURI();
+</p><p><a href="#L1210">1210</a>
+</p><p><a href="#L1211">1211</a>		StringBuffer url = new StringBuffer(scheme).append("://").append(server);
+</p><p><a href="#L1212">1212</a>		if (port &gt; 0 &amp;&amp; ((HTTP.equalsIgnoreCase(scheme) &amp;&amp; port != 80) ||
+</p><p><a href="#L1213">1213</a>				(HTTPS.equalsIgnoreCase(scheme) &amp;&amp; port != 443))) {
+</p><p><a href="#L1214">1214</a>			url.append(':').append(port);
+</p><p><a href="#L1215">1215</a>		}
+</p><p><a href="#L1216">1216</a>		if (StringUtils.hasText(uri)) {
+</p><p><a href="#L1217">1217</a>			url.append(uri);
+</p><p><a href="#L1218">1218</a>		}
+</p><p><a href="#L1219">1219</a>		return url;
+</p><p><a href="#L1220">1220</a>	}
+</p><p><a href="#L1221">1221</a>
+</p><p><a href="#L1222">1222</a>	public void setServletPath(String servletPath) {
+</p><p><a href="#L1223">1223</a>		this.servletPath = servletPath;
+</p><p><a href="#L1224">1224</a>	}
+</p><p><a href="#L1225">1225</a>
+</p><p><a href="#L1226">1226</a>	@Override
+</p><p><a href="#L1227">1227</a>	public String getServletPath() {
+</p><p><a href="#L1228">1228</a>		return this.servletPath;
+</p><p><a href="#L1229">1229</a>	}
+</p><p><a href="#L1230">1230</a>
+</p><p><a href="#L1231">1231</a>	public void setSession(HttpSession session) {
+</p><p><a href="#L1232">1232</a>		this.session = session;
+</p><p><a href="#L1233">1233</a>		if (session instanceof MockHttpSession) {
+</p><p><a href="#L1234">1234</a>			MockHttpSession mockSession = ((MockHttpSession) session);
+</p><p><a href="#L1235">1235</a>			mockSession.access();
+</p><p><a href="#L1236">1236</a>		}
+</p><p><a href="#L1237">1237</a>	}
+</p><p><a href="#L1238">1238</a>
+</p><p><a href="#L1239">1239</a>	@Override
+</p><p><a href="#L1240">1240</a>	@Nullable
+</p><p><a href="#L1241">1241</a>	public HttpSession getSession(boolean create) {
+</p><p><a href="#L1242">1242</a>		checkActive();
+</p><p><a href="#L1243">1243</a>		// Reset session if invalidated.
+</p><p><a href="#L1244">1244</a>		if (this.session instanceof MockHttpSession &amp;&amp; ((MockHttpSession) this.session).isInvalid()) {
+</p><p><a href="#L1245">1245</a>			this.session = null;
+</p><p><a href="#L1246">1246</a>		}
+</p><p><a href="#L1247">1247</a>		// Create new session if necessary.
+</p><p><a href="#L1248">1248</a>		if (this.session == null &amp;&amp; create) {
+</p><p><a href="#L1249">1249</a>			this.session = new MockHttpSession(this.servletContext);
+</p><p><a href="#L1250">1250</a>		}
+</p><p><a href="#L1251">1251</a>		return this.session;
+</p><p><a href="#L1252">1252</a>	}
+</p><p><a href="#L1253">1253</a>
+</p><p><a href="#L1254">1254</a>	@Override
+</p><p><a href="#L1255">1255</a>	@Nullable
+</p><p><a href="#L1256">1256</a>	public HttpSession getSession() {
+</p><p><a href="#L1257">1257</a>		return getSession(true);
+</p><p><a href="#L1258">1258</a>	}
+</p><p><a href="#L1259">1259</a>
+</p><p><a href="#L1260">1260</a>	/**
+</p><p><a href="#L1261">1261</a>	 * The implementation of this (Servlet 3.1+) method calls
+</p><p><a href="#L1262">1262</a>	 * {@link MockHttpSession#changeSessionId()} if the session is a mock session.
+</p><p><a href="#L1263">1263</a>	 * Otherwise it simply returns the current session id.
+</p><p><a href="#L1264">1264</a>	 * @since 4.0.3
+</p><p><a href="#L1265">1265</a>	 */
+</p><p><a href="#L1266">1266</a>	public String changeSessionId() {
+</p><p><a href="#L1267">1267</a>		Assert.isTrue(this.session != null, "The request does not have a session");
+</p><p><a href="#L1268">1268</a>		if (this.session instanceof MockHttpSession) {
+</p><p><a href="#L1269">1269</a>			return ((MockHttpSession) session).changeSessionId();
+</p><p><a href="#L1270">1270</a>		}
+</p><p><a href="#L1271">1271</a>		return this.session.getId();
+</p><p><a href="#L1272">1272</a>	}
+</p><p><a href="#L1273">1273</a>
+</p><p><a href="#L1274">1274</a>	public void setRequestedSessionIdValid(boolean requestedSessionIdValid) {
+</p><p><a href="#L1275">1275</a>		this.requestedSessionIdValid = requestedSessionIdValid;
+</p><p><a href="#L1276">1276</a>	}
+</p><p><a href="#L1277">1277</a>
+</p><p><a href="#L1278">1278</a>	@Override
+</p><p><a href="#L1279">1279</a>	public boolean isRequestedSessionIdValid() {
+</p><p><a href="#L1280">1280</a>		return this.requestedSessionIdValid;
+</p><p><a href="#L1281">1281</a>	}
+</p><p><a href="#L1282">1282</a>
+</p><p><a href="#L1283">1283</a>	public void setRequestedSessionIdFromCookie(boolean requestedSessionIdFromCookie) {
+</p><p><a href="#L1284">1284</a>		this.requestedSessionIdFromCookie = requestedSessionIdFromCookie;
+</p><p><a href="#L1285">1285</a>	}
+</p><p><a href="#L1286">1286</a>
+</p><p><a href="#L1287">1287</a>	@Override
+</p><p><a href="#L1288">1288</a>	public boolean isRequestedSessionIdFromCookie() {
+</p><p><a href="#L1289">1289</a>		return this.requestedSessionIdFromCookie;
+</p><p><a href="#L1290">1290</a>	}
+</p><p><a href="#L1291">1291</a>
+</p><p><a href="#L1292">1292</a>	public void setRequestedSessionIdFromURL(boolean requestedSessionIdFromURL) {
+</p><p><a href="#L1293">1293</a>		this.requestedSessionIdFromURL = requestedSessionIdFromURL;
+</p><p><a href="#L1294">1294</a>	}
+</p><p><a href="#L1295">1295</a>
+</p><p><a href="#L1296">1296</a>	@Override
+</p><p><a href="#L1297">1297</a>	public boolean isRequestedSessionIdFromURL() {
+</p><p><a href="#L1298">1298</a>		return this.requestedSessionIdFromURL;
+</p><p><a href="#L1299">1299</a>	}
+</p><p><a href="#L1300">1300</a>
+</p><p><a href="#L1301">1301</a>	@Override
+</p><p><a href="#L1302">1302</a>	@Deprecated
+</p><p><a href="#L1303">1303</a>	public boolean isRequestedSessionIdFromUrl() {
+</p><p><a href="#L1304">1304</a>		return isRequestedSessionIdFromURL();
+</p><p><a href="#L1305">1305</a>	}
+</p><p><a href="#L1306">1306</a>
+</p><p><a href="#L1307">1307</a>	@Override
+</p><p><a href="#L1308">1308</a>	public boolean authenticate(HttpServletResponse response) throws IOException, ServletException {
+</p><p><a href="#L1309">1309</a>		throw new UnsupportedOperationException();
+</p><p><a href="#L1310">1310</a>	}
+</p><p><a href="#L1311">1311</a>
+</p><p><a href="#L1312">1312</a>	@Override
+</p><p><a href="#L1313">1313</a>	public void login(String username, String password) throws ServletException {
+</p><p><a href="#L1314">1314</a>		throw new UnsupportedOperationException();
+</p><p><a href="#L1315">1315</a>	}
+</p><p><a href="#L1316">1316</a>
+</p><p><a href="#L1317">1317</a>	@Override
+</p><p><a href="#L1318">1318</a>	public void logout() throws ServletException {
+</p><p><a href="#L1319">1319</a>		this.userPrincipal = null;
+</p><p><a href="#L1320">1320</a>		this.remoteUser = null;
+</p><p><a href="#L1321">1321</a>		this.authType = null;
+</p><p><a href="#L1322">1322</a>	}
+</p><p><a href="#L1323">1323</a>
+</p><p><a href="#L1324">1324</a>	public void addPart(Part part) {
+</p><p><a href="#L1325">1325</a>		this.parts.add(part.getName(), part);
+</p><p><a href="#L1326">1326</a>	}
+</p><p><a href="#L1327">1327</a>
+</p><p><a href="#L1328">1328</a>	@Override
+</p><p><a href="#L1329">1329</a>	@Nullable
+</p><p><a href="#L1330">1330</a>	public Part getPart(String name) throws IOException, ServletException {
+</p><p><a href="#L1331">1331</a>		return this.parts.getFirst(name);
+</p><p><a href="#L1332">1332</a>	}
+</p><p><a href="#L1333">1333</a>
+</p><p><a href="#L1334">1334</a>	@Override
+</p><p><a href="#L1335">1335</a>	public Collection&lt;Part&gt; getParts() throws IOException, ServletException {
+</p><p><a href="#L1336">1336</a>		List&lt;Part&gt; result = new LinkedList&lt;&gt;();
+</p><p><a href="#L1337">1337</a>		for (List&lt;Part&gt; list : this.parts.values()) {
+</p><p><a href="#L1338">1338</a>			result.addAll(list);
+</p><p><a href="#L1339">1339</a>		}
+</p><p><a href="#L1340">1340</a>		return result;
+</p><p><a href="#L1341">1341</a>	}
+</p><p><a href="#L1342">1342</a>
+</p><p><a href="#L1343">1343</a>	@Override
+</p><p><a href="#L1344">1344</a>	public &lt;T extends HttpUpgradeHandler&gt; T upgrade(Class&lt;T&gt; handlerClass) throws IOException, ServletException {
+</p><p><a href="#L1345">1345</a>		throw new UnsupportedOperationException();
+</p><p><a href="#L1346">1346</a>	}
+</p><p><a href="#L1347">1347</a>
+</p><p><a href="#L1348">1348</a>}
+</p></pre></body></html>

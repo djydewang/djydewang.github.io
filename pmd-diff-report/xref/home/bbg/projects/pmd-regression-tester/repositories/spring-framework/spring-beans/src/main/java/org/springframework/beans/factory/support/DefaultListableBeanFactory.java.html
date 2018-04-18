@@ -1,0 +1,1817 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><pre><p><a href="#L1">1</a>/*
+</p><p><a href="#L2">2</a> * Copyright 2002-2018 the original author or authors.
+</p><p><a href="#L3">3</a> *
+</p><p><a href="#L4">4</a> * Licensed under the Apache License, Version 2.0 (the "License");
+</p><p><a href="#L5">5</a> * you may not use this file except in compliance with the License.
+</p><p><a href="#L6">6</a> * You may obtain a copy of the License at
+</p><p><a href="#L7">7</a> *
+</p><p><a href="#L8">8</a> *      http://www.apache.org/licenses/LICENSE-2.0
+</p><p><a href="#L9">9</a> *
+</p><p><a href="#L10">10</a> * Unless required by applicable law or agreed to in writing, software
+</p><p><a href="#L11">11</a> * distributed under the License is distributed on an "AS IS" BASIS,
+</p><p><a href="#L12">12</a> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+</p><p><a href="#L13">13</a> * See the License for the specific language governing permissions and
+</p><p><a href="#L14">14</a> * limitations under the License.
+</p><p><a href="#L15">15</a> */
+</p><p><a href="#L16">16</a>
+</p><p><a href="#L17">17</a>package org.springframework.beans.factory.support;
+</p><p><a href="#L18">18</a>
+</p><p><a href="#L19">19</a>import java.io.IOException;
+</p><p><a href="#L20">20</a>import java.io.NotSerializableException;
+</p><p><a href="#L21">21</a>import java.io.ObjectInputStream;
+</p><p><a href="#L22">22</a>import java.io.ObjectStreamException;
+</p><p><a href="#L23">23</a>import java.io.Serializable;
+</p><p><a href="#L24">24</a>import java.lang.annotation.Annotation;
+</p><p><a href="#L25">25</a>import java.lang.ref.Reference;
+</p><p><a href="#L26">26</a>import java.lang.ref.WeakReference;
+</p><p><a href="#L27">27</a>import java.lang.reflect.Method;
+</p><p><a href="#L28">28</a>import java.security.AccessController;
+</p><p><a href="#L29">29</a>import java.security.PrivilegedAction;
+</p><p><a href="#L30">30</a>import java.util.ArrayList;
+</p><p><a href="#L31">31</a>import java.util.Arrays;
+</p><p><a href="#L32">32</a>import java.util.Collection;
+</p><p><a href="#L33">33</a>import java.util.Comparator;
+</p><p><a href="#L34">34</a>import java.util.IdentityHashMap;
+</p><p><a href="#L35">35</a>import java.util.Iterator;
+</p><p><a href="#L36">36</a>import java.util.LinkedHashMap;
+</p><p><a href="#L37">37</a>import java.util.LinkedHashSet;
+</p><p><a href="#L38">38</a>import java.util.List;
+</p><p><a href="#L39">39</a>import java.util.Map;
+</p><p><a href="#L40">40</a>import java.util.Optional;
+</p><p><a href="#L41">41</a>import java.util.Set;
+</p><p><a href="#L42">42</a>import java.util.concurrent.ConcurrentHashMap;
+</p><p><a href="#L43">43</a>import javax.inject.Provider;
+</p><p><a href="#L44">44</a>
+</p><p><a href="#L45">45</a>import org.springframework.beans.BeanUtils;
+</p><p><a href="#L46">46</a>import org.springframework.beans.BeansException;
+</p><p><a href="#L47">47</a>import org.springframework.beans.TypeConverter;
+</p><p><a href="#L48">48</a>import org.springframework.beans.factory.BeanCreationException;
+</p><p><a href="#L49">49</a>import org.springframework.beans.factory.BeanCurrentlyInCreationException;
+</p><p><a href="#L50">50</a>import org.springframework.beans.factory.BeanDefinitionStoreException;
+</p><p><a href="#L51">51</a>import org.springframework.beans.factory.BeanFactory;
+</p><p><a href="#L52">52</a>import org.springframework.beans.factory.BeanFactoryAware;
+</p><p><a href="#L53">53</a>import org.springframework.beans.factory.BeanFactoryUtils;
+</p><p><a href="#L54">54</a>import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
+</p><p><a href="#L55">55</a>import org.springframework.beans.factory.CannotLoadBeanClassException;
+</p><p><a href="#L56">56</a>import org.springframework.beans.factory.FactoryBean;
+</p><p><a href="#L57">57</a>import org.springframework.beans.factory.InjectionPoint;
+</p><p><a href="#L58">58</a>import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+</p><p><a href="#L59">59</a>import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+</p><p><a href="#L60">60</a>import org.springframework.beans.factory.ObjectFactory;
+</p><p><a href="#L61">61</a>import org.springframework.beans.factory.ObjectProvider;
+</p><p><a href="#L62">62</a>import org.springframework.beans.factory.SmartFactoryBean;
+</p><p><a href="#L63">63</a>import org.springframework.beans.factory.SmartInitializingSingleton;
+</p><p><a href="#L64">64</a>import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+</p><p><a href="#L65">65</a>import org.springframework.beans.factory.config.BeanDefinition;
+</p><p><a href="#L66">66</a>import org.springframework.beans.factory.config.BeanDefinitionHolder;
+</p><p><a href="#L67">67</a>import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+</p><p><a href="#L68">68</a>import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+</p><p><a href="#L69">69</a>import org.springframework.beans.factory.config.DependencyDescriptor;
+</p><p><a href="#L70">70</a>import org.springframework.beans.factory.config.NamedBeanHolder;
+</p><p><a href="#L71">71</a>import org.springframework.core.OrderComparator;
+</p><p><a href="#L72">72</a>import org.springframework.core.ResolvableType;
+</p><p><a href="#L73">73</a>import org.springframework.core.annotation.AnnotationUtils;
+</p><p><a href="#L74">74</a>import org.springframework.lang.Nullable;
+</p><p><a href="#L75">75</a>import org.springframework.util.Assert;
+</p><p><a href="#L76">76</a>import org.springframework.util.ClassUtils;
+</p><p><a href="#L77">77</a>import org.springframework.util.CompositeIterator;
+</p><p><a href="#L78">78</a>import org.springframework.util.ObjectUtils;
+</p><p><a href="#L79">79</a>import org.springframework.util.StringUtils;
+</p><p><a href="#L80">80</a>
+</p><p><a href="#L81">81</a>/**
+</p><p><a href="#L82">82</a> * Default implementation of the
+</p><p><a href="#L83">83</a> * {@link org.springframework.beans.factory.ListableBeanFactory} and
+</p><p><a href="#L84">84</a> * {@link BeanDefinitionRegistry} interfaces: a full-fledged bean factory
+</p><p><a href="#L85">85</a> * based on bean definition objects.
+</p><p><a href="#L86">86</a> *
+</p><p><a href="#L87">87</a> * &lt;p&gt;Typical usage is registering all bean definitions first (possibly read
+</p><p><a href="#L88">88</a> * from a bean definition file), before accessing beans. Bean definition lookup
+</p><p><a href="#L89">89</a> * is therefore an inexpensive operation in a local bean definition table,
+</p><p><a href="#L90">90</a> * operating on pre-built bean definition metadata objects.
+</p><p><a href="#L91">91</a> *
+</p><p><a href="#L92">92</a> * &lt;p&gt;Can be used as a standalone bean factory, or as a superclass for custom
+</p><p><a href="#L93">93</a> * bean factories. Note that readers for specific bean definition formats are
+</p><p><a href="#L94">94</a> * typically implemented separately rather than as bean factory subclasses:
+</p><p><a href="#L95">95</a> * see for example {@link PropertiesBeanDefinitionReader} and
+</p><p><a href="#L96">96</a> * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
+</p><p><a href="#L97">97</a> *
+</p><p><a href="#L98">98</a> * &lt;p&gt;For an alternative implementation of the
+</p><p><a href="#L99">99</a> * {@link org.springframework.beans.factory.ListableBeanFactory} interface,
+</p><p><a href="#L100">100</a> * have a look at {@link StaticListableBeanFactory}, which manages existing
+</p><p><a href="#L101">101</a> * bean instances rather than creating new ones based on bean definitions.
+</p><p><a href="#L102">102</a> *
+</p><p><a href="#L103">103</a> * @author Rod Johnson
+</p><p><a href="#L104">104</a> * @author Juergen Hoeller
+</p><p><a href="#L105">105</a> * @author Sam Brannen
+</p><p><a href="#L106">106</a> * @author Costin Leau
+</p><p><a href="#L107">107</a> * @author Chris Beams
+</p><p><a href="#L108">108</a> * @author Phillip Webb
+</p><p><a href="#L109">109</a> * @author Stephane Nicoll
+</p><p><a href="#L110">110</a> * @since 16 April 2001
+</p><p><a href="#L111">111</a> * @see StaticListableBeanFactory
+</p><p><a href="#L112">112</a> * @see PropertiesBeanDefinitionReader
+</p><p><a href="#L113">113</a> * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
+</p><p><a href="#L114">114</a> */
+</p><p><a href="#L115">115</a>@SuppressWarnings("serial")
+</p><p><a href="#L116">116</a>public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
+</p><p><a href="#L117">117</a>		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
+</p><p><a href="#L118">118</a>
+</p><p><a href="#L119">119</a>	@Nullable
+</p><p><a href="#L120">120</a>	private static Class&lt;?&gt; javaxInjectProviderClass;
+</p><p><a href="#L121">121</a>
+</p><p><a href="#L122">122</a>	static {
+</p><p><a href="#L123">123</a>		try {
+</p><p><a href="#L124">124</a>			javaxInjectProviderClass =
+</p><p><a href="#L125">125</a>					ClassUtils.forName("javax.inject.Provider", DefaultListableBeanFactory.class.getClassLoader());
+</p><p><a href="#L126">126</a>		}
+</p><p><a href="#L127">127</a>		catch (ClassNotFoundException ex) {
+</p><p><a href="#L128">128</a>			// JSR-330 API not available - Provider interface simply not supported then.
+</p><p><a href="#L129">129</a>			javaxInjectProviderClass = null;
+</p><p><a href="#L130">130</a>		}
+</p><p><a href="#L131">131</a>	}
+</p><p><a href="#L132">132</a>
+</p><p><a href="#L133">133</a>
+</p><p><a href="#L134">134</a>	/** Map from serialized id to factory instance */
+</p><p><a href="#L135">135</a>	private static final Map&lt;String, Reference&lt;DefaultListableBeanFactory&gt;&gt; serializableFactories =
+</p><p><a href="#L136">136</a>			new ConcurrentHashMap&lt;&gt;(8);
+</p><p><a href="#L137">137</a>
+</p><p><a href="#L138">138</a>	/** Optional id for this factory, for serialization purposes */
+</p><p><a href="#L139">139</a>	@Nullable
+</p><p><a href="#L140">140</a>	private String serializationId;
+</p><p><a href="#L141">141</a>
+</p><p><a href="#L142">142</a>	/** Whether to allow re-registration of a different definition with the same name */
+</p><p><a href="#L143">143</a>	private boolean allowBeanDefinitionOverriding = true;
+</p><p><a href="#L144">144</a>
+</p><p><a href="#L145">145</a>	/** Whether to allow eager class loading even for lazy-init beans */
+</p><p><a href="#L146">146</a>	private boolean allowEagerClassLoading = true;
+</p><p><a href="#L147">147</a>
+</p><p><a href="#L148">148</a>	/** Optional OrderComparator for dependency Lists and arrays */
+</p><p><a href="#L149">149</a>	@Nullable
+</p><p><a href="#L150">150</a>	private Comparator&lt;Object&gt; dependencyComparator;
+</p><p><a href="#L151">151</a>
+</p><p><a href="#L152">152</a>	/** Resolver to use for checking if a bean definition is an autowire candidate */
+</p><p><a href="#L153">153</a>	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
+</p><p><a href="#L154">154</a>
+</p><p><a href="#L155">155</a>	/** Map from dependency type to corresponding autowired value */
+</p><p><a href="#L156">156</a>	private final Map&lt;Class&lt;?&gt;, Object&gt; resolvableDependencies = new ConcurrentHashMap&lt;&gt;(16);
+</p><p><a href="#L157">157</a>
+</p><p><a href="#L158">158</a>	/** Map of bean definition objects, keyed by bean name */
+</p><p><a href="#L159">159</a>	private final Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new ConcurrentHashMap&lt;&gt;(256);
+</p><p><a href="#L160">160</a>
+</p><p><a href="#L161">161</a>	/** Map of singleton and non-singleton bean names, keyed by dependency type */
+</p><p><a href="#L162">162</a>	private final Map&lt;Class&lt;?&gt;, String[]&gt; allBeanNamesByType = new ConcurrentHashMap&lt;&gt;(64);
+</p><p><a href="#L163">163</a>
+</p><p><a href="#L164">164</a>	/** Map of singleton-only bean names, keyed by dependency type */
+</p><p><a href="#L165">165</a>	private final Map&lt;Class&lt;?&gt;, String[]&gt; singletonBeanNamesByType = new ConcurrentHashMap&lt;&gt;(64);
+</p><p><a href="#L166">166</a>
+</p><p><a href="#L167">167</a>	/** List of bean definition names, in registration order */
+</p><p><a href="#L168">168</a>	private volatile List&lt;String&gt; beanDefinitionNames = new ArrayList&lt;&gt;(256);
+</p><p><a href="#L169">169</a>
+</p><p><a href="#L170">170</a>	/** List of names of manually registered singletons, in registration order */
+</p><p><a href="#L171">171</a>	private volatile Set&lt;String&gt; manualSingletonNames = new LinkedHashSet&lt;&gt;(16);
+</p><p><a href="#L172">172</a>
+</p><p><a href="#L173">173</a>	/** Cached array of bean definition names in case of frozen configuration */
+</p><p><a href="#L174">174</a>	@Nullable
+</p><p><a href="#L175">175</a>	private volatile String[] frozenBeanDefinitionNames;
+</p><p><a href="#L176">176</a>
+</p><p><a href="#L177">177</a>	/** Whether bean definition metadata may be cached for all beans */
+</p><p><a href="#L178">178</a>	private volatile boolean configurationFrozen = false;
+</p><p><a href="#L179">179</a>
+</p><p><a href="#L180">180</a>
+</p><p><a href="#L181">181</a>	/**
+</p><p><a href="#L182">182</a>	 * Create a new DefaultListableBeanFactory.
+</p><p><a href="#L183">183</a>	 */
+</p><p><a href="#L184">184</a>	public DefaultListableBeanFactory() {
+</p><p><a href="#L185">185</a>		super();
+</p><p><a href="#L186">186</a>	}
+</p><p><a href="#L187">187</a>
+</p><p><a href="#L188">188</a>	/**
+</p><p><a href="#L189">189</a>	 * Create a new DefaultListableBeanFactory with the given parent.
+</p><p><a href="#L190">190</a>	 * @param parentBeanFactory the parent BeanFactory
+</p><p><a href="#L191">191</a>	 */
+</p><p><a href="#L192">192</a>	public DefaultListableBeanFactory(@Nullable BeanFactory parentBeanFactory) {
+</p><p><a href="#L193">193</a>		super(parentBeanFactory);
+</p><p><a href="#L194">194</a>	}
+</p><p><a href="#L195">195</a>
+</p><p><a href="#L196">196</a>
+</p><p><a href="#L197">197</a>	/**
+</p><p><a href="#L198">198</a>	 * Specify an id for serialization purposes, allowing this BeanFactory to be
+</p><p><a href="#L199">199</a>	 * deserialized from this id back into the BeanFactory object, if needed.
+</p><p><a href="#L200">200</a>	 */
+</p><p><a href="#L201">201</a>	public void setSerializationId(@Nullable String serializationId) {
+</p><p><a href="#L202">202</a>		if (serializationId != null) {
+</p><p><a href="#L203">203</a>			serializableFactories.put(serializationId, new WeakReference&lt;&gt;(this));
+</p><p><a href="#L204">204</a>		}
+</p><p><a href="#L205">205</a>		else if (this.serializationId != null) {
+</p><p><a href="#L206">206</a>			serializableFactories.remove(this.serializationId);
+</p><p><a href="#L207">207</a>		}
+</p><p><a href="#L208">208</a>		this.serializationId = serializationId;
+</p><p><a href="#L209">209</a>	}
+</p><p><a href="#L210">210</a>
+</p><p><a href="#L211">211</a>	/**
+</p><p><a href="#L212">212</a>	 * Return an id for serialization purposes, if specified, allowing this BeanFactory
+</p><p><a href="#L213">213</a>	 * to be deserialized from this id back into the BeanFactory object, if needed.
+</p><p><a href="#L214">214</a>	 * @since 4.1.2
+</p><p><a href="#L215">215</a>	 */
+</p><p><a href="#L216">216</a>	@Nullable
+</p><p><a href="#L217">217</a>	public String getSerializationId() {
+</p><p><a href="#L218">218</a>		return this.serializationId;
+</p><p><a href="#L219">219</a>	}
+</p><p><a href="#L220">220</a>
+</p><p><a href="#L221">221</a>	/**
+</p><p><a href="#L222">222</a>	 * Set whether it should be allowed to override bean definitions by registering
+</p><p><a href="#L223">223</a>	 * a different definition with the same name, automatically replacing the former.
+</p><p><a href="#L224">224</a>	 * If not, an exception will be thrown. This also applies to overriding aliases.
+</p><p><a href="#L225">225</a>	 * &lt;p&gt;Default is "true".
+</p><p><a href="#L226">226</a>	 * @see #registerBeanDefinition
+</p><p><a href="#L227">227</a>	 */
+</p><p><a href="#L228">228</a>	public void setAllowBeanDefinitionOverriding(boolean allowBeanDefinitionOverriding) {
+</p><p><a href="#L229">229</a>		this.allowBeanDefinitionOverriding = allowBeanDefinitionOverriding;
+</p><p><a href="#L230">230</a>	}
+</p><p><a href="#L231">231</a>
+</p><p><a href="#L232">232</a>	/**
+</p><p><a href="#L233">233</a>	 * Return whether it should be allowed to override bean definitions by registering
+</p><p><a href="#L234">234</a>	 * a different definition with the same name, automatically replacing the former.
+</p><p><a href="#L235">235</a>	 * @since 4.1.2
+</p><p><a href="#L236">236</a>	 */
+</p><p><a href="#L237">237</a>	public boolean isAllowBeanDefinitionOverriding() {
+</p><p><a href="#L238">238</a>		return this.allowBeanDefinitionOverriding;
+</p><p><a href="#L239">239</a>	}
+</p><p><a href="#L240">240</a>
+</p><p><a href="#L241">241</a>	/**
+</p><p><a href="#L242">242</a>	 * Set whether the factory is allowed to eagerly load bean classes
+</p><p><a href="#L243">243</a>	 * even for bean definitions that are marked as "lazy-init".
+</p><p><a href="#L244">244</a>	 * &lt;p&gt;Default is "true". Turn this flag off to suppress class loading
+</p><p><a href="#L245">245</a>	 * for lazy-init beans unless such a bean is explicitly requested.
+</p><p><a href="#L246">246</a>	 * In particular, by-type lookups will then simply ignore bean definitions
+</p><p><a href="#L247">247</a>	 * without resolved class name, instead of loading the bean classes on
+</p><p><a href="#L248">248</a>	 * demand just to perform a type check.
+</p><p><a href="#L249">249</a>	 * @see AbstractBeanDefinition#setLazyInit
+</p><p><a href="#L250">250</a>	 */
+</p><p><a href="#L251">251</a>	public void setAllowEagerClassLoading(boolean allowEagerClassLoading) {
+</p><p><a href="#L252">252</a>		this.allowEagerClassLoading = allowEagerClassLoading;
+</p><p><a href="#L253">253</a>	}
+</p><p><a href="#L254">254</a>
+</p><p><a href="#L255">255</a>	/**
+</p><p><a href="#L256">256</a>	 * Return whether the factory is allowed to eagerly load bean classes
+</p><p><a href="#L257">257</a>	 * even for bean definitions that are marked as "lazy-init".
+</p><p><a href="#L258">258</a>	 * @since 4.1.2
+</p><p><a href="#L259">259</a>	 */
+</p><p><a href="#L260">260</a>	public boolean isAllowEagerClassLoading() {
+</p><p><a href="#L261">261</a>		return this.allowEagerClassLoading;
+</p><p><a href="#L262">262</a>	}
+</p><p><a href="#L263">263</a>
+</p><p><a href="#L264">264</a>	/**
+</p><p><a href="#L265">265</a>	 * Set a {@link java.util.Comparator} for dependency Lists and arrays.
+</p><p><a href="#L266">266</a>	 * @since 4.0
+</p><p><a href="#L267">267</a>	 * @see org.springframework.core.OrderComparator
+</p><p><a href="#L268">268</a>	 * @see org.springframework.core.annotation.AnnotationAwareOrderComparator
+</p><p><a href="#L269">269</a>	 */
+</p><p><a href="#L270">270</a>	public void setDependencyComparator(@Nullable Comparator&lt;Object&gt; dependencyComparator) {
+</p><p><a href="#L271">271</a>		this.dependencyComparator = dependencyComparator;
+</p><p><a href="#L272">272</a>	}
+</p><p><a href="#L273">273</a>
+</p><p><a href="#L274">274</a>	/**
+</p><p><a href="#L275">275</a>	 * Return the dependency comparator for this BeanFactory (may be {@code null}.
+</p><p><a href="#L276">276</a>	 * @since 4.0
+</p><p><a href="#L277">277</a>	 */
+</p><p><a href="#L278">278</a>	@Nullable
+</p><p><a href="#L279">279</a>	public Comparator&lt;Object&gt; getDependencyComparator() {
+</p><p><a href="#L280">280</a>		return this.dependencyComparator;
+</p><p><a href="#L281">281</a>	}
+</p><p><a href="#L282">282</a>
+</p><p><a href="#L283">283</a>	/**
+</p><p><a href="#L284">284</a>	 * Set a custom autowire candidate resolver for this BeanFactory to use
+</p><p><a href="#L285">285</a>	 * when deciding whether a bean definition should be considered as a
+</p><p><a href="#L286">286</a>	 * candidate for autowiring.
+</p><p><a href="#L287">287</a>	 */
+</p><p><a href="#L288">288</a>	public void setAutowireCandidateResolver(final AutowireCandidateResolver autowireCandidateResolver) {
+</p><p><a href="#L289">289</a>		Assert.notNull(autowireCandidateResolver, "AutowireCandidateResolver must not be null");
+</p><p><a href="#L290">290</a>		if (autowireCandidateResolver instanceof BeanFactoryAware) {
+</p><p><a href="#L291">291</a>			if (System.getSecurityManager() != null) {
+</p><p><a href="#L292">292</a>				AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; {
+</p><p><a href="#L293">293</a>					((BeanFactoryAware) autowireCandidateResolver).setBeanFactory(DefaultListableBeanFactory.this);
+</p><p><a href="#L294">294</a>					return null;
+</p><p><a href="#L295">295</a>				}, getAccessControlContext());
+</p><p><a href="#L296">296</a>			}
+</p><p><a href="#L297">297</a>			else {
+</p><p><a href="#L298">298</a>				((BeanFactoryAware) autowireCandidateResolver).setBeanFactory(this);
+</p><p><a href="#L299">299</a>			}
+</p><p><a href="#L300">300</a>		}
+</p><p><a href="#L301">301</a>		this.autowireCandidateResolver = autowireCandidateResolver;
+</p><p><a href="#L302">302</a>	}
+</p><p><a href="#L303">303</a>
+</p><p><a href="#L304">304</a>	/**
+</p><p><a href="#L305">305</a>	 * Return the autowire candidate resolver for this BeanFactory (never {@code null}).
+</p><p><a href="#L306">306</a>	 */
+</p><p><a href="#L307">307</a>	public AutowireCandidateResolver getAutowireCandidateResolver() {
+</p><p><a href="#L308">308</a>		return this.autowireCandidateResolver;
+</p><p><a href="#L309">309</a>	}
+</p><p><a href="#L310">310</a>
+</p><p><a href="#L311">311</a>
+</p><p><a href="#L312">312</a>	@Override
+</p><p><a href="#L313">313</a>	public void copyConfigurationFrom(ConfigurableBeanFactory otherFactory) {
+</p><p><a href="#L314">314</a>		super.copyConfigurationFrom(otherFactory);
+</p><p><a href="#L315">315</a>		if (otherFactory instanceof DefaultListableBeanFactory) {
+</p><p><a href="#L316">316</a>			DefaultListableBeanFactory otherListableFactory = (DefaultListableBeanFactory) otherFactory;
+</p><p><a href="#L317">317</a>			this.allowBeanDefinitionOverriding = otherListableFactory.allowBeanDefinitionOverriding;
+</p><p><a href="#L318">318</a>			this.allowEagerClassLoading = otherListableFactory.allowEagerClassLoading;
+</p><p><a href="#L319">319</a>			this.dependencyComparator = otherListableFactory.dependencyComparator;
+</p><p><a href="#L320">320</a>			// A clone of the AutowireCandidateResolver since it is potentially BeanFactoryAware...
+</p><p><a href="#L321">321</a>			setAutowireCandidateResolver(BeanUtils.instantiateClass(getAutowireCandidateResolver().getClass()));
+</p><p><a href="#L322">322</a>			// Make resolvable dependencies (e.g. ResourceLoader) available here as well...
+</p><p><a href="#L323">323</a>			this.resolvableDependencies.putAll(otherListableFactory.resolvableDependencies);
+</p><p><a href="#L324">324</a>		}
+</p><p><a href="#L325">325</a>	}
+</p><p><a href="#L326">326</a>
+</p><p><a href="#L327">327</a>
+</p><p><a href="#L328">328</a>	//---------------------------------------------------------------------
+</p><p><a href="#L329">329</a>	// Implementation of remaining BeanFactory methods
+</p><p><a href="#L330">330</a>	//---------------------------------------------------------------------
+</p><p><a href="#L331">331</a>
+</p><p><a href="#L332">332</a>	@Override
+</p><p><a href="#L333">333</a>	public &lt;T&gt; T getBean(Class&lt;T&gt; requiredType) throws BeansException {
+</p><p><a href="#L334">334</a>		return getBean(requiredType, (Object[]) null);
+</p><p><a href="#L335">335</a>	}
+</p><p><a href="#L336">336</a>
+</p><p><a href="#L337">337</a>	@Override
+</p><p><a href="#L338">338</a>	public &lt;T&gt; T getBean(Class&lt;T&gt; requiredType, @Nullable Object... args) throws BeansException {
+</p><p><a href="#L339">339</a>		NamedBeanHolder&lt;T&gt; namedBean = resolveNamedBean(requiredType, args);
+</p><p><a href="#L340">340</a>		if (namedBean != null) {
+</p><p><a href="#L341">341</a>			return namedBean.getBeanInstance();
+</p><p><a href="#L342">342</a>		}
+</p><p><a href="#L343">343</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L344">344</a>		if (parent != null) {
+</p><p><a href="#L345">345</a>			return (args != null ? parent.getBean(requiredType, args) : parent.getBean(requiredType));
+</p><p><a href="#L346">346</a>		}
+</p><p><a href="#L347">347</a>		throw new NoSuchBeanDefinitionException(requiredType);
+</p><p><a href="#L348">348</a>	}
+</p><p><a href="#L349">349</a>
+</p><p><a href="#L350">350</a>
+</p><p><a href="#L351">351</a>	//---------------------------------------------------------------------
+</p><p><a href="#L352">352</a>	// Implementation of ListableBeanFactory interface
+</p><p><a href="#L353">353</a>	//---------------------------------------------------------------------
+</p><p><a href="#L354">354</a>
+</p><p><a href="#L355">355</a>	@Override
+</p><p><a href="#L356">356</a>	public boolean containsBeanDefinition(String beanName) {
+</p><p><a href="#L357">357</a>		Assert.notNull(beanName, "Bean name must not be null");
+</p><p><a href="#L358">358</a>		return this.beanDefinitionMap.containsKey(beanName);
+</p><p><a href="#L359">359</a>	}
+</p><p><a href="#L360">360</a>
+</p><p><a href="#L361">361</a>	@Override
+</p><p><a href="#L362">362</a>	public int getBeanDefinitionCount() {
+</p><p><a href="#L363">363</a>		return this.beanDefinitionMap.size();
+</p><p><a href="#L364">364</a>	}
+</p><p><a href="#L365">365</a>
+</p><p><a href="#L366">366</a>	@Override
+</p><p><a href="#L367">367</a>	public String[] getBeanDefinitionNames() {
+</p><p><a href="#L368">368</a>		String[] frozenNames = this.frozenBeanDefinitionNames;
+</p><p><a href="#L369">369</a>		if (frozenNames != null) {
+</p><p><a href="#L370">370</a>			return frozenNames.clone();
+</p><p><a href="#L371">371</a>		}
+</p><p><a href="#L372">372</a>		else {
+</p><p><a href="#L373">373</a>			return StringUtils.toStringArray(this.beanDefinitionNames);
+</p><p><a href="#L374">374</a>		}
+</p><p><a href="#L375">375</a>	}
+</p><p><a href="#L376">376</a>
+</p><p><a href="#L377">377</a>	@Override
+</p><p><a href="#L378">378</a>	public String[] getBeanNamesForType(ResolvableType type) {
+</p><p><a href="#L379">379</a>		return doGetBeanNamesForType(type, true, true);
+</p><p><a href="#L380">380</a>	}
+</p><p><a href="#L381">381</a>
+</p><p><a href="#L382">382</a>	@Override
+</p><p><a href="#L383">383</a>	public String[] getBeanNamesForType(@Nullable Class&lt;?&gt; type) {
+</p><p><a href="#L384">384</a>		return getBeanNamesForType(type, true, true);
+</p><p><a href="#L385">385</a>	}
+</p><p><a href="#L386">386</a>
+</p><p><a href="#L387">387</a>	@Override
+</p><p><a href="#L388">388</a>	public String[] getBeanNamesForType(@Nullable Class&lt;?&gt; type, boolean includeNonSingletons, boolean allowEagerInit) {
+</p><p><a href="#L389">389</a>		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
+</p><p><a href="#L390">390</a>			return doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, allowEagerInit);
+</p><p><a href="#L391">391</a>		}
+</p><p><a href="#L392">392</a>		Map&lt;Class&lt;?&gt;, String[]&gt; cache =
+</p><p><a href="#L393">393</a>				(includeNonSingletons ? this.allBeanNamesByType : this.singletonBeanNamesByType);
+</p><p><a href="#L394">394</a>		String[] resolvedBeanNames = cache.get(type);
+</p><p><a href="#L395">395</a>		if (resolvedBeanNames != null) {
+</p><p><a href="#L396">396</a>			return resolvedBeanNames;
+</p><p><a href="#L397">397</a>		}
+</p><p><a href="#L398">398</a>		resolvedBeanNames = doGetBeanNamesForType(ResolvableType.forRawClass(type), includeNonSingletons, true);
+</p><p><a href="#L399">399</a>		if (ClassUtils.isCacheSafe(type, getBeanClassLoader())) {
+</p><p><a href="#L400">400</a>			cache.put(type, resolvedBeanNames);
+</p><p><a href="#L401">401</a>		}
+</p><p><a href="#L402">402</a>		return resolvedBeanNames;
+</p><p><a href="#L403">403</a>	}
+</p><p><a href="#L404">404</a>
+</p><p><a href="#L405">405</a>	private String[] doGetBeanNamesForType(ResolvableType type, boolean includeNonSingletons, boolean allowEagerInit) {
+</p><p><a href="#L406">406</a>		List&lt;String&gt; result = new ArrayList&lt;&gt;();
+</p><p><a href="#L407">407</a>
+</p><p><a href="#L408">408</a>		// Check all bean definitions.
+</p><p><a href="#L409">409</a>		for (String beanName : this.beanDefinitionNames) {
+</p><p><a href="#L410">410</a>			// Only consider bean as eligible if the bean name
+</p><p><a href="#L411">411</a>			// is not defined as alias for some other bean.
+</p><p><a href="#L412">412</a>			if (!isAlias(beanName)) {
+</p><p><a href="#L413">413</a>				try {
+</p><p><a href="#L414">414</a>					RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+</p><p><a href="#L415">415</a>					// Only check bean definition if it is complete.
+</p><p><a href="#L416">416</a>					if (!mbd.isAbstract() &amp;&amp; (allowEagerInit ||
+</p><p><a href="#L417">417</a>							(mbd.hasBeanClass() || !mbd.isLazyInit() || isAllowEagerClassLoading()) &amp;&amp;
+</p><p><a href="#L418">418</a>									!requiresEagerInitForType(mbd.getFactoryBeanName()))) {
+</p><p><a href="#L419">419</a>						// In case of FactoryBean, match object created by FactoryBean.
+</p><p><a href="#L420">420</a>						boolean isFactoryBean = isFactoryBean(beanName, mbd);
+</p><p><a href="#L421">421</a>						BeanDefinitionHolder dbd = mbd.getDecoratedDefinition();
+</p><p><a href="#L422">422</a>						boolean matchFound =
+</p><p><a href="#L423">423</a>								(allowEagerInit || !isFactoryBean ||
+</p><p><a href="#L424">424</a>										(dbd != null &amp;&amp; !mbd.isLazyInit()) || containsSingleton(beanName)) &amp;&amp;
+</p><p><a href="#L425">425</a>								(includeNonSingletons ||
+</p><p><a href="#L426">426</a>										(dbd != null ? mbd.isSingleton() : isSingleton(beanName))) &amp;&amp;
+</p><p><a href="#L427">427</a>								isTypeMatch(beanName, type);
+</p><p><a href="#L428">428</a>						if (!matchFound &amp;&amp; isFactoryBean) {
+</p><p><a href="#L429">429</a>							// In case of FactoryBean, try to match FactoryBean instance itself next.
+</p><p><a href="#L430">430</a>							beanName = FACTORY_BEAN_PREFIX + beanName;
+</p><p><a href="#L431">431</a>							matchFound = (includeNonSingletons || mbd.isSingleton()) &amp;&amp; isTypeMatch(beanName, type);
+</p><p><a href="#L432">432</a>						}
+</p><p><a href="#L433">433</a>						if (matchFound) {
+</p><p><a href="#L434">434</a>							result.add(beanName);
+</p><p><a href="#L435">435</a>						}
+</p><p><a href="#L436">436</a>					}
+</p><p><a href="#L437">437</a>				}
+</p><p><a href="#L438">438</a>				catch (CannotLoadBeanClassException ex) {
+</p><p><a href="#L439">439</a>					if (allowEagerInit) {
+</p><p><a href="#L440">440</a>						throw ex;
+</p><p><a href="#L441">441</a>					}
+</p><p><a href="#L442">442</a>					// Probably contains a placeholder: let's ignore it for type matching purposes.
+</p><p><a href="#L443">443</a>					if (this.logger.isDebugEnabled()) {
+</p><p><a href="#L444">444</a>						this.logger.debug("Ignoring bean class loading failure for bean '" + beanName + "'", ex);
+</p><p><a href="#L445">445</a>					}
+</p><p><a href="#L446">446</a>					onSuppressedException(ex);
+</p><p><a href="#L447">447</a>				}
+</p><p><a href="#L448">448</a>				catch (BeanDefinitionStoreException ex) {
+</p><p><a href="#L449">449</a>					if (allowEagerInit) {
+</p><p><a href="#L450">450</a>						throw ex;
+</p><p><a href="#L451">451</a>					}
+</p><p><a href="#L452">452</a>					// Probably contains a placeholder: let's ignore it for type matching purposes.
+</p><p><a href="#L453">453</a>					if (this.logger.isDebugEnabled()) {
+</p><p><a href="#L454">454</a>						this.logger.debug("Ignoring unresolvable metadata in bean definition '" + beanName + "'", ex);
+</p><p><a href="#L455">455</a>					}
+</p><p><a href="#L456">456</a>					onSuppressedException(ex);
+</p><p><a href="#L457">457</a>				}
+</p><p><a href="#L458">458</a>			}
+</p><p><a href="#L459">459</a>		}
+</p><p><a href="#L460">460</a>
+</p><p><a href="#L461">461</a>		// Check manually registered singletons too.
+</p><p><a href="#L462">462</a>		for (String beanName : this.manualSingletonNames) {
+</p><p><a href="#L463">463</a>			try {
+</p><p><a href="#L464">464</a>				// In case of FactoryBean, match object created by FactoryBean.
+</p><p><a href="#L465">465</a>				if (isFactoryBean(beanName)) {
+</p><p><a href="#L466">466</a>					if ((includeNonSingletons || isSingleton(beanName)) &amp;&amp; isTypeMatch(beanName, type)) {
+</p><p><a href="#L467">467</a>						result.add(beanName);
+</p><p><a href="#L468">468</a>						// Match found for this bean: do not match FactoryBean itself anymore.
+</p><p><a href="#L469">469</a>						continue;
+</p><p><a href="#L470">470</a>					}
+</p><p><a href="#L471">471</a>					// In case of FactoryBean, try to match FactoryBean itself next.
+</p><p><a href="#L472">472</a>					beanName = FACTORY_BEAN_PREFIX + beanName;
+</p><p><a href="#L473">473</a>				}
+</p><p><a href="#L474">474</a>				// Match raw bean instance (might be raw FactoryBean).
+</p><p><a href="#L475">475</a>				if (isTypeMatch(beanName, type)) {
+</p><p><a href="#L476">476</a>					result.add(beanName);
+</p><p><a href="#L477">477</a>				}
+</p><p><a href="#L478">478</a>			}
+</p><p><a href="#L479">479</a>			catch (NoSuchBeanDefinitionException ex) {
+</p><p><a href="#L480">480</a>				// Shouldn't happen - probably a result of circular reference resolution...
+</p><p><a href="#L481">481</a>				if (logger.isDebugEnabled()) {
+</p><p><a href="#L482">482</a>					logger.debug("Failed to check manually registered singleton with name '" + beanName + "'", ex);
+</p><p><a href="#L483">483</a>				}
+</p><p><a href="#L484">484</a>			}
+</p><p><a href="#L485">485</a>		}
+</p><p><a href="#L486">486</a>
+</p><p><a href="#L487">487</a>		return StringUtils.toStringArray(result);
+</p><p><a href="#L488">488</a>	}
+</p><p><a href="#L489">489</a>
+</p><p><a href="#L490">490</a>	/**
+</p><p><a href="#L491">491</a>	 * Check whether the specified bean would need to be eagerly initialized
+</p><p><a href="#L492">492</a>	 * in order to determine its type.
+</p><p><a href="#L493">493</a>	 * @param factoryBeanName a factory-bean reference that the bean definition
+</p><p><a href="#L494">494</a>	 * defines a factory method for
+</p><p><a href="#L495">495</a>	 * @return whether eager initialization is necessary
+</p><p><a href="#L496">496</a>	 */
+</p><p><a href="#L497">497</a>	private boolean requiresEagerInitForType(@Nullable String factoryBeanName) {
+</p><p><a href="#L498">498</a>		return (factoryBeanName != null &amp;&amp; isFactoryBean(factoryBeanName) &amp;&amp; !containsSingleton(factoryBeanName));
+</p><p><a href="#L499">499</a>	}
+</p><p><a href="#L500">500</a>
+</p><p><a href="#L501">501</a>	@Override
+</p><p><a href="#L502">502</a>	public &lt;T&gt; Map&lt;String, T&gt; getBeansOfType(@Nullable Class&lt;T&gt; type) throws BeansException {
+</p><p><a href="#L503">503</a>		return getBeansOfType(type, true, true);
+</p><p><a href="#L504">504</a>	}
+</p><p><a href="#L505">505</a>
+</p><p><a href="#L506">506</a>	@Override
+</p><p><a href="#L507">507</a>	@SuppressWarnings("unchecked")
+</p><p><a href="#L508">508</a>	public &lt;T&gt; Map&lt;String, T&gt; getBeansOfType(@Nullable Class&lt;T&gt; type, boolean includeNonSingletons, boolean allowEagerInit)
+</p><p><a href="#L509">509</a>			throws BeansException {
+</p><p><a href="#L510">510</a>
+</p><p><a href="#L511">511</a>		String[] beanNames = getBeanNamesForType(type, includeNonSingletons, allowEagerInit);
+</p><p><a href="#L512">512</a>		Map&lt;String, T&gt; result = new LinkedHashMap&lt;&gt;(beanNames.length);
+</p><p><a href="#L513">513</a>		for (String beanName : beanNames) {
+</p><p><a href="#L514">514</a>			try {
+</p><p><a href="#L515">515</a>				Object beanInstance = getBean(beanName);
+</p><p><a href="#L516">516</a>				result.put(beanName, (beanInstance instanceof NullBean ? null : (T) beanInstance));
+</p><p><a href="#L517">517</a>			}
+</p><p><a href="#L518">518</a>			catch (BeanCreationException ex) {
+</p><p><a href="#L519">519</a>				Throwable rootCause = ex.getMostSpecificCause();
+</p><p><a href="#L520">520</a>				if (rootCause instanceof BeanCurrentlyInCreationException) {
+</p><p><a href="#L521">521</a>					BeanCreationException bce = (BeanCreationException) rootCause;
+</p><p><a href="#L522">522</a>					String exBeanName = bce.getBeanName();
+</p><p><a href="#L523">523</a>					if (exBeanName != null &amp;&amp; isCurrentlyInCreation(exBeanName)) {
+</p><p><a href="#L524">524</a>						if (this.logger.isDebugEnabled()) {
+</p><p><a href="#L525">525</a>							this.logger.debug("Ignoring match to currently created bean '" + exBeanName + "': " +
+</p><p><a href="#L526">526</a>									ex.getMessage());
+</p><p><a href="#L527">527</a>						}
+</p><p><a href="#L528">528</a>						onSuppressedException(ex);
+</p><p><a href="#L529">529</a>						// Ignore: indicates a circular reference when autowiring constructors.
+</p><p><a href="#L530">530</a>						// We want to find matches other than the currently created bean itself.
+</p><p><a href="#L531">531</a>						continue;
+</p><p><a href="#L532">532</a>					}
+</p><p><a href="#L533">533</a>				}
+</p><p><a href="#L534">534</a>				throw ex;
+</p><p><a href="#L535">535</a>			}
+</p><p><a href="#L536">536</a>		}
+</p><p><a href="#L537">537</a>		return result;
+</p><p><a href="#L538">538</a>	}
+</p><p><a href="#L539">539</a>
+</p><p><a href="#L540">540</a>	@Override
+</p><p><a href="#L541">541</a>	public String[] getBeanNamesForAnnotation(Class&lt;? extends Annotation&gt; annotationType) {
+</p><p><a href="#L542">542</a>		List&lt;String&gt; results = new ArrayList&lt;&gt;();
+</p><p><a href="#L543">543</a>		for (String beanName : this.beanDefinitionNames) {
+</p><p><a href="#L544">544</a>			BeanDefinition beanDefinition = getBeanDefinition(beanName);
+</p><p><a href="#L545">545</a>			if (!beanDefinition.isAbstract() &amp;&amp; findAnnotationOnBean(beanName, annotationType) != null) {
+</p><p><a href="#L546">546</a>				results.add(beanName);
+</p><p><a href="#L547">547</a>			}
+</p><p><a href="#L548">548</a>		}
+</p><p><a href="#L549">549</a>		for (String beanName : this.manualSingletonNames) {
+</p><p><a href="#L550">550</a>			if (!results.contains(beanName) &amp;&amp; findAnnotationOnBean(beanName, annotationType) != null) {
+</p><p><a href="#L551">551</a>				results.add(beanName);
+</p><p><a href="#L552">552</a>			}
+</p><p><a href="#L553">553</a>		}
+</p><p><a href="#L554">554</a>		return StringUtils.toStringArray(results);
+</p><p><a href="#L555">555</a>	}
+</p><p><a href="#L556">556</a>
+</p><p><a href="#L557">557</a>	@Override
+</p><p><a href="#L558">558</a>	public Map&lt;String, Object&gt; getBeansWithAnnotation(Class&lt;? extends Annotation&gt; annotationType) {
+</p><p><a href="#L559">559</a>		String[] beanNames = getBeanNamesForAnnotation(annotationType);
+</p><p><a href="#L560">560</a>		Map&lt;String, Object&gt; results = new LinkedHashMap&lt;&gt;(beanNames.length);
+</p><p><a href="#L561">561</a>		for (String beanName : beanNames) {
+</p><p><a href="#L562">562</a>			results.put(beanName, getBean(beanName));
+</p><p><a href="#L563">563</a>		}
+</p><p><a href="#L564">564</a>		return results;
+</p><p><a href="#L565">565</a>	}
+</p><p><a href="#L566">566</a>
+</p><p><a href="#L567">567</a>	/**
+</p><p><a href="#L568">568</a>	 * Find a {@link Annotation} of {@code annotationType} on the specified
+</p><p><a href="#L569">569</a>	 * bean, traversing its interfaces and super classes if no annotation can be
+</p><p><a href="#L570">570</a>	 * found on the given class itself, as well as checking its raw bean class
+</p><p><a href="#L571">571</a>	 * if not found on the exposed bean reference (e.g. in case of a proxy).
+</p><p><a href="#L572">572</a>	 */
+</p><p><a href="#L573">573</a>	@Override
+</p><p><a href="#L574">574</a>	@Nullable
+</p><p><a href="#L575">575</a>	public &lt;A extends Annotation&gt; A findAnnotationOnBean(String beanName, Class&lt;A&gt; annotationType)
+</p><p><a href="#L576">576</a>			throws NoSuchBeanDefinitionException{
+</p><p><a href="#L577">577</a>
+</p><p><a href="#L578">578</a>		A ann = null;
+</p><p><a href="#L579">579</a>		Class&lt;?&gt; beanType = getType(beanName);
+</p><p><a href="#L580">580</a>		if (beanType != null) {
+</p><p><a href="#L581">581</a>			ann = AnnotationUtils.findAnnotation(beanType, annotationType);
+</p><p><a href="#L582">582</a>		}
+</p><p><a href="#L583">583</a>		if (ann == null &amp;&amp; containsBeanDefinition(beanName)) {
+</p><p><a href="#L584">584</a>			BeanDefinition bd = getMergedBeanDefinition(beanName);
+</p><p><a href="#L585">585</a>			if (bd instanceof AbstractBeanDefinition) {
+</p><p><a href="#L586">586</a>				AbstractBeanDefinition abd = (AbstractBeanDefinition) bd;
+</p><p><a href="#L587">587</a>				if (abd.hasBeanClass()) {
+</p><p><a href="#L588">588</a>					ann = AnnotationUtils.findAnnotation(abd.getBeanClass(), annotationType);
+</p><p><a href="#L589">589</a>				}
+</p><p><a href="#L590">590</a>			}
+</p><p><a href="#L591">591</a>		}
+</p><p><a href="#L592">592</a>		return ann;
+</p><p><a href="#L593">593</a>	}
+</p><p><a href="#L594">594</a>
+</p><p><a href="#L595">595</a>
+</p><p><a href="#L596">596</a>	//---------------------------------------------------------------------
+</p><p><a href="#L597">597</a>	// Implementation of ConfigurableListableBeanFactory interface
+</p><p><a href="#L598">598</a>	//---------------------------------------------------------------------
+</p><p><a href="#L599">599</a>
+</p><p><a href="#L600">600</a>	@Override
+</p><p><a href="#L601">601</a>	public void registerResolvableDependency(Class&lt;?&gt; dependencyType, @Nullable Object autowiredValue) {
+</p><p><a href="#L602">602</a>		Assert.notNull(dependencyType, "Dependency type must not be null");
+</p><p><a href="#L603">603</a>		if (autowiredValue != null) {
+</p><p><a href="#L604">604</a>			if (!(autowiredValue instanceof ObjectFactory || dependencyType.isInstance(autowiredValue))) {
+</p><p><a href="#L605">605</a>				throw new IllegalArgumentException("Value [" + autowiredValue +
+</p><p><a href="#L606">606</a>						"] does not implement specified dependency type [" + dependencyType.getName() + "]");
+</p><p><a href="#L607">607</a>			}
+</p><p><a href="#L608">608</a>			this.resolvableDependencies.put(dependencyType, autowiredValue);
+</p><p><a href="#L609">609</a>		}
+</p><p><a href="#L610">610</a>	}
+</p><p><a href="#L611">611</a>
+</p><p><a href="#L612">612</a>	@Override
+</p><p><a href="#L613">613</a>	public boolean isAutowireCandidate(String beanName, DependencyDescriptor descriptor)
+</p><p><a href="#L614">614</a>			throws NoSuchBeanDefinitionException {
+</p><p><a href="#L615">615</a>
+</p><p><a href="#L616">616</a>		return isAutowireCandidate(beanName, descriptor, getAutowireCandidateResolver());
+</p><p><a href="#L617">617</a>	}
+</p><p><a href="#L618">618</a>
+</p><p><a href="#L619">619</a>	/**
+</p><p><a href="#L620">620</a>	 * Determine whether the specified bean definition qualifies as an autowire candidate,
+</p><p><a href="#L621">621</a>	 * to be injected into other beans which declare a dependency of matching type.
+</p><p><a href="#L622">622</a>	 * @param beanName the name of the bean definition to check
+</p><p><a href="#L623">623</a>	 * @param descriptor the descriptor of the dependency to resolve
+</p><p><a href="#L624">624</a>	 * @param resolver the AutowireCandidateResolver to use for the actual resolution algorithm
+</p><p><a href="#L625">625</a>	 * @return whether the bean should be considered as autowire candidate
+</p><p><a href="#L626">626</a>	 */
+</p><p><a href="#L627">627</a>	protected boolean isAutowireCandidate(String beanName, DependencyDescriptor descriptor, AutowireCandidateResolver resolver)
+</p><p><a href="#L628">628</a>			throws NoSuchBeanDefinitionException {
+</p><p><a href="#L629">629</a>
+</p><p><a href="#L630">630</a>		String beanDefinitionName = BeanFactoryUtils.transformedBeanName(beanName);
+</p><p><a href="#L631">631</a>		if (containsBeanDefinition(beanDefinitionName)) {
+</p><p><a href="#L632">632</a>			return isAutowireCandidate(beanName, getMergedLocalBeanDefinition(beanDefinitionName), descriptor, resolver);
+</p><p><a href="#L633">633</a>		}
+</p><p><a href="#L634">634</a>		else if (containsSingleton(beanName)) {
+</p><p><a href="#L635">635</a>			return isAutowireCandidate(beanName, new RootBeanDefinition(getType(beanName)), descriptor, resolver);
+</p><p><a href="#L636">636</a>		}
+</p><p><a href="#L637">637</a>
+</p><p><a href="#L638">638</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L639">639</a>		if (parent instanceof DefaultListableBeanFactory) {
+</p><p><a href="#L640">640</a>			// No bean definition found in this factory -&gt; delegate to parent.
+</p><p><a href="#L641">641</a>			return ((DefaultListableBeanFactory) parent).isAutowireCandidate(beanName, descriptor, resolver);
+</p><p><a href="#L642">642</a>		}
+</p><p><a href="#L643">643</a>		else if (parent instanceof ConfigurableListableBeanFactory) {
+</p><p><a href="#L644">644</a>			// If no DefaultListableBeanFactory, can't pass the resolver along.
+</p><p><a href="#L645">645</a>			return ((ConfigurableListableBeanFactory) parent).isAutowireCandidate(beanName, descriptor);
+</p><p><a href="#L646">646</a>		}
+</p><p><a href="#L647">647</a>		else {
+</p><p><a href="#L648">648</a>			return true;
+</p><p><a href="#L649">649</a>		}
+</p><p><a href="#L650">650</a>	}
+</p><p><a href="#L651">651</a>
+</p><p><a href="#L652">652</a>	/**
+</p><p><a href="#L653">653</a>	 * Determine whether the specified bean definition qualifies as an autowire candidate,
+</p><p><a href="#L654">654</a>	 * to be injected into other beans which declare a dependency of matching type.
+</p><p><a href="#L655">655</a>	 * @param beanName the name of the bean definition to check
+</p><p><a href="#L656">656</a>	 * @param mbd the merged bean definition to check
+</p><p><a href="#L657">657</a>	 * @param descriptor the descriptor of the dependency to resolve
+</p><p><a href="#L658">658</a>	 * @param resolver the AutowireCandidateResolver to use for the actual resolution algorithm
+</p><p><a href="#L659">659</a>	 * @return whether the bean should be considered as autowire candidate
+</p><p><a href="#L660">660</a>	 */
+</p><p><a href="#L661">661</a>	protected boolean isAutowireCandidate(String beanName, RootBeanDefinition mbd,
+</p><p><a href="#L662">662</a>			DependencyDescriptor descriptor, AutowireCandidateResolver resolver) {
+</p><p><a href="#L663">663</a>
+</p><p><a href="#L664">664</a>		String beanDefinitionName = BeanFactoryUtils.transformedBeanName(beanName);
+</p><p><a href="#L665">665</a>		resolveBeanClass(mbd, beanDefinitionName);
+</p><p><a href="#L666">666</a>		if (mbd.isFactoryMethodUnique) {
+</p><p><a href="#L667">667</a>			boolean resolve;
+</p><p><a href="#L668">668</a>			synchronized (mbd.constructorArgumentLock) {
+</p><p><a href="#L669">669</a>				resolve = (mbd.resolvedConstructorOrFactoryMethod == null);
+</p><p><a href="#L670">670</a>			}
+</p><p><a href="#L671">671</a>			if (resolve) {
+</p><p><a href="#L672">672</a>				new ConstructorResolver(this).resolveFactoryMethodIfPossible(mbd);
+</p><p><a href="#L673">673</a>			}
+</p><p><a href="#L674">674</a>		}
+</p><p><a href="#L675">675</a>		return resolver.isAutowireCandidate(
+</p><p><a href="#L676">676</a>				new BeanDefinitionHolder(mbd, beanName, getAliases(beanDefinitionName)), descriptor);
+</p><p><a href="#L677">677</a>	}
+</p><p><a href="#L678">678</a>
+</p><p><a href="#L679">679</a>	@Override
+</p><p><a href="#L680">680</a>	public BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException {
+</p><p><a href="#L681">681</a>		BeanDefinition bd = this.beanDefinitionMap.get(beanName);
+</p><p><a href="#L682">682</a>		if (bd == null) {
+</p><p><a href="#L683">683</a>			if (this.logger.isTraceEnabled()) {
+</p><p><a href="#L684">684</a>				this.logger.trace("No bean named '" + beanName + "' found in " + this);
+</p><p><a href="#L685">685</a>			}
+</p><p><a href="#L686">686</a>			throw new NoSuchBeanDefinitionException(beanName);
+</p><p><a href="#L687">687</a>		}
+</p><p><a href="#L688">688</a>		return bd;
+</p><p><a href="#L689">689</a>	}
+</p><p><a href="#L690">690</a>
+</p><p><a href="#L691">691</a>	@Override
+</p><p><a href="#L692">692</a>	public Iterator&lt;String&gt; getBeanNamesIterator() {
+</p><p><a href="#L693">693</a>		CompositeIterator&lt;String&gt; iterator = new CompositeIterator&lt;&gt;();
+</p><p><a href="#L694">694</a>		iterator.add(this.beanDefinitionNames.iterator());
+</p><p><a href="#L695">695</a>		iterator.add(this.manualSingletonNames.iterator());
+</p><p><a href="#L696">696</a>		return iterator;
+</p><p><a href="#L697">697</a>	}
+</p><p><a href="#L698">698</a>
+</p><p><a href="#L699">699</a>	@Override
+</p><p><a href="#L700">700</a>	public void clearMetadataCache() {
+</p><p><a href="#L701">701</a>		super.clearMetadataCache();
+</p><p><a href="#L702">702</a>		clearByTypeCache();
+</p><p><a href="#L703">703</a>	}
+</p><p><a href="#L704">704</a>
+</p><p><a href="#L705">705</a>	@Override
+</p><p><a href="#L706">706</a>	public void freezeConfiguration() {
+</p><p><a href="#L707">707</a>		this.configurationFrozen = true;
+</p><p><a href="#L708">708</a>		this.frozenBeanDefinitionNames = StringUtils.toStringArray(this.beanDefinitionNames);
+</p><p><a href="#L709">709</a>	}
+</p><p><a href="#L710">710</a>
+</p><p><a href="#L711">711</a>	@Override
+</p><p><a href="#L712">712</a>	public boolean isConfigurationFrozen() {
+</p><p><a href="#L713">713</a>		return this.configurationFrozen;
+</p><p><a href="#L714">714</a>	}
+</p><p><a href="#L715">715</a>
+</p><p><a href="#L716">716</a>	/**
+</p><p><a href="#L717">717</a>	 * Considers all beans as eligible for metadata caching
+</p><p><a href="#L718">718</a>	 * if the factory's configuration has been marked as frozen.
+</p><p><a href="#L719">719</a>	 * @see #freezeConfiguration()
+</p><p><a href="#L720">720</a>	 */
+</p><p><a href="#L721">721</a>	@Override
+</p><p><a href="#L722">722</a>	protected boolean isBeanEligibleForMetadataCaching(String beanName) {
+</p><p><a href="#L723">723</a>		return (this.configurationFrozen || super.isBeanEligibleForMetadataCaching(beanName));
+</p><p><a href="#L724">724</a>	}
+</p><p><a href="#L725">725</a>
+</p><p><a href="#L726">726</a>	@Override
+</p><p><a href="#L727">727</a>	public void preInstantiateSingletons() throws BeansException {
+</p><p><a href="#L728">728</a>		if (this.logger.isDebugEnabled()) {
+</p><p><a href="#L729">729</a>			this.logger.debug("Pre-instantiating singletons in " + this);
+</p><p><a href="#L730">730</a>		}
+</p><p><a href="#L731">731</a>
+</p><p><a href="#L732">732</a>		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
+</p><p><a href="#L733">733</a>		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
+</p><p><a href="#L734">734</a>		List&lt;String&gt; beanNames = new ArrayList&lt;&gt;(this.beanDefinitionNames);
+</p><p><a href="#L735">735</a>
+</p><p><a href="#L736">736</a>		// Trigger initialization of all non-lazy singleton beans...
+</p><p><a href="#L737">737</a>		for (String beanName : beanNames) {
+</p><p><a href="#L738">738</a>			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+</p><p><a href="#L739">739</a>			if (!bd.isAbstract() &amp;&amp; bd.isSingleton() &amp;&amp; !bd.isLazyInit()) {
+</p><p><a href="#L740">740</a>				if (isFactoryBean(beanName)) {
+</p><p><a href="#L741">741</a>					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
+</p><p><a href="#L742">742</a>					if (bean instanceof FactoryBean) {
+</p><p><a href="#L743">743</a>						final FactoryBean&lt;?&gt; factory = (FactoryBean&lt;?&gt;) bean;
+</p><p><a href="#L744">744</a>						boolean isEagerInit;
+</p><p><a href="#L745">745</a>						if (System.getSecurityManager() != null &amp;&amp; factory instanceof SmartFactoryBean) {
+</p><p><a href="#L746">746</a>							isEagerInit = AccessController.doPrivileged((PrivilegedAction&lt;Boolean&gt;)
+</p><p><a href="#L747">747</a>											((SmartFactoryBean&lt;?&gt;) factory)::isEagerInit,
+</p><p><a href="#L748">748</a>									getAccessControlContext());
+</p><p><a href="#L749">749</a>						}
+</p><p><a href="#L750">750</a>						else {
+</p><p><a href="#L751">751</a>							isEagerInit = (factory instanceof SmartFactoryBean &amp;&amp;
+</p><p><a href="#L752">752</a>									((SmartFactoryBean&lt;?&gt;) factory).isEagerInit());
+</p><p><a href="#L753">753</a>						}
+</p><p><a href="#L754">754</a>						if (isEagerInit) {
+</p><p><a href="#L755">755</a>							getBean(beanName);
+</p><p><a href="#L756">756</a>						}
+</p><p><a href="#L757">757</a>					}
+</p><p><a href="#L758">758</a>				}
+</p><p><a href="#L759">759</a>				else {
+</p><p><a href="#L760">760</a>					getBean(beanName);
+</p><p><a href="#L761">761</a>				}
+</p><p><a href="#L762">762</a>			}
+</p><p><a href="#L763">763</a>		}
+</p><p><a href="#L764">764</a>
+</p><p><a href="#L765">765</a>		// Trigger post-initialization callback for all applicable beans...
+</p><p><a href="#L766">766</a>		for (String beanName : beanNames) {
+</p><p><a href="#L767">767</a>			Object singletonInstance = getSingleton(beanName);
+</p><p><a href="#L768">768</a>			if (singletonInstance instanceof SmartInitializingSingleton) {
+</p><p><a href="#L769">769</a>				final SmartInitializingSingleton smartSingleton = (SmartInitializingSingleton) singletonInstance;
+</p><p><a href="#L770">770</a>				if (System.getSecurityManager() != null) {
+</p><p><a href="#L771">771</a>					AccessController.doPrivileged((PrivilegedAction&lt;Object&gt;) () -&gt; {
+</p><p><a href="#L772">772</a>						smartSingleton.afterSingletonsInstantiated();
+</p><p><a href="#L773">773</a>						return null;
+</p><p><a href="#L774">774</a>					}, getAccessControlContext());
+</p><p><a href="#L775">775</a>				}
+</p><p><a href="#L776">776</a>				else {
+</p><p><a href="#L777">777</a>					smartSingleton.afterSingletonsInstantiated();
+</p><p><a href="#L778">778</a>				}
+</p><p><a href="#L779">779</a>			}
+</p><p><a href="#L780">780</a>		}
+</p><p><a href="#L781">781</a>	}
+</p><p><a href="#L782">782</a>
+</p><p><a href="#L783">783</a>
+</p><p><a href="#L784">784</a>	//---------------------------------------------------------------------
+</p><p><a href="#L785">785</a>	// Implementation of BeanDefinitionRegistry interface
+</p><p><a href="#L786">786</a>	//---------------------------------------------------------------------
+</p><p><a href="#L787">787</a>
+</p><p><a href="#L788">788</a>	@Override
+</p><p><a href="#L789">789</a>	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
+</p><p><a href="#L790">790</a>			throws BeanDefinitionStoreException {
+</p><p><a href="#L791">791</a>
+</p><p><a href="#L792">792</a>		Assert.hasText(beanName, "Bean name must not be empty");
+</p><p><a href="#L793">793</a>		Assert.notNull(beanDefinition, "BeanDefinition must not be null");
+</p><p><a href="#L794">794</a>
+</p><p><a href="#L795">795</a>		if (beanDefinition instanceof AbstractBeanDefinition) {
+</p><p><a href="#L796">796</a>			try {
+</p><p><a href="#L797">797</a>				((AbstractBeanDefinition) beanDefinition).validate();
+</p><p><a href="#L798">798</a>			}
+</p><p><a href="#L799">799</a>			catch (BeanDefinitionValidationException ex) {
+</p><p><a href="#L800">800</a>				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
+</p><p><a href="#L801">801</a>						"Validation of bean definition failed", ex);
+</p><p><a href="#L802">802</a>			}
+</p><p><a href="#L803">803</a>		}
+</p><p><a href="#L804">804</a>
+</p><p><a href="#L805">805</a>		BeanDefinition oldBeanDefinition;
+</p><p><a href="#L806">806</a>
+</p><p><a href="#L807">807</a>		oldBeanDefinition = this.beanDefinitionMap.get(beanName);
+</p><p><a href="#L808">808</a>		if (oldBeanDefinition != null) {
+</p><p><a href="#L809">809</a>			if (!isAllowBeanDefinitionOverriding()) {
+</p><p><a href="#L810">810</a>				throw new BeanDefinitionStoreException(beanDefinition.getResourceDescription(), beanName,
+</p><p><a href="#L811">811</a>						"Cannot register bean definition [" + beanDefinition + "] for bean '" + beanName +
+</p><p><a href="#L812">812</a>						"': There is already [" + oldBeanDefinition + "] bound.");
+</p><p><a href="#L813">813</a>			}
+</p><p><a href="#L814">814</a>			else if (oldBeanDefinition.getRole() &lt; beanDefinition.getRole()) {
+</p><p><a href="#L815">815</a>				// e.g. was ROLE_APPLICATION, now overriding with ROLE_SUPPORT or ROLE_INFRASTRUCTURE
+</p><p><a href="#L816">816</a>				if (this.logger.isWarnEnabled()) {
+</p><p><a href="#L817">817</a>					this.logger.warn("Overriding user-defined bean definition for bean '" + beanName +
+</p><p><a href="#L818">818</a>							"' with a framework-generated bean definition: replacing [" +
+</p><p><a href="#L819">819</a>							oldBeanDefinition + "] with [" + beanDefinition + "]");
+</p><p><a href="#L820">820</a>				}
+</p><p><a href="#L821">821</a>			}
+</p><p><a href="#L822">822</a>			else if (!beanDefinition.equals(oldBeanDefinition)) {
+</p><p><a href="#L823">823</a>				if (this.logger.isInfoEnabled()) {
+</p><p><a href="#L824">824</a>					this.logger.info("Overriding bean definition for bean '" + beanName +
+</p><p><a href="#L825">825</a>							"' with a different definition: replacing [" + oldBeanDefinition +
+</p><p><a href="#L826">826</a>							"] with [" + beanDefinition + "]");
+</p><p><a href="#L827">827</a>				}
+</p><p><a href="#L828">828</a>			}
+</p><p><a href="#L829">829</a>			else {
+</p><p><a href="#L830">830</a>				if (this.logger.isDebugEnabled()) {
+</p><p><a href="#L831">831</a>					this.logger.debug("Overriding bean definition for bean '" + beanName +
+</p><p><a href="#L832">832</a>							"' with an equivalent definition: replacing [" + oldBeanDefinition +
+</p><p><a href="#L833">833</a>							"] with [" + beanDefinition + "]");
+</p><p><a href="#L834">834</a>				}
+</p><p><a href="#L835">835</a>			}
+</p><p><a href="#L836">836</a>			this.beanDefinitionMap.put(beanName, beanDefinition);
+</p><p><a href="#L837">837</a>		}
+</p><p><a href="#L838">838</a>		else {
+</p><p><a href="#L839">839</a>			if (hasBeanCreationStarted()) {
+</p><p><a href="#L840">840</a>				// Cannot modify startup-time collection elements anymore (for stable iteration)
+</p><p><a href="#L841">841</a>				synchronized (this.beanDefinitionMap) {
+</p><p><a href="#L842">842</a>					this.beanDefinitionMap.put(beanName, beanDefinition);
+</p><p><a href="#L843">843</a>					List&lt;String&gt; updatedDefinitions = new ArrayList&lt;&gt;(this.beanDefinitionNames.size() + 1);
+</p><p><a href="#L844">844</a>					updatedDefinitions.addAll(this.beanDefinitionNames);
+</p><p><a href="#L845">845</a>					updatedDefinitions.add(beanName);
+</p><p><a href="#L846">846</a>					this.beanDefinitionNames = updatedDefinitions;
+</p><p><a href="#L847">847</a>					if (this.manualSingletonNames.contains(beanName)) {
+</p><p><a href="#L848">848</a>						Set&lt;String&gt; updatedSingletons = new LinkedHashSet&lt;&gt;(this.manualSingletonNames);
+</p><p><a href="#L849">849</a>						updatedSingletons.remove(beanName);
+</p><p><a href="#L850">850</a>						this.manualSingletonNames = updatedSingletons;
+</p><p><a href="#L851">851</a>					}
+</p><p><a href="#L852">852</a>				}
+</p><p><a href="#L853">853</a>			}
+</p><p><a href="#L854">854</a>			else {
+</p><p><a href="#L855">855</a>				// Still in startup registration phase
+</p><p><a href="#L856">856</a>				this.beanDefinitionMap.put(beanName, beanDefinition);
+</p><p><a href="#L857">857</a>				this.beanDefinitionNames.add(beanName);
+</p><p><a href="#L858">858</a>				this.manualSingletonNames.remove(beanName);
+</p><p><a href="#L859">859</a>			}
+</p><p><a href="#L860">860</a>			this.frozenBeanDefinitionNames = null;
+</p><p><a href="#L861">861</a>		}
+</p><p><a href="#L862">862</a>
+</p><p><a href="#L863">863</a>		if (oldBeanDefinition != null || containsSingleton(beanName)) {
+</p><p><a href="#L864">864</a>			resetBeanDefinition(beanName);
+</p><p><a href="#L865">865</a>		}
+</p><p><a href="#L866">866</a>	}
+</p><p><a href="#L867">867</a>
+</p><p><a href="#L868">868</a>	@Override
+</p><p><a href="#L869">869</a>	public void removeBeanDefinition(String beanName) throws NoSuchBeanDefinitionException {
+</p><p><a href="#L870">870</a>		Assert.hasText(beanName, "'beanName' must not be empty");
+</p><p><a href="#L871">871</a>
+</p><p><a href="#L872">872</a>		BeanDefinition bd = this.beanDefinitionMap.remove(beanName);
+</p><p><a href="#L873">873</a>		if (bd == null) {
+</p><p><a href="#L874">874</a>			if (this.logger.isTraceEnabled()) {
+</p><p><a href="#L875">875</a>				this.logger.trace("No bean named '" + beanName + "' found in " + this);
+</p><p><a href="#L876">876</a>			}
+</p><p><a href="#L877">877</a>			throw new NoSuchBeanDefinitionException(beanName);
+</p><p><a href="#L878">878</a>		}
+</p><p><a href="#L879">879</a>
+</p><p><a href="#L880">880</a>		if (hasBeanCreationStarted()) {
+</p><p><a href="#L881">881</a>			// Cannot modify startup-time collection elements anymore (for stable iteration)
+</p><p><a href="#L882">882</a>			synchronized (this.beanDefinitionMap) {
+</p><p><a href="#L883">883</a>				List&lt;String&gt; updatedDefinitions = new ArrayList&lt;&gt;(this.beanDefinitionNames);
+</p><p><a href="#L884">884</a>				updatedDefinitions.remove(beanName);
+</p><p><a href="#L885">885</a>				this.beanDefinitionNames = updatedDefinitions;
+</p><p><a href="#L886">886</a>			}
+</p><p><a href="#L887">887</a>		}
+</p><p><a href="#L888">888</a>		else {
+</p><p><a href="#L889">889</a>			// Still in startup registration phase
+</p><p><a href="#L890">890</a>			this.beanDefinitionNames.remove(beanName);
+</p><p><a href="#L891">891</a>		}
+</p><p><a href="#L892">892</a>		this.frozenBeanDefinitionNames = null;
+</p><p><a href="#L893">893</a>
+</p><p><a href="#L894">894</a>		resetBeanDefinition(beanName);
+</p><p><a href="#L895">895</a>	}
+</p><p><a href="#L896">896</a>
+</p><p><a href="#L897">897</a>	/**
+</p><p><a href="#L898">898</a>	 * Reset all bean definition caches for the given bean,
+</p><p><a href="#L899">899</a>	 * including the caches of beans that are derived from it.
+</p><p><a href="#L900">900</a>	 * @param beanName the name of the bean to reset
+</p><p><a href="#L901">901</a>	 */
+</p><p><a href="#L902">902</a>	protected void resetBeanDefinition(String beanName) {
+</p><p><a href="#L903">903</a>		// Remove the merged bean definition for the given bean, if already created.
+</p><p><a href="#L904">904</a>		clearMergedBeanDefinition(beanName);
+</p><p><a href="#L905">905</a>
+</p><p><a href="#L906">906</a>		// Remove corresponding bean from singleton cache, if any. Shouldn't usually
+</p><p><a href="#L907">907</a>		// be necessary, rather just meant for overriding a context's default beans
+</p><p><a href="#L908">908</a>		// (e.g. the default StaticMessageSource in a StaticApplicationContext).
+</p><p><a href="#L909">909</a>		destroySingleton(beanName);
+</p><p><a href="#L910">910</a>
+</p><p><a href="#L911">911</a>		// Reset all bean definitions that have the given bean as parent (recursively).
+</p><p><a href="#L912">912</a>		for (String bdName : this.beanDefinitionNames) {
+</p><p><a href="#L913">913</a>			if (!beanName.equals(bdName)) {
+</p><p><a href="#L914">914</a>				BeanDefinition bd = this.beanDefinitionMap.get(bdName);
+</p><p><a href="#L915">915</a>				if (beanName.equals(bd.getParentName())) {
+</p><p><a href="#L916">916</a>					resetBeanDefinition(bdName);
+</p><p><a href="#L917">917</a>				}
+</p><p><a href="#L918">918</a>			}
+</p><p><a href="#L919">919</a>		}
+</p><p><a href="#L920">920</a>	}
+</p><p><a href="#L921">921</a>
+</p><p><a href="#L922">922</a>	/**
+</p><p><a href="#L923">923</a>	 * Only allows alias overriding if bean definition overriding is allowed.
+</p><p><a href="#L924">924</a>	 */
+</p><p><a href="#L925">925</a>	@Override
+</p><p><a href="#L926">926</a>	protected boolean allowAliasOverriding() {
+</p><p><a href="#L927">927</a>		return isAllowBeanDefinitionOverriding();
+</p><p><a href="#L928">928</a>	}
+</p><p><a href="#L929">929</a>
+</p><p><a href="#L930">930</a>	@Override
+</p><p><a href="#L931">931</a>	public void registerSingleton(String beanName, Object singletonObject) throws IllegalStateException {
+</p><p><a href="#L932">932</a>		super.registerSingleton(beanName, singletonObject);
+</p><p><a href="#L933">933</a>
+</p><p><a href="#L934">934</a>		if (hasBeanCreationStarted()) {
+</p><p><a href="#L935">935</a>			// Cannot modify startup-time collection elements anymore (for stable iteration)
+</p><p><a href="#L936">936</a>			synchronized (this.beanDefinitionMap) {
+</p><p><a href="#L937">937</a>				if (!this.beanDefinitionMap.containsKey(beanName)) {
+</p><p><a href="#L938">938</a>					Set&lt;String&gt; updatedSingletons = new LinkedHashSet&lt;&gt;(this.manualSingletonNames.size() + 1);
+</p><p><a href="#L939">939</a>					updatedSingletons.addAll(this.manualSingletonNames);
+</p><p><a href="#L940">940</a>					updatedSingletons.add(beanName);
+</p><p><a href="#L941">941</a>					this.manualSingletonNames = updatedSingletons;
+</p><p><a href="#L942">942</a>				}
+</p><p><a href="#L943">943</a>			}
+</p><p><a href="#L944">944</a>		}
+</p><p><a href="#L945">945</a>		else {
+</p><p><a href="#L946">946</a>			// Still in startup registration phase
+</p><p><a href="#L947">947</a>			if (!this.beanDefinitionMap.containsKey(beanName)) {
+</p><p><a href="#L948">948</a>				this.manualSingletonNames.add(beanName);
+</p><p><a href="#L949">949</a>			}
+</p><p><a href="#L950">950</a>		}
+</p><p><a href="#L951">951</a>
+</p><p><a href="#L952">952</a>		clearByTypeCache();
+</p><p><a href="#L953">953</a>	}
+</p><p><a href="#L954">954</a>
+</p><p><a href="#L955">955</a>	@Override
+</p><p><a href="#L956">956</a>	public void destroySingleton(String beanName) {
+</p><p><a href="#L957">957</a>		super.destroySingleton(beanName);
+</p><p><a href="#L958">958</a>		this.manualSingletonNames.remove(beanName);
+</p><p><a href="#L959">959</a>		clearByTypeCache();
+</p><p><a href="#L960">960</a>	}
+</p><p><a href="#L961">961</a>
+</p><p><a href="#L962">962</a>	@Override
+</p><p><a href="#L963">963</a>	public void destroySingletons() {
+</p><p><a href="#L964">964</a>		super.destroySingletons();
+</p><p><a href="#L965">965</a>		this.manualSingletonNames.clear();
+</p><p><a href="#L966">966</a>		clearByTypeCache();
+</p><p><a href="#L967">967</a>	}
+</p><p><a href="#L968">968</a>
+</p><p><a href="#L969">969</a>	/**
+</p><p><a href="#L970">970</a>	 * Remove any assumptions about by-type mappings.
+</p><p><a href="#L971">971</a>	 */
+</p><p><a href="#L972">972</a>	private void clearByTypeCache() {
+</p><p><a href="#L973">973</a>		this.allBeanNamesByType.clear();
+</p><p><a href="#L974">974</a>		this.singletonBeanNamesByType.clear();
+</p><p><a href="#L975">975</a>	}
+</p><p><a href="#L976">976</a>
+</p><p><a href="#L977">977</a>
+</p><p><a href="#L978">978</a>	//---------------------------------------------------------------------
+</p><p><a href="#L979">979</a>	// Dependency resolution functionality
+</p><p><a href="#L980">980</a>	//---------------------------------------------------------------------
+</p><p><a href="#L981">981</a>
+</p><p><a href="#L982">982</a>	@Override
+</p><p><a href="#L983">983</a>	public &lt;T&gt; NamedBeanHolder&lt;T&gt; resolveNamedBean(Class&lt;T&gt; requiredType) throws BeansException {
+</p><p><a href="#L984">984</a>		NamedBeanHolder&lt;T&gt; namedBean = resolveNamedBean(requiredType, (Object[]) null);
+</p><p><a href="#L985">985</a>		if (namedBean != null) {
+</p><p><a href="#L986">986</a>			return namedBean;
+</p><p><a href="#L987">987</a>		}
+</p><p><a href="#L988">988</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L989">989</a>		if (parent instanceof AutowireCapableBeanFactory) {
+</p><p><a href="#L990">990</a>			return ((AutowireCapableBeanFactory) parent).resolveNamedBean(requiredType);
+</p><p><a href="#L991">991</a>		}
+</p><p><a href="#L992">992</a>		throw new NoSuchBeanDefinitionException(requiredType);
+</p><p><a href="#L993">993</a>	}
+</p><p><a href="#L994">994</a>
+</p><p><a href="#L995">995</a>	@SuppressWarnings("unchecked")
+</p><p><a href="#L996">996</a>	@Nullable
+</p><p><a href="#L997">997</a>	private &lt;T&gt; NamedBeanHolder&lt;T&gt; resolveNamedBean(Class&lt;T&gt; requiredType, @Nullable Object... args) throws BeansException {
+</p><p><a href="#L998">998</a>		Assert.notNull(requiredType, "Required type must not be null");
+</p><p><a href="#L999">999</a>		String[] candidateNames = getBeanNamesForType(requiredType);
+</p><p><a href="#L1000">1000</a>
+</p><p><a href="#L1001">1001</a>		if (candidateNames.length &gt; 1) {
+</p><p><a href="#L1002">1002</a>			List&lt;String&gt; autowireCandidates = new ArrayList&lt;&gt;(candidateNames.length);
+</p><p><a href="#L1003">1003</a>			for (String beanName : candidateNames) {
+</p><p><a href="#L1004">1004</a>				if (!containsBeanDefinition(beanName) || getBeanDefinition(beanName).isAutowireCandidate()) {
+</p><p><a href="#L1005">1005</a>					autowireCandidates.add(beanName);
+</p><p><a href="#L1006">1006</a>				}
+</p><p><a href="#L1007">1007</a>			}
+</p><p><a href="#L1008">1008</a>			if (!autowireCandidates.isEmpty()) {
+</p><p><a href="#L1009">1009</a>				candidateNames = StringUtils.toStringArray(autowireCandidates);
+</p><p><a href="#L1010">1010</a>			}
+</p><p><a href="#L1011">1011</a>		}
+</p><p><a href="#L1012">1012</a>
+</p><p><a href="#L1013">1013</a>		if (candidateNames.length == 1) {
+</p><p><a href="#L1014">1014</a>			String beanName = candidateNames[0];
+</p><p><a href="#L1015">1015</a>			return new NamedBeanHolder&lt;&gt;(beanName, getBean(beanName, requiredType, args));
+</p><p><a href="#L1016">1016</a>		}
+</p><p><a href="#L1017">1017</a>		else if (candidateNames.length &gt; 1) {
+</p><p><a href="#L1018">1018</a>			Map&lt;String, Object&gt; candidates = new LinkedHashMap&lt;&gt;(candidateNames.length);
+</p><p><a href="#L1019">1019</a>			for (String beanName : candidateNames) {
+</p><p><a href="#L1020">1020</a>				if (containsSingleton(beanName) &amp;&amp; args == null) {
+</p><p><a href="#L1021">1021</a>					Object beanInstance = getBean(beanName);
+</p><p><a href="#L1022">1022</a>					candidates.put(beanName, (beanInstance instanceof NullBean ? null : beanInstance));
+</p><p><a href="#L1023">1023</a>				}
+</p><p><a href="#L1024">1024</a>				else {
+</p><p><a href="#L1025">1025</a>					candidates.put(beanName, getType(beanName));
+</p><p><a href="#L1026">1026</a>				}
+</p><p><a href="#L1027">1027</a>			}
+</p><p><a href="#L1028">1028</a>			String candidateName = determinePrimaryCandidate(candidates, requiredType);
+</p><p><a href="#L1029">1029</a>			if (candidateName == null) {
+</p><p><a href="#L1030">1030</a>				candidateName = determineHighestPriorityCandidate(candidates, requiredType);
+</p><p><a href="#L1031">1031</a>			}
+</p><p><a href="#L1032">1032</a>			if (candidateName != null) {
+</p><p><a href="#L1033">1033</a>				Object beanInstance = candidates.get(candidateName);
+</p><p><a href="#L1034">1034</a>				if (beanInstance == null || beanInstance instanceof Class) {
+</p><p><a href="#L1035">1035</a>					beanInstance = getBean(candidateName, requiredType, args);
+</p><p><a href="#L1036">1036</a>				}
+</p><p><a href="#L1037">1037</a>				return new NamedBeanHolder&lt;&gt;(candidateName, (T) beanInstance);
+</p><p><a href="#L1038">1038</a>			}
+</p><p><a href="#L1039">1039</a>			throw new NoUniqueBeanDefinitionException(requiredType, candidates.keySet());
+</p><p><a href="#L1040">1040</a>		}
+</p><p><a href="#L1041">1041</a>
+</p><p><a href="#L1042">1042</a>		return null;
+</p><p><a href="#L1043">1043</a>	}
+</p><p><a href="#L1044">1044</a>
+</p><p><a href="#L1045">1045</a>	@Override
+</p><p><a href="#L1046">1046</a>	@Nullable
+</p><p><a href="#L1047">1047</a>	public Object resolveDependency(DependencyDescriptor descriptor, @Nullable String requestingBeanName,
+</p><p><a href="#L1048">1048</a>			@Nullable Set&lt;String&gt; autowiredBeanNames, @Nullable TypeConverter typeConverter) throws BeansException {
+</p><p><a href="#L1049">1049</a>
+</p><p><a href="#L1050">1050</a>		descriptor.initParameterNameDiscovery(getParameterNameDiscoverer());
+</p><p><a href="#L1051">1051</a>		if (Optional.class == descriptor.getDependencyType()) {
+</p><p><a href="#L1052">1052</a>			return createOptionalDependency(descriptor, requestingBeanName);
+</p><p><a href="#L1053">1053</a>		}
+</p><p><a href="#L1054">1054</a>		else if (ObjectFactory.class == descriptor.getDependencyType() ||
+</p><p><a href="#L1055">1055</a>				ObjectProvider.class == descriptor.getDependencyType()) {
+</p><p><a href="#L1056">1056</a>			return new DependencyObjectProvider(descriptor, requestingBeanName);
+</p><p><a href="#L1057">1057</a>		}
+</p><p><a href="#L1058">1058</a>		else if (javaxInjectProviderClass == descriptor.getDependencyType()) {
+</p><p><a href="#L1059">1059</a>			return new Jsr330ProviderFactory().createDependencyProvider(descriptor, requestingBeanName);
+</p><p><a href="#L1060">1060</a>		}
+</p><p><a href="#L1061">1061</a>		else {
+</p><p><a href="#L1062">1062</a>			Object result = getAutowireCandidateResolver().getLazyResolutionProxyIfNecessary(
+</p><p><a href="#L1063">1063</a>					descriptor, requestingBeanName);
+</p><p><a href="#L1064">1064</a>			if (result == null) {
+</p><p><a href="#L1065">1065</a>				result = doResolveDependency(descriptor, requestingBeanName, autowiredBeanNames, typeConverter);
+</p><p><a href="#L1066">1066</a>			}
+</p><p><a href="#L1067">1067</a>			return result;
+</p><p><a href="#L1068">1068</a>		}
+</p><p><a href="#L1069">1069</a>	}
+</p><p><a href="#L1070">1070</a>
+</p><p><a href="#L1071">1071</a>	@Nullable
+</p><p><a href="#L1072">1072</a>	public Object doResolveDependency(DependencyDescriptor descriptor, @Nullable String beanName,
+</p><p><a href="#L1073">1073</a>			@Nullable Set&lt;String&gt; autowiredBeanNames, @Nullable TypeConverter typeConverter) throws BeansException {
+</p><p><a href="#L1074">1074</a>
+</p><p><a href="#L1075">1075</a>		InjectionPoint previousInjectionPoint = ConstructorResolver.setCurrentInjectionPoint(descriptor);
+</p><p><a href="#L1076">1076</a>		try {
+</p><p><a href="#L1077">1077</a>			Object shortcut = descriptor.resolveShortcut(this);
+</p><p><a href="#L1078">1078</a>			if (shortcut != null) {
+</p><p><a href="#L1079">1079</a>				return shortcut;
+</p><p><a href="#L1080">1080</a>			}
+</p><p><a href="#L1081">1081</a>
+</p><p><a href="#L1082">1082</a>			Class&lt;?&gt; type = descriptor.getDependencyType();
+</p><p><a href="#L1083">1083</a>			Object value = getAutowireCandidateResolver().getSuggestedValue(descriptor);
+</p><p><a href="#L1084">1084</a>			if (value != null) {
+</p><p><a href="#L1085">1085</a>				if (value instanceof String) {
+</p><p><a href="#L1086">1086</a>					String strVal = resolveEmbeddedValue((String) value);
+</p><p><a href="#L1087">1087</a>					BeanDefinition bd = (beanName != null &amp;&amp; containsBean(beanName) ? getMergedBeanDefinition(beanName) : null);
+</p><p><a href="#L1088">1088</a>					value = evaluateBeanDefinitionString(strVal, bd);
+</p><p><a href="#L1089">1089</a>				}
+</p><p><a href="#L1090">1090</a>				TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
+</p><p><a href="#L1091">1091</a>				return (descriptor.getField() != null ?
+</p><p><a href="#L1092">1092</a>						converter.convertIfNecessary(value, type, descriptor.getField()) :
+</p><p><a href="#L1093">1093</a>						converter.convertIfNecessary(value, type, descriptor.getMethodParameter()));
+</p><p><a href="#L1094">1094</a>			}
+</p><p><a href="#L1095">1095</a>
+</p><p><a href="#L1096">1096</a>			Object multipleBeans = resolveMultipleBeans(descriptor, beanName, autowiredBeanNames, typeConverter);
+</p><p><a href="#L1097">1097</a>			if (multipleBeans != null) {
+</p><p><a href="#L1098">1098</a>				return multipleBeans;
+</p><p><a href="#L1099">1099</a>			}
+</p><p><a href="#L1100">1100</a>
+</p><p><a href="#L1101">1101</a>			Map&lt;String, Object&gt; matchingBeans = findAutowireCandidates(beanName, type, descriptor);
+</p><p><a href="#L1102">1102</a>			if (matchingBeans.isEmpty()) {
+</p><p><a href="#L1103">1103</a>				if (isRequired(descriptor)) {
+</p><p><a href="#L1104">1104</a>					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
+</p><p><a href="#L1105">1105</a>				}
+</p><p><a href="#L1106">1106</a>				return null;
+</p><p><a href="#L1107">1107</a>			}
+</p><p><a href="#L1108">1108</a>
+</p><p><a href="#L1109">1109</a>			String autowiredBeanName;
+</p><p><a href="#L1110">1110</a>			Object instanceCandidate;
+</p><p><a href="#L1111">1111</a>
+</p><p><a href="#L1112">1112</a>			if (matchingBeans.size() &gt; 1) {
+</p><p><a href="#L1113">1113</a>				autowiredBeanName = determineAutowireCandidate(matchingBeans, descriptor);
+</p><p><a href="#L1114">1114</a>				if (autowiredBeanName == null) {
+</p><p><a href="#L1115">1115</a>					if (isRequired(descriptor) || !indicatesMultipleBeans(type)) {
+</p><p><a href="#L1116">1116</a>						return descriptor.resolveNotUnique(type, matchingBeans);
+</p><p><a href="#L1117">1117</a>					}
+</p><p><a href="#L1118">1118</a>					else {
+</p><p><a href="#L1119">1119</a>						// In case of an optional Collection/Map, silently ignore a non-unique case:
+</p><p><a href="#L1120">1120</a>						// possibly it was meant to be an empty collection of multiple regular beans
+</p><p><a href="#L1121">1121</a>						// (before 4.3 in particular when we didn't even look for collection beans).
+</p><p><a href="#L1122">1122</a>						return null;
+</p><p><a href="#L1123">1123</a>					}
+</p><p><a href="#L1124">1124</a>				}
+</p><p><a href="#L1125">1125</a>				instanceCandidate = matchingBeans.get(autowiredBeanName);
+</p><p><a href="#L1126">1126</a>			}
+</p><p><a href="#L1127">1127</a>			else {
+</p><p><a href="#L1128">1128</a>				// We have exactly one match.
+</p><p><a href="#L1129">1129</a>				Map.Entry&lt;String, Object&gt; entry = matchingBeans.entrySet().iterator().next();
+</p><p><a href="#L1130">1130</a>				autowiredBeanName = entry.getKey();
+</p><p><a href="#L1131">1131</a>				instanceCandidate = entry.getValue();
+</p><p><a href="#L1132">1132</a>			}
+</p><p><a href="#L1133">1133</a>
+</p><p><a href="#L1134">1134</a>			if (autowiredBeanNames != null) {
+</p><p><a href="#L1135">1135</a>				autowiredBeanNames.add(autowiredBeanName);
+</p><p><a href="#L1136">1136</a>			}
+</p><p><a href="#L1137">1137</a>			if (instanceCandidate instanceof Class) {
+</p><p><a href="#L1138">1138</a>				instanceCandidate = descriptor.resolveCandidate(autowiredBeanName, type, this);
+</p><p><a href="#L1139">1139</a>			}
+</p><p><a href="#L1140">1140</a>			Object result = instanceCandidate;
+</p><p><a href="#L1141">1141</a>			if (result instanceof NullBean) {
+</p><p><a href="#L1142">1142</a>				if (isRequired(descriptor)) {
+</p><p><a href="#L1143">1143</a>					raiseNoMatchingBeanFound(type, descriptor.getResolvableType(), descriptor);
+</p><p><a href="#L1144">1144</a>				}
+</p><p><a href="#L1145">1145</a>				result = null;
+</p><p><a href="#L1146">1146</a>			}
+</p><p><a href="#L1147">1147</a>			if (!ClassUtils.isAssignableValue(type, result)) {
+</p><p><a href="#L1148">1148</a>				throw new BeanNotOfRequiredTypeException(autowiredBeanName, type, instanceCandidate.getClass());
+</p><p><a href="#L1149">1149</a>			}
+</p><p><a href="#L1150">1150</a>			return result;
+</p><p><a href="#L1151">1151</a>		}
+</p><p><a href="#L1152">1152</a>		finally {
+</p><p><a href="#L1153">1153</a>			ConstructorResolver.setCurrentInjectionPoint(previousInjectionPoint);
+</p><p><a href="#L1154">1154</a>		}
+</p><p><a href="#L1155">1155</a>	}
+</p><p><a href="#L1156">1156</a>
+</p><p><a href="#L1157">1157</a>	@Nullable
+</p><p><a href="#L1158">1158</a>	private Object resolveMultipleBeans(DependencyDescriptor descriptor, @Nullable String beanName,
+</p><p><a href="#L1159">1159</a>			@Nullable Set&lt;String&gt; autowiredBeanNames, @Nullable TypeConverter typeConverter) {
+</p><p><a href="#L1160">1160</a>
+</p><p><a href="#L1161">1161</a>		Class&lt;?&gt; type = descriptor.getDependencyType();
+</p><p><a href="#L1162">1162</a>		if (type.isArray()) {
+</p><p><a href="#L1163">1163</a>			Class&lt;?&gt; componentType = type.getComponentType();
+</p><p><a href="#L1164">1164</a>			ResolvableType resolvableType = descriptor.getResolvableType();
+</p><p><a href="#L1165">1165</a>			Class&lt;?&gt; resolvedArrayType = resolvableType.resolve();
+</p><p><a href="#L1166">1166</a>			if (resolvedArrayType != null &amp;&amp; resolvedArrayType != type) {
+</p><p><a href="#L1167">1167</a>				type = resolvedArrayType;
+</p><p><a href="#L1168">1168</a>				componentType = resolvableType.getComponentType().resolve();
+</p><p><a href="#L1169">1169</a>			}
+</p><p><a href="#L1170">1170</a>			if (componentType == null) {
+</p><p><a href="#L1171">1171</a>				return null;
+</p><p><a href="#L1172">1172</a>			}
+</p><p><a href="#L1173">1173</a>			Map&lt;String, Object&gt; matchingBeans = findAutowireCandidates(beanName, componentType,
+</p><p><a href="#L1174">1174</a>					new MultiElementDescriptor(descriptor));
+</p><p><a href="#L1175">1175</a>			if (matchingBeans.isEmpty()) {
+</p><p><a href="#L1176">1176</a>				return null;
+</p><p><a href="#L1177">1177</a>			}
+</p><p><a href="#L1178">1178</a>			if (autowiredBeanNames != null) {
+</p><p><a href="#L1179">1179</a>				autowiredBeanNames.addAll(matchingBeans.keySet());
+</p><p><a href="#L1180">1180</a>			}
+</p><p><a href="#L1181">1181</a>			TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
+</p><p><a href="#L1182">1182</a>			Object result = converter.convertIfNecessary(matchingBeans.values(), type);
+</p><p><a href="#L1183">1183</a>			if (getDependencyComparator() != null &amp;&amp; result instanceof Object[]) {
+</p><p><a href="#L1184">1184</a>				Arrays.sort((Object[]) result, adaptDependencyComparator(matchingBeans));
+</p><p><a href="#L1185">1185</a>			}
+</p><p><a href="#L1186">1186</a>			return result;
+</p><p><a href="#L1187">1187</a>		}
+</p><p><a href="#L1188">1188</a>		else if (Collection.class.isAssignableFrom(type) &amp;&amp; type.isInterface()) {
+</p><p><a href="#L1189">1189</a>			Class&lt;?&gt; elementType = descriptor.getResolvableType().asCollection().resolveGeneric();
+</p><p><a href="#L1190">1190</a>			if (elementType == null) {
+</p><p><a href="#L1191">1191</a>				return null;
+</p><p><a href="#L1192">1192</a>			}
+</p><p><a href="#L1193">1193</a>			Map&lt;String, Object&gt; matchingBeans = findAutowireCandidates(beanName, elementType,
+</p><p><a href="#L1194">1194</a>					new MultiElementDescriptor(descriptor));
+</p><p><a href="#L1195">1195</a>			if (matchingBeans.isEmpty()) {
+</p><p><a href="#L1196">1196</a>				return null;
+</p><p><a href="#L1197">1197</a>			}
+</p><p><a href="#L1198">1198</a>			if (autowiredBeanNames != null) {
+</p><p><a href="#L1199">1199</a>				autowiredBeanNames.addAll(matchingBeans.keySet());
+</p><p><a href="#L1200">1200</a>			}
+</p><p><a href="#L1201">1201</a>			TypeConverter converter = (typeConverter != null ? typeConverter : getTypeConverter());
+</p><p><a href="#L1202">1202</a>			Object result = converter.convertIfNecessary(matchingBeans.values(), type);
+</p><p><a href="#L1203">1203</a>			if (getDependencyComparator() != null &amp;&amp; result instanceof List) {
+</p><p><a href="#L1204">1204</a>				((List&lt;?&gt;) result).sort(adaptDependencyComparator(matchingBeans));
+</p><p><a href="#L1205">1205</a>			}
+</p><p><a href="#L1206">1206</a>			return result;
+</p><p><a href="#L1207">1207</a>		}
+</p><p><a href="#L1208">1208</a>		else if (Map.class == type) {
+</p><p><a href="#L1209">1209</a>			ResolvableType mapType = descriptor.getResolvableType().asMap();
+</p><p><a href="#L1210">1210</a>			Class&lt;?&gt; keyType = mapType.resolveGeneric(0);
+</p><p><a href="#L1211">1211</a>			if (String.class != keyType) {
+</p><p><a href="#L1212">1212</a>				return null;
+</p><p><a href="#L1213">1213</a>			}
+</p><p><a href="#L1214">1214</a>			Class&lt;?&gt; valueType = mapType.resolveGeneric(1);
+</p><p><a href="#L1215">1215</a>			if (valueType == null) {
+</p><p><a href="#L1216">1216</a>				return null;
+</p><p><a href="#L1217">1217</a>			}
+</p><p><a href="#L1218">1218</a>			Map&lt;String, Object&gt; matchingBeans = findAutowireCandidates(beanName, valueType,
+</p><p><a href="#L1219">1219</a>					new MultiElementDescriptor(descriptor));
+</p><p><a href="#L1220">1220</a>			if (matchingBeans.isEmpty()) {
+</p><p><a href="#L1221">1221</a>				return null;
+</p><p><a href="#L1222">1222</a>			}
+</p><p><a href="#L1223">1223</a>			if (autowiredBeanNames != null) {
+</p><p><a href="#L1224">1224</a>				autowiredBeanNames.addAll(matchingBeans.keySet());
+</p><p><a href="#L1225">1225</a>			}
+</p><p><a href="#L1226">1226</a>			return matchingBeans;
+</p><p><a href="#L1227">1227</a>		}
+</p><p><a href="#L1228">1228</a>		else {
+</p><p><a href="#L1229">1229</a>			return null;
+</p><p><a href="#L1230">1230</a>		}
+</p><p><a href="#L1231">1231</a>	}
+</p><p><a href="#L1232">1232</a>
+</p><p><a href="#L1233">1233</a>	private boolean isRequired(DependencyDescriptor descriptor) {
+</p><p><a href="#L1234">1234</a>		return getAutowireCandidateResolver().isRequired(descriptor);
+</p><p><a href="#L1235">1235</a>	}
+</p><p><a href="#L1236">1236</a>
+</p><p><a href="#L1237">1237</a>	private boolean indicatesMultipleBeans(Class&lt;?&gt; type) {
+</p><p><a href="#L1238">1238</a>		return (type.isArray() || (type.isInterface() &amp;&amp;
+</p><p><a href="#L1239">1239</a>				(Collection.class.isAssignableFrom(type) || Map.class.isAssignableFrom(type))));
+</p><p><a href="#L1240">1240</a>	}
+</p><p><a href="#L1241">1241</a>
+</p><p><a href="#L1242">1242</a>	@Nullable
+</p><p><a href="#L1243">1243</a>	private Comparator&lt;Object&gt; adaptDependencyComparator(Map&lt;String, Object&gt; matchingBeans) {
+</p><p><a href="#L1244">1244</a>		Comparator&lt;Object&gt; comparator = getDependencyComparator();
+</p><p><a href="#L1245">1245</a>		if (comparator instanceof OrderComparator) {
+</p><p><a href="#L1246">1246</a>			return ((OrderComparator) comparator).withSourceProvider(
+</p><p><a href="#L1247">1247</a>					createFactoryAwareOrderSourceProvider(matchingBeans));
+</p><p><a href="#L1248">1248</a>		}
+</p><p><a href="#L1249">1249</a>		else {
+</p><p><a href="#L1250">1250</a>			return comparator;
+</p><p><a href="#L1251">1251</a>		}
+</p><p><a href="#L1252">1252</a>	}
+</p><p><a href="#L1253">1253</a>
+</p><p><a href="#L1254">1254</a>	private FactoryAwareOrderSourceProvider createFactoryAwareOrderSourceProvider(Map&lt;String, Object&gt; beans) {
+</p><p><a href="#L1255">1255</a>		IdentityHashMap&lt;Object, String&gt; instancesToBeanNames = new IdentityHashMap&lt;&gt;();
+</p><p><a href="#L1256">1256</a>		beans.forEach((beanName, instance) -&gt; instancesToBeanNames.put(instance, beanName));
+</p><p><a href="#L1257">1257</a>		return new FactoryAwareOrderSourceProvider(instancesToBeanNames);
+</p><p><a href="#L1258">1258</a>	}
+</p><p><a href="#L1259">1259</a>
+</p><p><a href="#L1260">1260</a>	/**
+</p><p><a href="#L1261">1261</a>	 * Find bean instances that match the required type.
+</p><p><a href="#L1262">1262</a>	 * Called during autowiring for the specified bean.
+</p><p><a href="#L1263">1263</a>	 * @param beanName the name of the bean that is about to be wired
+</p><p><a href="#L1264">1264</a>	 * @param requiredType the actual type of bean to look for
+</p><p><a href="#L1265">1265</a>	 * (may be an array component type or collection element type)
+</p><p><a href="#L1266">1266</a>	 * @param descriptor the descriptor of the dependency to resolve
+</p><p><a href="#L1267">1267</a>	 * @return a Map of candidate names and candidate instances that match
+</p><p><a href="#L1268">1268</a>	 * the required type (never {@code null})
+</p><p><a href="#L1269">1269</a>	 * @throws BeansException in case of errors
+</p><p><a href="#L1270">1270</a>	 * @see #autowireByType
+</p><p><a href="#L1271">1271</a>	 * @see #autowireConstructor
+</p><p><a href="#L1272">1272</a>	 */
+</p><p><a href="#L1273">1273</a>	protected Map&lt;String, Object&gt; findAutowireCandidates(
+</p><p><a href="#L1274">1274</a>			@Nullable String beanName, Class&lt;?&gt; requiredType, DependencyDescriptor descriptor) {
+</p><p><a href="#L1275">1275</a>
+</p><p><a href="#L1276">1276</a>		String[] candidateNames = BeanFactoryUtils.beanNamesForTypeIncludingAncestors(
+</p><p><a href="#L1277">1277</a>				this, requiredType, true, descriptor.isEager());
+</p><p><a href="#L1278">1278</a>		Map&lt;String, Object&gt; result = new LinkedHashMap&lt;&gt;(candidateNames.length);
+</p><p><a href="#L1279">1279</a>		for (Class&lt;?&gt; autowiringType : this.resolvableDependencies.keySet()) {
+</p><p><a href="#L1280">1280</a>			if (autowiringType.isAssignableFrom(requiredType)) {
+</p><p><a href="#L1281">1281</a>				Object autowiringValue = this.resolvableDependencies.get(autowiringType);
+</p><p><a href="#L1282">1282</a>				autowiringValue = AutowireUtils.resolveAutowiringValue(autowiringValue, requiredType);
+</p><p><a href="#L1283">1283</a>				if (requiredType.isInstance(autowiringValue)) {
+</p><p><a href="#L1284">1284</a>					result.put(ObjectUtils.identityToString(autowiringValue), autowiringValue);
+</p><p><a href="#L1285">1285</a>					break;
+</p><p><a href="#L1286">1286</a>				}
+</p><p><a href="#L1287">1287</a>			}
+</p><p><a href="#L1288">1288</a>		}
+</p><p><a href="#L1289">1289</a>		for (String candidate : candidateNames) {
+</p><p><a href="#L1290">1290</a>			if (!isSelfReference(beanName, candidate) &amp;&amp; isAutowireCandidate(candidate, descriptor)) {
+</p><p><a href="#L1291">1291</a>				addCandidateEntry(result, candidate, descriptor, requiredType);
+</p><p><a href="#L1292">1292</a>			}
+</p><p><a href="#L1293">1293</a>		}
+</p><p><a href="#L1294">1294</a>		if (result.isEmpty() &amp;&amp; !indicatesMultipleBeans(requiredType)) {
+</p><p><a href="#L1295">1295</a>			// Consider fallback matches if the first pass failed to find anything...
+</p><p><a href="#L1296">1296</a>			DependencyDescriptor fallbackDescriptor = descriptor.forFallbackMatch();
+</p><p><a href="#L1297">1297</a>			for (String candidate : candidateNames) {
+</p><p><a href="#L1298">1298</a>				if (!isSelfReference(beanName, candidate) &amp;&amp; isAutowireCandidate(candidate, fallbackDescriptor)) {
+</p><p><a href="#L1299">1299</a>					addCandidateEntry(result, candidate, descriptor, requiredType);
+</p><p><a href="#L1300">1300</a>				}
+</p><p><a href="#L1301">1301</a>			}
+</p><p><a href="#L1302">1302</a>			if (result.isEmpty()) {
+</p><p><a href="#L1303">1303</a>				// Consider self references as a final pass...
+</p><p><a href="#L1304">1304</a>				// but in the case of a dependency collection, not the very same bean itself.
+</p><p><a href="#L1305">1305</a>				for (String candidate : candidateNames) {
+</p><p><a href="#L1306">1306</a>					if (isSelfReference(beanName, candidate) &amp;&amp;
+</p><p><a href="#L1307">1307</a>							(!(descriptor instanceof MultiElementDescriptor) || !beanName.equals(candidate)) &amp;&amp;
+</p><p><a href="#L1308">1308</a>							isAutowireCandidate(candidate, fallbackDescriptor)) {
+</p><p><a href="#L1309">1309</a>						addCandidateEntry(result, candidate, descriptor, requiredType);
+</p><p><a href="#L1310">1310</a>					}
+</p><p><a href="#L1311">1311</a>				}
+</p><p><a href="#L1312">1312</a>			}
+</p><p><a href="#L1313">1313</a>		}
+</p><p><a href="#L1314">1314</a>		return result;
+</p><p><a href="#L1315">1315</a>	}
+</p><p><a href="#L1316">1316</a>
+</p><p><a href="#L1317">1317</a>	/**
+</p><p><a href="#L1318">1318</a>	 * Add an entry to the candidate map: a bean instance if available or just the resolved
+</p><p><a href="#L1319">1319</a>	 * type, preventing early bean initialization ahead of primary candidate selection.
+</p><p><a href="#L1320">1320</a>	 */
+</p><p><a href="#L1321">1321</a>	private void addCandidateEntry(Map&lt;String, Object&gt; candidates, String candidateName,
+</p><p><a href="#L1322">1322</a>			DependencyDescriptor descriptor, Class&lt;?&gt; requiredType) {
+</p><p><a href="#L1323">1323</a>
+</p><p><a href="#L1324">1324</a>		if (descriptor instanceof MultiElementDescriptor || containsSingleton(candidateName)) {
+</p><p><a href="#L1325">1325</a>			Object beanInstance = descriptor.resolveCandidate(candidateName, requiredType, this);
+</p><p><a href="#L1326">1326</a>			candidates.put(candidateName, (beanInstance instanceof NullBean ? null : beanInstance));
+</p><p><a href="#L1327">1327</a>		}
+</p><p><a href="#L1328">1328</a>		else {
+</p><p><a href="#L1329">1329</a>			candidates.put(candidateName, getType(candidateName));
+</p><p><a href="#L1330">1330</a>		}
+</p><p><a href="#L1331">1331</a>	}
+</p><p><a href="#L1332">1332</a>
+</p><p><a href="#L1333">1333</a>	/**
+</p><p><a href="#L1334">1334</a>	 * Determine the autowire candidate in the given set of beans.
+</p><p><a href="#L1335">1335</a>	 * &lt;p&gt;Looks for {@code @Primary} and {@code @Priority} (in that order).
+</p><p><a href="#L1336">1336</a>	 * @param candidates a Map of candidate names and candidate instances
+</p><p><a href="#L1337">1337</a>	 * that match the required type, as returned by {@link #findAutowireCandidates}
+</p><p><a href="#L1338">1338</a>	 * @param descriptor the target dependency to match against
+</p><p><a href="#L1339">1339</a>	 * @return the name of the autowire candidate, or {@code null} if none found
+</p><p><a href="#L1340">1340</a>	 */
+</p><p><a href="#L1341">1341</a>	@Nullable
+</p><p><a href="#L1342">1342</a>	protected String determineAutowireCandidate(Map&lt;String, Object&gt; candidates, DependencyDescriptor descriptor) {
+</p><p><a href="#L1343">1343</a>		Class&lt;?&gt; requiredType = descriptor.getDependencyType();
+</p><p><a href="#L1344">1344</a>		String primaryCandidate = determinePrimaryCandidate(candidates, requiredType);
+</p><p><a href="#L1345">1345</a>		if (primaryCandidate != null) {
+</p><p><a href="#L1346">1346</a>			return primaryCandidate;
+</p><p><a href="#L1347">1347</a>		}
+</p><p><a href="#L1348">1348</a>		String priorityCandidate = determineHighestPriorityCandidate(candidates, requiredType);
+</p><p><a href="#L1349">1349</a>		if (priorityCandidate != null) {
+</p><p><a href="#L1350">1350</a>			return priorityCandidate;
+</p><p><a href="#L1351">1351</a>		}
+</p><p><a href="#L1352">1352</a>		// Fallback
+</p><p><a href="#L1353">1353</a>		for (Map.Entry&lt;String, Object&gt; entry : candidates.entrySet()) {
+</p><p><a href="#L1354">1354</a>			String candidateName = entry.getKey();
+</p><p><a href="#L1355">1355</a>			Object beanInstance = entry.getValue();
+</p><p><a href="#L1356">1356</a>			if ((beanInstance != null &amp;&amp; this.resolvableDependencies.containsValue(beanInstance)) ||
+</p><p><a href="#L1357">1357</a>					matchesBeanName(candidateName, descriptor.getDependencyName())) {
+</p><p><a href="#L1358">1358</a>				return candidateName;
+</p><p><a href="#L1359">1359</a>			}
+</p><p><a href="#L1360">1360</a>		}
+</p><p><a href="#L1361">1361</a>		return null;
+</p><p><a href="#L1362">1362</a>	}
+</p><p><a href="#L1363">1363</a>
+</p><p><a href="#L1364">1364</a>	/**
+</p><p><a href="#L1365">1365</a>	 * Determine the primary candidate in the given set of beans.
+</p><p><a href="#L1366">1366</a>	 * @param candidates a Map of candidate names and candidate instances
+</p><p><a href="#L1367">1367</a>	 * (or candidate classes if not created yet) that match the required type
+</p><p><a href="#L1368">1368</a>	 * @param requiredType the target dependency type to match against
+</p><p><a href="#L1369">1369</a>	 * @return the name of the primary candidate, or {@code null} if none found
+</p><p><a href="#L1370">1370</a>	 * @see #isPrimary(String, Object)
+</p><p><a href="#L1371">1371</a>	 */
+</p><p><a href="#L1372">1372</a>	@Nullable
+</p><p><a href="#L1373">1373</a>	protected String determinePrimaryCandidate(Map&lt;String, Object&gt; candidates, Class&lt;?&gt; requiredType) {
+</p><p><a href="#L1374">1374</a>		String primaryBeanName = null;
+</p><p><a href="#L1375">1375</a>		for (Map.Entry&lt;String, Object&gt; entry : candidates.entrySet()) {
+</p><p><a href="#L1376">1376</a>			String candidateBeanName = entry.getKey();
+</p><p><a href="#L1377">1377</a>			Object beanInstance = entry.getValue();
+</p><p><a href="#L1378">1378</a>			if (isPrimary(candidateBeanName, beanInstance)) {
+</p><p><a href="#L1379">1379</a>				if (primaryBeanName != null) {
+</p><p><a href="#L1380">1380</a>					boolean candidateLocal = containsBeanDefinition(candidateBeanName);
+</p><p><a href="#L1381">1381</a>					boolean primaryLocal = containsBeanDefinition(primaryBeanName);
+</p><p><a href="#L1382">1382</a>					if (candidateLocal &amp;&amp; primaryLocal) {
+</p><p><a href="#L1383">1383</a>						throw new NoUniqueBeanDefinitionException(requiredType, candidates.size(),
+</p><p><a href="#L1384">1384</a>								"more than one 'primary' bean found among candidates: " + candidates.keySet());
+</p><p><a href="#L1385">1385</a>					}
+</p><p><a href="#L1386">1386</a>					else if (candidateLocal) {
+</p><p><a href="#L1387">1387</a>						primaryBeanName = candidateBeanName;
+</p><p><a href="#L1388">1388</a>					}
+</p><p><a href="#L1389">1389</a>				}
+</p><p><a href="#L1390">1390</a>				else {
+</p><p><a href="#L1391">1391</a>					primaryBeanName = candidateBeanName;
+</p><p><a href="#L1392">1392</a>				}
+</p><p><a href="#L1393">1393</a>			}
+</p><p><a href="#L1394">1394</a>		}
+</p><p><a href="#L1395">1395</a>		return primaryBeanName;
+</p><p><a href="#L1396">1396</a>	}
+</p><p><a href="#L1397">1397</a>
+</p><p><a href="#L1398">1398</a>	/**
+</p><p><a href="#L1399">1399</a>	 * Determine the candidate with the highest priority in the given set of beans.
+</p><p><a href="#L1400">1400</a>	 * &lt;p&gt;Based on {@code @javax.annotation.Priority}. As defined by the related
+</p><p><a href="#L1401">1401</a>	 * {@link org.springframework.core.Ordered} interface, the lowest value has
+</p><p><a href="#L1402">1402</a>	 * the highest priority.
+</p><p><a href="#L1403">1403</a>	 * @param candidates a Map of candidate names and candidate instances
+</p><p><a href="#L1404">1404</a>	 * (or candidate classes if not created yet) that match the required type
+</p><p><a href="#L1405">1405</a>	 * @param requiredType the target dependency type to match against
+</p><p><a href="#L1406">1406</a>	 * @return the name of the candidate with the highest priority,
+</p><p><a href="#L1407">1407</a>	 * or {@code null} if none found
+</p><p><a href="#L1408">1408</a>	 * @see #getPriority(Object)
+</p><p><a href="#L1409">1409</a>	 */
+</p><p><a href="#L1410">1410</a>	@Nullable
+</p><p><a href="#L1411">1411</a>	protected String determineHighestPriorityCandidate(Map&lt;String, Object&gt; candidates, Class&lt;?&gt; requiredType) {
+</p><p><a href="#L1412">1412</a>		String highestPriorityBeanName = null;
+</p><p><a href="#L1413">1413</a>		Integer highestPriority = null;
+</p><p><a href="#L1414">1414</a>		for (Map.Entry&lt;String, Object&gt; entry : candidates.entrySet()) {
+</p><p><a href="#L1415">1415</a>			String candidateBeanName = entry.getKey();
+</p><p><a href="#L1416">1416</a>			Object beanInstance = entry.getValue();
+</p><p><a href="#L1417">1417</a>			if (beanInstance != null) {
+</p><p><a href="#L1418">1418</a>				Integer candidatePriority = getPriority(beanInstance);
+</p><p><a href="#L1419">1419</a>				if (candidatePriority != null) {
+</p><p><a href="#L1420">1420</a>					if (highestPriorityBeanName != null) {
+</p><p><a href="#L1421">1421</a>						if (candidatePriority.equals(highestPriority)) {
+</p><p><a href="#L1422">1422</a>							throw new NoUniqueBeanDefinitionException(requiredType, candidates.size(),
+</p><p><a href="#L1423">1423</a>									"Multiple beans found with the same priority ('" + highestPriority +
+</p><p><a href="#L1424">1424</a>									"') among candidates: " + candidates.keySet());
+</p><p><a href="#L1425">1425</a>						}
+</p><p><a href="#L1426">1426</a>						else if (candidatePriority &lt; highestPriority) {
+</p><p><a href="#L1427">1427</a>							highestPriorityBeanName = candidateBeanName;
+</p><p><a href="#L1428">1428</a>							highestPriority = candidatePriority;
+</p><p><a href="#L1429">1429</a>						}
+</p><p><a href="#L1430">1430</a>					}
+</p><p><a href="#L1431">1431</a>					else {
+</p><p><a href="#L1432">1432</a>						highestPriorityBeanName = candidateBeanName;
+</p><p><a href="#L1433">1433</a>						highestPriority = candidatePriority;
+</p><p><a href="#L1434">1434</a>					}
+</p><p><a href="#L1435">1435</a>				}
+</p><p><a href="#L1436">1436</a>			}
+</p><p><a href="#L1437">1437</a>		}
+</p><p><a href="#L1438">1438</a>		return highestPriorityBeanName;
+</p><p><a href="#L1439">1439</a>	}
+</p><p><a href="#L1440">1440</a>
+</p><p><a href="#L1441">1441</a>	/**
+</p><p><a href="#L1442">1442</a>	 * Return whether the bean definition for the given bean name has been
+</p><p><a href="#L1443">1443</a>	 * marked as a primary bean.
+</p><p><a href="#L1444">1444</a>	 * @param beanName the name of the bean
+</p><p><a href="#L1445">1445</a>	 * @param beanInstance the corresponding bean instance (can be null)
+</p><p><a href="#L1446">1446</a>	 * @return whether the given bean qualifies as primary
+</p><p><a href="#L1447">1447</a>	 */
+</p><p><a href="#L1448">1448</a>	protected boolean isPrimary(String beanName, Object beanInstance) {
+</p><p><a href="#L1449">1449</a>		if (containsBeanDefinition(beanName)) {
+</p><p><a href="#L1450">1450</a>			return getMergedLocalBeanDefinition(beanName).isPrimary();
+</p><p><a href="#L1451">1451</a>		}
+</p><p><a href="#L1452">1452</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L1453">1453</a>		return (parent instanceof DefaultListableBeanFactory &amp;&amp;
+</p><p><a href="#L1454">1454</a>				((DefaultListableBeanFactory) parent).isPrimary(beanName, beanInstance));
+</p><p><a href="#L1455">1455</a>	}
+</p><p><a href="#L1456">1456</a>
+</p><p><a href="#L1457">1457</a>	/**
+</p><p><a href="#L1458">1458</a>	 * Return the priority assigned for the given bean instance by
+</p><p><a href="#L1459">1459</a>	 * the {@code javax.annotation.Priority} annotation.
+</p><p><a href="#L1460">1460</a>	 * &lt;p&gt;The default implementation delegates to the specified
+</p><p><a href="#L1461">1461</a>	 * {@link #setDependencyComparator dependency comparator}, checking its
+</p><p><a href="#L1462">1462</a>	 * {@link OrderComparator#getPriority method} if it is an extension of
+</p><p><a href="#L1463">1463</a>	 * Spring's common {@link OrderComparator} - typically, an
+</p><p><a href="#L1464">1464</a>	 * {@link org.springframework.core.annotation.AnnotationAwareOrderComparator}.
+</p><p><a href="#L1465">1465</a>	 * If no such comparator is present, this implementation returns {@code null}.
+</p><p><a href="#L1466">1466</a>	 * @param beanInstance the bean instance to check (can be {@code null})
+</p><p><a href="#L1467">1467</a>	 * @return the priority assigned to that bean or {@code null} if none is set
+</p><p><a href="#L1468">1468</a>	 */
+</p><p><a href="#L1469">1469</a>	@Nullable
+</p><p><a href="#L1470">1470</a>	protected Integer getPriority(Object beanInstance) {
+</p><p><a href="#L1471">1471</a>		Comparator&lt;Object&gt; comparator = getDependencyComparator();
+</p><p><a href="#L1472">1472</a>		if (comparator instanceof OrderComparator) {
+</p><p><a href="#L1473">1473</a>			return ((OrderComparator) comparator).getPriority(beanInstance);
+</p><p><a href="#L1474">1474</a>		}
+</p><p><a href="#L1475">1475</a>		return null;
+</p><p><a href="#L1476">1476</a>	}
+</p><p><a href="#L1477">1477</a>
+</p><p><a href="#L1478">1478</a>	/**
+</p><p><a href="#L1479">1479</a>	 * Determine whether the given candidate name matches the bean name or the aliases
+</p><p><a href="#L1480">1480</a>	 * stored in this bean definition.
+</p><p><a href="#L1481">1481</a>	 */
+</p><p><a href="#L1482">1482</a>	protected boolean matchesBeanName(String beanName, @Nullable String candidateName) {
+</p><p><a href="#L1483">1483</a>		return (candidateName != null &amp;&amp;
+</p><p><a href="#L1484">1484</a>				(candidateName.equals(beanName) || ObjectUtils.containsElement(getAliases(beanName), candidateName)));
+</p><p><a href="#L1485">1485</a>	}
+</p><p><a href="#L1486">1486</a>
+</p><p><a href="#L1487">1487</a>	/**
+</p><p><a href="#L1488">1488</a>	 * Determine whether the given beanName/candidateName pair indicates a self reference,
+</p><p><a href="#L1489">1489</a>	 * i.e. whether the candidate points back to the original bean or to a factory method
+</p><p><a href="#L1490">1490</a>	 * on the original bean.
+</p><p><a href="#L1491">1491</a>	 */
+</p><p><a href="#L1492">1492</a>	private boolean isSelfReference(@Nullable String beanName, @Nullable String candidateName) {
+</p><p><a href="#L1493">1493</a>		return (beanName != null &amp;&amp; candidateName != null &amp;&amp;
+</p><p><a href="#L1494">1494</a>				(beanName.equals(candidateName) || (containsBeanDefinition(candidateName) &amp;&amp;
+</p><p><a href="#L1495">1495</a>						beanName.equals(getMergedLocalBeanDefinition(candidateName).getFactoryBeanName()))));
+</p><p><a href="#L1496">1496</a>	}
+</p><p><a href="#L1497">1497</a>
+</p><p><a href="#L1498">1498</a>	/**
+</p><p><a href="#L1499">1499</a>	 * Raise a NoSuchBeanDefinitionException or BeanNotOfRequiredTypeException
+</p><p><a href="#L1500">1500</a>	 * for an unresolvable dependency.
+</p><p><a href="#L1501">1501</a>	 */
+</p><p><a href="#L1502">1502</a>	private void raiseNoMatchingBeanFound(
+</p><p><a href="#L1503">1503</a>			Class&lt;?&gt; type, ResolvableType resolvableType, DependencyDescriptor descriptor) throws BeansException {
+</p><p><a href="#L1504">1504</a>
+</p><p><a href="#L1505">1505</a>		checkBeanNotOfRequiredType(type, descriptor);
+</p><p><a href="#L1506">1506</a>
+</p><p><a href="#L1507">1507</a>		throw new NoSuchBeanDefinitionException(resolvableType,
+</p><p><a href="#L1508">1508</a>				"expected at least 1 bean which qualifies as autowire candidate. " +
+</p><p><a href="#L1509">1509</a>				"Dependency annotations: " + ObjectUtils.nullSafeToString(descriptor.getAnnotations()));
+</p><p><a href="#L1510">1510</a>	}
+</p><p><a href="#L1511">1511</a>
+</p><p><a href="#L1512">1512</a>	/**
+</p><p><a href="#L1513">1513</a>	 * Raise a BeanNotOfRequiredTypeException for an unresolvable dependency, if applicable,
+</p><p><a href="#L1514">1514</a>	 * i.e. if the target type of the bean would match but an exposed proxy doesn't.
+</p><p><a href="#L1515">1515</a>	 */
+</p><p><a href="#L1516">1516</a>	private void checkBeanNotOfRequiredType(Class&lt;?&gt; type, DependencyDescriptor descriptor) {
+</p><p><a href="#L1517">1517</a>		for (String beanName : this.beanDefinitionNames) {
+</p><p><a href="#L1518">1518</a>			RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
+</p><p><a href="#L1519">1519</a>			Class&lt;?&gt; targetType = mbd.getTargetType();
+</p><p><a href="#L1520">1520</a>			if (targetType != null &amp;&amp; type.isAssignableFrom(targetType) &amp;&amp;
+</p><p><a href="#L1521">1521</a>					isAutowireCandidate(beanName, mbd, descriptor, getAutowireCandidateResolver())) {
+</p><p><a href="#L1522">1522</a>				// Probably a proxy interfering with target type match -&gt; throw meaningful exception.
+</p><p><a href="#L1523">1523</a>				Object beanInstance = getSingleton(beanName, false);
+</p><p><a href="#L1524">1524</a>				Class&lt;?&gt; beanType = (beanInstance != null &amp;&amp; beanInstance.getClass() != NullBean.class) ?
+</p><p><a href="#L1525">1525</a>						beanInstance.getClass() : predictBeanType(beanName, mbd);
+</p><p><a href="#L1526">1526</a>				if (beanType != null &amp;&amp; !type.isAssignableFrom(beanType)) {
+</p><p><a href="#L1527">1527</a>					throw new BeanNotOfRequiredTypeException(beanName, type, beanType);
+</p><p><a href="#L1528">1528</a>				}
+</p><p><a href="#L1529">1529</a>			}
+</p><p><a href="#L1530">1530</a>		}
+</p><p><a href="#L1531">1531</a>
+</p><p><a href="#L1532">1532</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L1533">1533</a>		if (parent instanceof DefaultListableBeanFactory) {
+</p><p><a href="#L1534">1534</a>			((DefaultListableBeanFactory) parent).checkBeanNotOfRequiredType(type, descriptor);
+</p><p><a href="#L1535">1535</a>		}
+</p><p><a href="#L1536">1536</a>	}
+</p><p><a href="#L1537">1537</a>
+</p><p><a href="#L1538">1538</a>	/**
+</p><p><a href="#L1539">1539</a>	 * Create an {@link Optional} wrapper for the specified dependency.
+</p><p><a href="#L1540">1540</a>	 */
+</p><p><a href="#L1541">1541</a>	private Optional&lt;?&gt; createOptionalDependency(
+</p><p><a href="#L1542">1542</a>			DependencyDescriptor descriptor, @Nullable String beanName, final Object... args) {
+</p><p><a href="#L1543">1543</a>
+</p><p><a href="#L1544">1544</a>		DependencyDescriptor descriptorToUse = new NestedDependencyDescriptor(descriptor) {
+</p><p><a href="#L1545">1545</a>			@Override
+</p><p><a href="#L1546">1546</a>			public boolean isRequired() {
+</p><p><a href="#L1547">1547</a>				return false;
+</p><p><a href="#L1548">1548</a>			}
+</p><p><a href="#L1549">1549</a>			@Override
+</p><p><a href="#L1550">1550</a>			public Object resolveCandidate(String beanName, Class&lt;?&gt; requiredType, BeanFactory beanFactory) {
+</p><p><a href="#L1551">1551</a>				return (!ObjectUtils.isEmpty(args) ? beanFactory.getBean(beanName, args) :
+</p><p><a href="#L1552">1552</a>						super.resolveCandidate(beanName, requiredType, beanFactory));
+</p><p><a href="#L1553">1553</a>			}
+</p><p><a href="#L1554">1554</a>		};
+</p><p><a href="#L1555">1555</a>		return Optional.ofNullable(doResolveDependency(descriptorToUse, beanName, null, null));
+</p><p><a href="#L1556">1556</a>	}
+</p><p><a href="#L1557">1557</a>
+</p><p><a href="#L1558">1558</a>
+</p><p><a href="#L1559">1559</a>	@Override
+</p><p><a href="#L1560">1560</a>	public String toString() {
+</p><p><a href="#L1561">1561</a>		StringBuilder sb = new StringBuilder(ObjectUtils.identityToString(this));
+</p><p><a href="#L1562">1562</a>		sb.append(": defining beans [");
+</p><p><a href="#L1563">1563</a>		sb.append(StringUtils.collectionToCommaDelimitedString(this.beanDefinitionNames));
+</p><p><a href="#L1564">1564</a>		sb.append("]; ");
+</p><p><a href="#L1565">1565</a>		BeanFactory parent = getParentBeanFactory();
+</p><p><a href="#L1566">1566</a>		if (parent == null) {
+</p><p><a href="#L1567">1567</a>			sb.append("root of factory hierarchy");
+</p><p><a href="#L1568">1568</a>		}
+</p><p><a href="#L1569">1569</a>		else {
+</p><p><a href="#L1570">1570</a>			sb.append("parent: ").append(ObjectUtils.identityToString(parent));
+</p><p><a href="#L1571">1571</a>		}
+</p><p><a href="#L1572">1572</a>		return sb.toString();
+</p><p><a href="#L1573">1573</a>	}
+</p><p><a href="#L1574">1574</a>
+</p><p><a href="#L1575">1575</a>
+</p><p><a href="#L1576">1576</a>	//---------------------------------------------------------------------
+</p><p><a href="#L1577">1577</a>	// Serialization support
+</p><p><a href="#L1578">1578</a>	//---------------------------------------------------------------------
+</p><p><a href="#L1579">1579</a>
+</p><p><a href="#L1580">1580</a>	private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+</p><p><a href="#L1581">1581</a>		throw new NotSerializableException("DefaultListableBeanFactory itself is not deserializable - " +
+</p><p><a href="#L1582">1582</a>				"just a SerializedBeanFactoryReference is");
+</p><p><a href="#L1583">1583</a>	}
+</p><p><a href="#L1584">1584</a>
+</p><p><a href="#L1585">1585</a>	protected Object writeReplace() throws ObjectStreamException {
+</p><p><a href="#L1586">1586</a>		if (this.serializationId != null) {
+</p><p><a href="#L1587">1587</a>			return new SerializedBeanFactoryReference(this.serializationId);
+</p><p><a href="#L1588">1588</a>		}
+</p><p><a href="#L1589">1589</a>		else {
+</p><p><a href="#L1590">1590</a>			throw new NotSerializableException("DefaultListableBeanFactory has no serialization id");
+</p><p><a href="#L1591">1591</a>		}
+</p><p><a href="#L1592">1592</a>	}
+</p><p><a href="#L1593">1593</a>
+</p><p><a href="#L1594">1594</a>
+</p><p><a href="#L1595">1595</a>	/**
+</p><p><a href="#L1596">1596</a>	 * Minimal id reference to the factory.
+</p><p><a href="#L1597">1597</a>	 * Resolved to the actual factory instance on deserialization.
+</p><p><a href="#L1598">1598</a>	 */
+</p><p><a href="#L1599">1599</a>	private static class SerializedBeanFactoryReference implements Serializable {
+</p><p><a href="#L1600">1600</a>
+</p><p><a href="#L1601">1601</a>		private final String id;
+</p><p><a href="#L1602">1602</a>
+</p><p><a href="#L1603">1603</a>		public SerializedBeanFactoryReference(String id) {
+</p><p><a href="#L1604">1604</a>			this.id = id;
+</p><p><a href="#L1605">1605</a>		}
+</p><p><a href="#L1606">1606</a>
+</p><p><a href="#L1607">1607</a>		private Object readResolve() {
+</p><p><a href="#L1608">1608</a>			Reference&lt;?&gt; ref = serializableFactories.get(this.id);
+</p><p><a href="#L1609">1609</a>			if (ref != null) {
+</p><p><a href="#L1610">1610</a>				Object result = ref.get();
+</p><p><a href="#L1611">1611</a>				if (result != null) {
+</p><p><a href="#L1612">1612</a>					return result;
+</p><p><a href="#L1613">1613</a>				}
+</p><p><a href="#L1614">1614</a>			}
+</p><p><a href="#L1615">1615</a>			// Lenient fallback: dummy factory in case of original factory not found...
+</p><p><a href="#L1616">1616</a>			return new DefaultListableBeanFactory();
+</p><p><a href="#L1617">1617</a>		}
+</p><p><a href="#L1618">1618</a>	}
+</p><p><a href="#L1619">1619</a>
+</p><p><a href="#L1620">1620</a>
+</p><p><a href="#L1621">1621</a>	/**
+</p><p><a href="#L1622">1622</a>	 * Serializable ObjectFactory/ObjectProvider for lazy resolution of a dependency.
+</p><p><a href="#L1623">1623</a>	 */
+</p><p><a href="#L1624">1624</a>	private class DependencyObjectProvider implements ObjectProvider&lt;Object&gt;, Serializable {
+</p><p><a href="#L1625">1625</a>
+</p><p><a href="#L1626">1626</a>		private final DependencyDescriptor descriptor;
+</p><p><a href="#L1627">1627</a>
+</p><p><a href="#L1628">1628</a>		private final boolean optional;
+</p><p><a href="#L1629">1629</a>
+</p><p><a href="#L1630">1630</a>		@Nullable
+</p><p><a href="#L1631">1631</a>		private final String beanName;
+</p><p><a href="#L1632">1632</a>
+</p><p><a href="#L1633">1633</a>		public DependencyObjectProvider(DependencyDescriptor descriptor, @Nullable String beanName) {
+</p><p><a href="#L1634">1634</a>			this.descriptor = new NestedDependencyDescriptor(descriptor);
+</p><p><a href="#L1635">1635</a>			this.optional = (this.descriptor.getDependencyType() == Optional.class);
+</p><p><a href="#L1636">1636</a>			this.beanName = beanName;
+</p><p><a href="#L1637">1637</a>		}
+</p><p><a href="#L1638">1638</a>
+</p><p><a href="#L1639">1639</a>		@Override
+</p><p><a href="#L1640">1640</a>		public Object getObject() throws BeansException {
+</p><p><a href="#L1641">1641</a>			if (this.optional) {
+</p><p><a href="#L1642">1642</a>				return createOptionalDependency(this.descriptor, this.beanName);
+</p><p><a href="#L1643">1643</a>			}
+</p><p><a href="#L1644">1644</a>			else {
+</p><p><a href="#L1645">1645</a>				Object result = doResolveDependency(this.descriptor, this.beanName, null, null);
+</p><p><a href="#L1646">1646</a>				if (result == null) {
+</p><p><a href="#L1647">1647</a>					throw new NoSuchBeanDefinitionException(this.descriptor.getResolvableType());
+</p><p><a href="#L1648">1648</a>				}
+</p><p><a href="#L1649">1649</a>				return result;
+</p><p><a href="#L1650">1650</a>			}
+</p><p><a href="#L1651">1651</a>		}
+</p><p><a href="#L1652">1652</a>
+</p><p><a href="#L1653">1653</a>		@Override
+</p><p><a href="#L1654">1654</a>		public Object getObject(final Object... args) throws BeansException {
+</p><p><a href="#L1655">1655</a>			if (this.optional) {
+</p><p><a href="#L1656">1656</a>				return createOptionalDependency(this.descriptor, this.beanName, args);
+</p><p><a href="#L1657">1657</a>			}
+</p><p><a href="#L1658">1658</a>			else {
+</p><p><a href="#L1659">1659</a>				DependencyDescriptor descriptorToUse = new DependencyDescriptor(descriptor) {
+</p><p><a href="#L1660">1660</a>					@Override
+</p><p><a href="#L1661">1661</a>					public Object resolveCandidate(String beanName, Class&lt;?&gt; requiredType, BeanFactory beanFactory) {
+</p><p><a href="#L1662">1662</a>						return beanFactory.getBean(beanName, args);
+</p><p><a href="#L1663">1663</a>					}
+</p><p><a href="#L1664">1664</a>				};
+</p><p><a href="#L1665">1665</a>				Object result = doResolveDependency(descriptorToUse, this.beanName, null, null);
+</p><p><a href="#L1666">1666</a>				if (result == null) {
+</p><p><a href="#L1667">1667</a>					throw new NoSuchBeanDefinitionException(this.descriptor.getResolvableType());
+</p><p><a href="#L1668">1668</a>				}
+</p><p><a href="#L1669">1669</a>				return result;
+</p><p><a href="#L1670">1670</a>			}
+</p><p><a href="#L1671">1671</a>		}
+</p><p><a href="#L1672">1672</a>
+</p><p><a href="#L1673">1673</a>		@Override
+</p><p><a href="#L1674">1674</a>		@Nullable
+</p><p><a href="#L1675">1675</a>		public Object getIfAvailable() throws BeansException {
+</p><p><a href="#L1676">1676</a>			if (this.optional) {
+</p><p><a href="#L1677">1677</a>				return createOptionalDependency(this.descriptor, this.beanName);
+</p><p><a href="#L1678">1678</a>			}
+</p><p><a href="#L1679">1679</a>			else {
+</p><p><a href="#L1680">1680</a>				DependencyDescriptor descriptorToUse = new DependencyDescriptor(descriptor) {
+</p><p><a href="#L1681">1681</a>					@Override
+</p><p><a href="#L1682">1682</a>					public boolean isRequired() {
+</p><p><a href="#L1683">1683</a>						return false;
+</p><p><a href="#L1684">1684</a>					}
+</p><p><a href="#L1685">1685</a>				};
+</p><p><a href="#L1686">1686</a>				return doResolveDependency(descriptorToUse, this.beanName, null, null);
+</p><p><a href="#L1687">1687</a>			}
+</p><p><a href="#L1688">1688</a>		}
+</p><p><a href="#L1689">1689</a>
+</p><p><a href="#L1690">1690</a>		@Override
+</p><p><a href="#L1691">1691</a>		@Nullable
+</p><p><a href="#L1692">1692</a>		public Object getIfUnique() throws BeansException {
+</p><p><a href="#L1693">1693</a>			DependencyDescriptor descriptorToUse = new DependencyDescriptor(descriptor) {
+</p><p><a href="#L1694">1694</a>				@Override
+</p><p><a href="#L1695">1695</a>				public boolean isRequired() {
+</p><p><a href="#L1696">1696</a>					return false;
+</p><p><a href="#L1697">1697</a>				}
+</p><p><a href="#L1698">1698</a>				@Override
+</p><p><a href="#L1699">1699</a>				@Nullable
+</p><p><a href="#L1700">1700</a>				public Object resolveNotUnique(Class&lt;?&gt; type, Map&lt;String, Object&gt; matchingBeans) {
+</p><p><a href="#L1701">1701</a>					return null;
+</p><p><a href="#L1702">1702</a>				}
+</p><p><a href="#L1703">1703</a>			};
+</p><p><a href="#L1704">1704</a>			if (this.optional) {
+</p><p><a href="#L1705">1705</a>				return createOptionalDependency(descriptorToUse, this.beanName);
+</p><p><a href="#L1706">1706</a>			}
+</p><p><a href="#L1707">1707</a>			else {
+</p><p><a href="#L1708">1708</a>				return doResolveDependency(descriptorToUse, this.beanName, null, null);
+</p><p><a href="#L1709">1709</a>			}
+</p><p><a href="#L1710">1710</a>		}
+</p><p><a href="#L1711">1711</a>
+</p><p><a href="#L1712">1712</a>		@Nullable
+</p><p><a href="#L1713">1713</a>		protected Object getValue() throws BeansException {
+</p><p><a href="#L1714">1714</a>			if (this.optional) {
+</p><p><a href="#L1715">1715</a>				return createOptionalDependency(this.descriptor, this.beanName);
+</p><p><a href="#L1716">1716</a>			}
+</p><p><a href="#L1717">1717</a>			else {
+</p><p><a href="#L1718">1718</a>				return doResolveDependency(this.descriptor, this.beanName, null, null);
+</p><p><a href="#L1719">1719</a>			}
+</p><p><a href="#L1720">1720</a>		}
+</p><p><a href="#L1721">1721</a>	}
+</p><p><a href="#L1722">1722</a>
+</p><p><a href="#L1723">1723</a>
+</p><p><a href="#L1724">1724</a>	/**
+</p><p><a href="#L1725">1725</a>	 * Serializable ObjectFactory for lazy resolution of a dependency.
+</p><p><a href="#L1726">1726</a>	 */
+</p><p><a href="#L1727">1727</a>	private class Jsr330DependencyProvider extends DependencyObjectProvider implements Provider&lt;Object&gt; {
+</p><p><a href="#L1728">1728</a>
+</p><p><a href="#L1729">1729</a>		public Jsr330DependencyProvider(DependencyDescriptor descriptor, @Nullable String beanName) {
+</p><p><a href="#L1730">1730</a>			super(descriptor, beanName);
+</p><p><a href="#L1731">1731</a>		}
+</p><p><a href="#L1732">1732</a>
+</p><p><a href="#L1733">1733</a>		@Override
+</p><p><a href="#L1734">1734</a>		@Nullable
+</p><p><a href="#L1735">1735</a>		public Object get() throws BeansException {
+</p><p><a href="#L1736">1736</a>			return getValue();
+</p><p><a href="#L1737">1737</a>		}
+</p><p><a href="#L1738">1738</a>	}
+</p><p><a href="#L1739">1739</a>
+</p><p><a href="#L1740">1740</a>
+</p><p><a href="#L1741">1741</a>	/**
+</p><p><a href="#L1742">1742</a>	 * Separate inner class for avoiding a hard dependency on the {@code javax.inject} API.
+</p><p><a href="#L1743">1743</a>	 */
+</p><p><a href="#L1744">1744</a>	private class Jsr330ProviderFactory {
+</p><p><a href="#L1745">1745</a>
+</p><p><a href="#L1746">1746</a>		public Object createDependencyProvider(DependencyDescriptor descriptor, @Nullable String beanName) {
+</p><p><a href="#L1747">1747</a>			return new Jsr330DependencyProvider(descriptor, beanName);
+</p><p><a href="#L1748">1748</a>		}
+</p><p><a href="#L1749">1749</a>	}
+</p><p><a href="#L1750">1750</a>
+</p><p><a href="#L1751">1751</a>
+</p><p><a href="#L1752">1752</a>	/**
+</p><p><a href="#L1753">1753</a>	 * An {@link org.springframework.core.OrderComparator.OrderSourceProvider} implementation
+</p><p><a href="#L1754">1754</a>	 * that is aware of the bean metadata of the instances to sort.
+</p><p><a href="#L1755">1755</a>	 * &lt;p&gt;Lookup for the method factory of an instance to sort, if any, and let the
+</p><p><a href="#L1756">1756</a>	 * comparator retrieve the {@link org.springframework.core.annotation.Order}
+</p><p><a href="#L1757">1757</a>	 * value defined on it. This essentially allows for the following construct:
+</p><p><a href="#L1758">1758</a>	 */
+</p><p><a href="#L1759">1759</a>	private class FactoryAwareOrderSourceProvider implements OrderComparator.OrderSourceProvider {
+</p><p><a href="#L1760">1760</a>
+</p><p><a href="#L1761">1761</a>		private final Map&lt;Object, String&gt; instancesToBeanNames;
+</p><p><a href="#L1762">1762</a>
+</p><p><a href="#L1763">1763</a>		public FactoryAwareOrderSourceProvider(Map&lt;Object, String&gt; instancesToBeanNames) {
+</p><p><a href="#L1764">1764</a>			this.instancesToBeanNames = instancesToBeanNames;
+</p><p><a href="#L1765">1765</a>		}
+</p><p><a href="#L1766">1766</a>
+</p><p><a href="#L1767">1767</a>		@Override
+</p><p><a href="#L1768">1768</a>		@Nullable
+</p><p><a href="#L1769">1769</a>		public Object getOrderSource(Object obj) {
+</p><p><a href="#L1770">1770</a>			RootBeanDefinition beanDefinition = getRootBeanDefinition(this.instancesToBeanNames.get(obj));
+</p><p><a href="#L1771">1771</a>			if (beanDefinition == null) {
+</p><p><a href="#L1772">1772</a>				return null;
+</p><p><a href="#L1773">1773</a>			}
+</p><p><a href="#L1774">1774</a>			List&lt;Object&gt; sources = new ArrayList&lt;&gt;(2);
+</p><p><a href="#L1775">1775</a>			Method factoryMethod = beanDefinition.getResolvedFactoryMethod();
+</p><p><a href="#L1776">1776</a>			if (factoryMethod != null) {
+</p><p><a href="#L1777">1777</a>				sources.add(factoryMethod);
+</p><p><a href="#L1778">1778</a>			}
+</p><p><a href="#L1779">1779</a>			Class&lt;?&gt; targetType = beanDefinition.getTargetType();
+</p><p><a href="#L1780">1780</a>			if (targetType != null &amp;&amp; targetType != obj.getClass()) {
+</p><p><a href="#L1781">1781</a>				sources.add(targetType);
+</p><p><a href="#L1782">1782</a>			}
+</p><p><a href="#L1783">1783</a>			return sources.toArray();
+</p><p><a href="#L1784">1784</a>		}
+</p><p><a href="#L1785">1785</a>
+</p><p><a href="#L1786">1786</a>		@Nullable
+</p><p><a href="#L1787">1787</a>		private RootBeanDefinition getRootBeanDefinition(@Nullable String beanName) {
+</p><p><a href="#L1788">1788</a>			if (beanName != null &amp;&amp; containsBeanDefinition(beanName)) {
+</p><p><a href="#L1789">1789</a>				BeanDefinition bd = getMergedBeanDefinition(beanName);
+</p><p><a href="#L1790">1790</a>				if (bd instanceof RootBeanDefinition) {
+</p><p><a href="#L1791">1791</a>					return (RootBeanDefinition) bd;
+</p><p><a href="#L1792">1792</a>				}
+</p><p><a href="#L1793">1793</a>			}
+</p><p><a href="#L1794">1794</a>			return null;
+</p><p><a href="#L1795">1795</a>		}
+</p><p><a href="#L1796">1796</a>	}
+</p><p><a href="#L1797">1797</a>
+</p><p><a href="#L1798">1798</a>
+</p><p><a href="#L1799">1799</a>	private static class NestedDependencyDescriptor extends DependencyDescriptor {
+</p><p><a href="#L1800">1800</a>
+</p><p><a href="#L1801">1801</a>		public NestedDependencyDescriptor(DependencyDescriptor original) {
+</p><p><a href="#L1802">1802</a>			super(original);
+</p><p><a href="#L1803">1803</a>			increaseNestingLevel();
+</p><p><a href="#L1804">1804</a>		}
+</p><p><a href="#L1805">1805</a>	}
+</p><p><a href="#L1806">1806</a>
+</p><p><a href="#L1807">1807</a>
+</p><p><a href="#L1808">1808</a>	private static class MultiElementDescriptor extends NestedDependencyDescriptor {
+</p><p><a href="#L1809">1809</a>
+</p><p><a href="#L1810">1810</a>		public MultiElementDescriptor(DependencyDescriptor original) {
+</p><p><a href="#L1811">1811</a>			super(original);
+</p><p><a href="#L1812">1812</a>		}
+</p><p><a href="#L1813">1813</a>	}
+</p><p><a href="#L1814">1814</a>
+</p><p><a href="#L1815">1815</a>}
+</p></pre></body></html>
