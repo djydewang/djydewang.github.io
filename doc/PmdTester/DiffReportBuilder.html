@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class PmdTester::DiffReportBuilder - pmdtester-1.0.0-SNAPSHOT Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">HtmlReportBuilder
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-build">#build</a>
+    
+    <li ><a href="#method-i-build_body">#build_body</a>
+    
+    <li ><a href="#method-i-build_errors_section">#build_errors_section</a>
+    
+    <li ><a href="#method-i-build_errors_table">#build_errors_table</a>
+    
+    <li ><a href="#method-i-build_errors_table_body">#build_errors_table_body</a>
+    
+    <li ><a href="#method-i-build_errors_table_head">#build_errors_table_head</a>
+    
+    <li ><a href="#method-i-build_filename_h3">#build_filename_h3</a>
+    
+    <li ><a href="#method-i-build_summary_row">#build_summary_row</a>
+    
+    <li ><a href="#method-i-build_summary_section">#build_summary_section</a>
+    
+    <li ><a href="#method-i-build_summary_table">#build_summary_table</a>
+    
+    <li ><a href="#method-i-build_summary_table_body">#build_summary_table_body</a>
+    
+    <li ><a href="#method-i-build_violation_table">#build_violation_table</a>
+    
+    <li ><a href="#method-i-build_violation_table_body">#build_violation_table_body</a>
+    
+    <li ><a href="#method-i-build_violation_table_head">#build_violation_table_head</a>
+    
+    <li ><a href="#method-i-build_violation_table_row">#build_violation_table_row</a>
+    
+    <li ><a href="#method-i-build_violations_section">#build_violations_section</a>
+    
+    <li ><a href="#method-i-get_link_to_source">#get_link_to_source</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-PmdTester::DiffReportBuilder">
+  <h1 id="class-PmdTester::DiffReportBuilder" class="class">
+    class PmdTester::DiffReportBuilder
+  </h1>
+
+  <section class="description">
+    
+<p>Building diff report for a single project</p>
+
+  </section>
+
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="NO_DIFFERENCES_MESSAGE">NO_DIFFERENCES_MESSAGE
+        
+        <dd>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-build" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build</span><span
+            class="method-args">(project)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build</span>(<span class="ruby-identifier">project</span>)
+  <span class="ruby-ivar">@project</span> = <span class="ruby-identifier">project</span>
+  <span class="ruby-ivar">@report_diff</span> = <span class="ruby-identifier">project</span>.<span class="ruby-identifier">report_diff</span>
+
+  <span class="ruby-identifier">index</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">project</span>.<span class="ruby-identifier">diff_report_index_path</span>, <span class="ruby-string">&#39;w&#39;</span>)
+
+  <span class="ruby-identifier">html_report</span> = <span class="ruby-identifier">build_html_report</span>(<span class="ruby-string">&#39;pmd xml difference report&#39;</span>)
+  <span class="ruby-identifier">copy_css</span>(<span class="ruby-identifier">project</span>.<span class="ruby-identifier">target_diff_report_path</span>)
+
+  <span class="ruby-identifier">index</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">html_report</span>
+  <span class="ruby-identifier">index</span>.<span class="ruby-identifier">close</span>
+
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Built difference report of #{project.name} successfully!&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_body" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_body</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_body-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_body</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">violation_diffs</span> = <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">violation_diffs</span>
+  <span class="ruby-identifier">error_diffs</span> = <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">error_diffs</span>
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">body</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;composite&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">id:</span> <span class="ruby-string">&#39;contentBox&#39;</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">build_summary_section</span>(<span class="ruby-identifier">doc</span>)
+      <span class="ruby-identifier">build_violations_section</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">violation_diffs</span>)
+      <span class="ruby-identifier">build_errors_section</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">error_diffs</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_errors_section" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_errors_section</span><span
+            class="method-args">(doc, error_diffs)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_errors_section-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 170</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_errors_section</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">error_diffs</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;section&#39;</span>, <span class="ruby-value">id:</span> <span class="ruby-string">&#39;Errors&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h2</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-string">&#39;Errors:&#39;</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h3</span> <span class="ruby-constant">NO_DIFFERENCES_MESSAGE</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">error_diffs</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">error_diffs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;section&#39;</span>) <span class="ruby-keyword">do</span>
+        <span class="ruby-identifier">build_filename_h3</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>)
+        <span class="ruby-identifier">build_errors_table</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_errors_table" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_errors_table</span><span
+            class="method-args">(doc, errors)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_errors_table-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 186</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_errors_table</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">errors</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">table</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;bodyTable&#39;</span>, <span class="ruby-value">border:</span> <span class="ruby-string">&#39;0&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">build_errors_table_head</span>(<span class="ruby-identifier">doc</span>)
+    <span class="ruby-identifier">build_errors_table_body</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">errors</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_errors_table_body" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_errors_table_body</span><span
+            class="method-args">(doc, errors)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_errors_table_body-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 203</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_errors_table_body</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">errors</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tbody</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">b_index</span> = <span class="ruby-value">1</span>
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pmd_error</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value">class:</span> <span class="ruby-identifier">pmd_error</span>.<span class="ruby-identifier">branch</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;base&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;b&#39;</span>) <span class="ruby-keyword">do</span>
+        <span class="ruby-comment"># The anchor</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-keyword">do</span>
+          <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">a</span>(<span class="ruby-value">id:</span> <span class="ruby-node">&quot;B#{b_index}&quot;</span>, <span class="ruby-value">href:</span> <span class="ruby-node">&quot;#B#{b_index}&quot;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-string">&#39;#&#39;</span> }
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># The error message</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-identifier">pmd_error</span>.<span class="ruby-identifier">msg</span>
+
+        <span class="ruby-comment"># Details of error</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-identifier">pmd_error</span>.<span class="ruby-identifier">text</span>
+
+        <span class="ruby-identifier">b_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_errors_table_head" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_errors_table_head</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_errors_table_head-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 193</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_errors_table_head</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">thead</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Message&#39;</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Details&#39;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_filename_h3" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_filename_h3</span><span
+            class="method-args">(doc, filename)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_filename_h3-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 82</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_filename_h3</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">filename</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h3</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">a</span>(<span class="ruby-value">href:</span> <span class="ruby-ivar">@project</span>.<span class="ruby-identifier">get_webview_url</span>(<span class="ruby-identifier">filename</span>)) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-ivar">@project</span>.<span class="ruby-identifier">get_path_inside_project</span>(<span class="ruby-identifier">filename</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_summary_row" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_summary_row</span><span
+            class="method-args">(doc, item, base, patch, diff)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_summary_row-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 73</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_summary_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">item</span>, <span class="ruby-identifier">base</span>, <span class="ruby-identifier">patch</span>, <span class="ruby-identifier">diff</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;c&#39;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">item</span> }
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;a&#39;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">base</span> }
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;b&#39;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">patch</span> }
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;c&#39;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">diff</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_summary_section" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_summary_section</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_summary_section-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_summary_section</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;section&#39;</span>, <span class="ruby-value">id:</span> <span class="ruby-string">&#39;Summary&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h2</span> <span class="ruby-string">&#39;Summary:&#39;</span>
+    <span class="ruby-identifier">build_summary_table</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_summary_table" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_summary_table</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_summary_table-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_summary_table</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">table</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;bodyTable&#39;</span>, <span class="ruby-value">border:</span> <span class="ruby-string">&#39;0&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">thead</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span> <span class="ruby-keyword">do</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Item&#39;</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Base&#39;</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Patch&#39;</span>
+        <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Difference&#39;</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">build_summary_table_body</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_summary_table_body" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_summary_table_body</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_summary_table_body-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_summary_table_body</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tbody</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">build_summary_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-string">&#39;number of errors&#39;</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">base_errors_size</span>,
+                      <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">patch_errors_size</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">error_diffs_size</span>)
+    <span class="ruby-identifier">build_summary_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-string">&#39;number of violations&#39;</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">base_violations_size</span>,
+                      <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">patch_violations_size</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">violation_diffs_size</span>)
+    <span class="ruby-identifier">build_summary_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-string">&#39;execution time&#39;</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">base_execution_time</span>,
+                      <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">patch_execution_time</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">diff_execution_time</span>)
+    <span class="ruby-identifier">build_summary_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-string">&#39;timestamp&#39;</span>, <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">base_timestamp</span>,
+                      <span class="ruby-ivar">@report_diff</span>.<span class="ruby-identifier">patch_timestamp</span>, <span class="ruby-string">&#39;&#39;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_violation_table" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_violation_table</span><span
+            class="method-args">(doc, key, value)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_violation_table-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_violation_table</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">table</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;bodyTable&#39;</span>, <span class="ruby-value">border:</span> <span class="ruby-string">&#39;0&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">build_violation_table_head</span>(<span class="ruby-identifier">doc</span>)
+    <span class="ruby-identifier">build_violation_table_body</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_violation_table_body" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_violation_table_body</span><span
+            class="method-args">(doc, key, value)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_violation_table_body-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 123</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_violation_table_body</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tbody</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">a_index</span> = <span class="ruby-value">1</span>
+    <span class="ruby-identifier">value</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pmd_violation</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">build_violation_table_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">pmd_violation</span>, <span class="ruby-identifier">a_index</span>)
+      <span class="ruby-identifier">a_index</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_violation_table_head" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_violation_table_head</span><span
+            class="method-args">(doc)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_violation_table_head-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_violation_table_head</span>(<span class="ruby-identifier">doc</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">thead</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;priority&#39;</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Rule&#39;</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Message&#39;</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">th</span> <span class="ruby-string">&#39;Line&#39;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_violation_table_row" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_violation_table_row</span><span
+            class="method-args">(doc, key, pmd_violation, a_index)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_violation_table_row-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_violation_table_row</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">pmd_violation</span>, <span class="ruby-identifier">a_index</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value">class:</span> <span class="ruby-identifier">pmd_violation</span>.<span class="ruby-identifier">branch</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;base&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;b&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># The anchor</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">a</span>(<span class="ruby-value">id:</span> <span class="ruby-node">&quot;A#{a_index}&quot;</span>, <span class="ruby-value">href:</span> <span class="ruby-node">&quot;#A#{a_index}&quot;</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-string">&#39;#&#39;</span> }
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">violation</span> = <span class="ruby-identifier">pmd_violation</span>.<span class="ruby-identifier">attrs</span>
+
+    <span class="ruby-comment"># The priority of the rule</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-identifier">violation</span>[<span class="ruby-string">&#39;priority&#39;</span>]
+
+    <span class="ruby-comment"># The rule that trigger the violation</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">a</span>(<span class="ruby-value">href:</span> (<span class="ruby-identifier">violation</span>[<span class="ruby-string">&#39;externalInfoUrl&#39;</span>]).<span class="ruby-identifier">to_s</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">violation</span>[<span class="ruby-string">&#39;rule&#39;</span>] }
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-comment"># The violation message</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-identifier">pmd_violation</span>.<span class="ruby-identifier">text</span>
+
+    <span class="ruby-comment"># The begin line of the violation</span>
+    <span class="ruby-identifier">line</span> = <span class="ruby-identifier">violation</span>[<span class="ruby-string">&#39;beginline&#39;</span>]
+
+    <span class="ruby-comment"># The link to the source file</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">td</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">link</span> = <span class="ruby-identifier">get_link_to_source</span>(<span class="ruby-identifier">violation</span>, <span class="ruby-identifier">key</span>)
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">a</span>(<span class="ruby-value">href:</span> <span class="ruby-identifier">link</span>.<span class="ruby-identifier">to_s</span>) { <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">text</span> <span class="ruby-identifier">line</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-build_violations_section" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">build_violations_section</span><span
+            class="method-args">(doc, violation_diffs)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="build_violations_section-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 90</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build_violations_section</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">violation_diffs</span>)
+  <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;section&#39;</span>, <span class="ruby-value">id:</span> <span class="ruby-string">&#39;Violations&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h2</span> <span class="ruby-string">&#39;Violations:&#39;</span>
+
+    <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">h3</span> <span class="ruby-constant">NO_DIFFERENCES_MESSAGE</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">violation_diffs</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">violation_diffs</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">div</span>(<span class="ruby-value">class:</span> <span class="ruby-string">&#39;section&#39;</span>) <span class="ruby-keyword">do</span>
+        <span class="ruby-identifier">build_filename_h3</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>)
+        <span class="ruby-identifier">build_violation_table</span>(<span class="ruby-identifier">doc</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_link_to_source" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_link_to_source</span><span
+            class="method-args">(violation, key)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_link_to_source-source">
+            <pre><span class="ruby-comment"># File lib/pmdtester/builders/diff_report_builder.rb, line 164</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_link_to_source</span>(<span class="ruby-identifier">violation</span>, <span class="ruby-identifier">key</span>)
+  <span class="ruby-identifier">l_str</span> = <span class="ruby-ivar">@project</span>.<span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;git&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;L&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;l&#39;</span>
+  <span class="ruby-identifier">line_str</span> = <span class="ruby-node">&quot;##{l_str}#{violation[&#39;beginline&#39;]}&quot;</span>
+  <span class="ruby-ivar">@project</span>.<span class="ruby-identifier">get_webview_url</span>(<span class="ruby-identifier">key</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">line_str</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.0.4.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
