@@ -1,0 +1,2723 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<title>pmd xml difference report</title>
+<style type="text/css" media="all">@import url("./css/maven-base.css");@import url("./css/maven-theme.css");</style>
+</head>
+<body class="composite"><div id="contentBox">
+<div class="section" id="Summary">
+<h2>Summary:</h2>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th>Item</th>
+<th>Base</th>
+<th>Patch</th>
+<th>Difference</th>
+</tr></thead>
+<tbody>
+<tr>
+<td class="c">number of errors</td>
+<td class="a">24</td>
+<td class="b">24</td>
+<td class="c">48</td>
+</tr>
+<tr>
+<td class="c">number of violations</td>
+<td class="a">7881</td>
+<td class="b">7881</td>
+<td class="c">0</td>
+</tr>
+<tr>
+<td class="c">execution time</td>
+<td class="a">00:01:01</td>
+<td class="b">00:00:44</td>
+<td class="c">00:00:17</td>
+</tr>
+<tr>
+<td class="c">timestamp</td>
+<td class="a">2018-07-12 22:22:00 +0800</td>
+<td class="b">2018-07-14 20:44:38 +0800</td>
+<td class="c"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Violations">
+<h2>Violations:</h2>
+<h3>No differences found!</h3>
+</div>
+<div class="section" id="Errors">
+<h2>Errors:</h2>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " &lt;IDENTIFIER&gt; "classD "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/asttreestringprinter/InputAstTreeStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " &lt;IDENTIFIER&gt; "classD "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 21, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/modifier/modifierorder/InputModifierOrderTypeAnnotations.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 21, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/filefilters/beforeexecutionexclusionfilefilter/InputBeforeExecutionExclusionFileFilterIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/gui/mainframemodel/InputMainFrameModelIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 8, column 1.
+Was expecting:
+    "}" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1196)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/javadocpropertiesgenerator/InputJavadocPropertiesGeneratorParseError.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 8, column 1.
+Was expecting:
+    "}" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1196)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/main/InputMainIncorrectClass.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "!" "! "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java">checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " &lt;IDENTIFIER&gt; "classD "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/suppressionsstringprinter/InputSuppressionsStringPrinter.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " &lt;IDENTIFIER&gt; "classD "" at line 1, column 1.
+Was expecting one of:
+    &lt;EOF&gt; 
+    "import" ...
+    "\u001a" ...
+    "~[]" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:323)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while processing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while processing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:102)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.symboltable.NameFinder.checkForNameChild(NameFinder.java:59)
+	at net.sourceforge.pmd.lang.java.symboltable.NameFinder.&lt;init&gt;(NameFinder.java:34)
+	at net.sourceforge.pmd.lang.java.symboltable.OccurrenceFinder.visit(OccurrenceFinder.java:25)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:374)
+	at net.sourceforge.pmd.lang.java.ast.ASTStatementExpression.jjtAccept(ASTStatementExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:350)
+	at net.sourceforge.pmd.lang.java.ast.ASTStatement.jjtAccept(ASTStatement.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:362)
+	at net.sourceforge.pmd.lang.java.ast.ASTBlockStatement.jjtAccept(ASTBlockStatement.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:198)
+	at net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration.jjtAccept(ASTConstructorDeclaration.java:32)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:46)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:42)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:18)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration.jjtAccept(ASTClassOrInterfaceDeclaration.java:55)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:46)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:42)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:18)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration.jjtAccept(ASTClassOrInterfaceDeclaration.java:55)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:158)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:35)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:10)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:138)
+	at net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit.jjtAccept(ASTCompilationUnit.java:41)
+	at net.sourceforge.pmd.lang.java.symboltable.SymbolFacade.initializeWith(SymbolFacade.java:18)
+	at net.sourceforge.pmd.lang.java.AbstractJavaHandler$4.start(AbstractJavaHandler.java:95)
+	at net.sourceforge.pmd.SourceCodeProcessor.symbolFacade(SourceCodeProcessor.java:119)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:177)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while processing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while processing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCtorCall.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:102)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.symboltable.NameFinder.checkForNameChild(NameFinder.java:59)
+	at net.sourceforge.pmd.lang.java.symboltable.NameFinder.&lt;init&gt;(NameFinder.java:34)
+	at net.sourceforge.pmd.lang.java.symboltable.OccurrenceFinder.visit(OccurrenceFinder.java:26)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:466)
+	at net.sourceforge.pmd.lang.java.ast.ASTStatementExpression.jjtAccept(ASTStatementExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:436)
+	at net.sourceforge.pmd.lang.java.ast.ASTStatement.jjtAccept(ASTStatement.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:451)
+	at net.sourceforge.pmd.lang.java.ast.ASTBlockStatement.jjtAccept(ASTBlockStatement.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:246)
+	at net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration.jjtAccept(ASTConstructorDeclaration.java:32)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:56)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:51)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:21)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration.jjtAccept(ASTClassOrInterfaceDeclaration.java:55)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:56)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:51)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:21)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration.jjtAccept(ASTClassOrInterfaceDeclaration.java:55)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:196)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:37)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:11)
+	at net.sourceforge.pmd.lang.java.ast.JavaParserVisitorAdapter.visit(JavaParserVisitorAdapter.java:171)
+	at net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit.jjtAccept(ASTCompilationUnit.java:41)
+	at net.sourceforge.pmd.lang.java.symboltable.SymbolFacade.initializeWith(SymbolFacade.java:18)
+	at net.sourceforge.pmd.lang.java.AbstractJavaHandler$4.start(AbstractJavaHandler.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.symbolFacade(SourceCodeProcessor.java:119)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:177)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCustomAnnotation.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCustomAnnotation.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:25)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:256)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:120)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:116)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:416)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:27)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:388)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:384)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:304)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:248)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:240)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:236)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:192)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:188)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:184)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:232)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:35)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:212)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:300)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:130)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:125)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:500)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:28)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:465)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:460)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:360)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:290)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:280)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:275)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:220)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:215)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:210)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:270)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:37)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:245)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/checks/sizes/methodcount/InputMethodCount4.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/sizes/methodcount/InputMethodCount4.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:25)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:256)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:120)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:116)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:416)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:27)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:388)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:384)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:304)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:248)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:240)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:236)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:192)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:188)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:184)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:232)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:35)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:212)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:300)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:130)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:125)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:500)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:28)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:465)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:460)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:360)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:290)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:280)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:275)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:220)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:215)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:210)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:270)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:37)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:245)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 25, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 25, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 44, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 44, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "super" "super "" at line 40, column 34.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MemberSelector(JavaParser.java:3770)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimarySuffix(JavaParser.java:4162)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimaryExpression(JavaParser.java:3735)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ExplicitConstructorInvocation(JavaParser.java:1949)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ConstructorDeclaration(JavaParser.java:1865)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1235)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "super" "super "" at line 40, column 34.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MemberSelector(JavaParser.java:3770)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimarySuffix(JavaParser.java:4162)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimaryExpression(JavaParser.java:3735)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ExplicitConstructorInvocation(JavaParser.java:1949)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ConstructorDeclaration(JavaParser.java:1865)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1235)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 20.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 20.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "@" "@ "" at line 23, column 66.
+Was expecting one of:
+    "this" ...
+    &lt;IDENTIFIER&gt; ...
+    "|" ...
+    "..." ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.VariableDeclaratorId(JavaParser.java:1402)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameter(JavaParser.java:1813)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameters(JavaParser.java:1714)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1658)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "@" "@ "" at line 23, column 66.
+Was expecting one of:
+    "this" ...
+    &lt;IDENTIFIER&gt; ...
+    "|" ...
+    "..." ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.VariableDeclaratorId(JavaParser.java:1402)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameter(JavaParser.java:1813)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameters(JavaParser.java:1714)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1658)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java">checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/src/test/resources/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCustomAnnotation.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/InputIndentationCustomAnnotation.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:25)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:256)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:120)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:116)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:416)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:27)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:388)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:384)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:304)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:248)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:240)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:236)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:192)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:188)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:184)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:232)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:35)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:212)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:300)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:130)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:125)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:500)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:28)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:465)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:460)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:360)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:290)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:280)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:275)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:220)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:215)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:210)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:270)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:37)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:245)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/checks/sizes/methodcount/InputMethodCount4.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/sizes/methodcount/InputMethodCount4.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:25)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:256)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:120)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:41)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:116)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:416)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:27)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:388)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:384)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:304)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:248)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:240)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:236)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:192)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:188)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:21)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:184)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:232)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:35)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:56)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:83)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:212)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Index -1 out-of-bounds for length 0</td>
+<td>java.lang.IndexOutOfBoundsException: Index -1 out-of-bounds for length 0
+	at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+	at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+	at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+	at java.base/java.util.Objects.checkIndex(Objects.java:372)
+	at java.base/java.util.ArrayList.get(ArrayList.java:440)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.getCurrentEvalPackage(ConstructorCallsOverridableMethodRule.java:625)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:932)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator.jjtAccept(ASTMethodDeclarator.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:300)
+	at net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration.jjtAccept(ASTMethodDeclaration.java:33)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:130)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration.jjtAccept(ASTClassOrInterfaceBodyDeclaration.java:43)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:125)
+	at net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody.jjtAccept(ASTClassOrInterfaceBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:500)
+	at net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression.jjtAccept(ASTAllocationExpression.java:28)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:465)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix.jjtAccept(ASTPrimaryPrefix.java:42)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:460)
+	at net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression.jjtAccept(ASTPrimaryExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:360)
+	at net.sourceforge.pmd.lang.java.ast.ASTExpression.jjtAccept(ASTExpression.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:290)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableInitializer.jjtAccept(ASTVariableInitializer.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:280)
+	at net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator.jjtAccept(ASTVariableDeclarator.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:275)
+	at net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration.jjtAccept(ASTFieldDeclaration.java:29)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:220)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeMemberDeclaration.jjtAccept(ASTAnnotationTypeMemberDeclaration.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:215)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeBody.jjtAccept(ASTAnnotationTypeBody.java:22)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:210)
+	at net.sourceforge.pmd.lang.java.ast.ASTAnnotationTypeDeclaration.jjtAccept(ASTAnnotationTypeDeclaration.java:26)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:270)
+	at net.sourceforge.pmd.lang.java.ast.ASTTypeDeclaration.jjtAccept(ASTTypeDeclaration.java:37)
+	at net.sourceforge.pmd.lang.java.ast.AbstractJavaNode.childrenAccept(AbstractJavaNode.java:60)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:84)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visit(AbstractJavaRule.java:245)
+	at net.sourceforge.pmd.lang.java.rule.errorprone.ConstructorCallsOverridableMethodRule.visit(ConstructorCallsOverridableMethodRule.java:853)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.visitAll(AbstractJavaRule.java:39)
+	at net.sourceforge.pmd.lang.java.rule.AbstractJavaRule.apply(AbstractJavaRule.java:27)
+	at net.sourceforge.pmd.lang.rule.AbstractDelegateRule.apply(AbstractDelegateRule.java:321)
+	at net.sourceforge.pmd.RuleSet.apply(RuleSet.java:502)
+	at net.sourceforge.pmd.RuleSets.apply(RuleSets.java:143)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:184)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 25, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/checks/suppresswarningsholder/InputSuppressWarningsHolder5.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 25, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 44, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJava8Class1.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 44, column 12.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "super" "super "" at line 40, column 34.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MemberSelector(JavaParser.java:3770)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimarySuffix(JavaParser.java:4162)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimaryExpression(JavaParser.java:3735)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ExplicitConstructorInvocation(JavaParser.java:1949)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ConstructorDeclaration(JavaParser.java:1865)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1235)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/InputRegressionJavaClass2.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "super" "super "" at line 40, column 34.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MemberSelector(JavaParser.java:3770)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimarySuffix(JavaParser.java:4162)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.PrimaryExpression(JavaParser.java:3735)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ExplicitConstructorInvocation(JavaParser.java:1949)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ConstructorDeclaration(JavaParser.java:1865)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1235)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 20.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotations8.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 20.
+Was expecting one of:
+    ";" ...
+    "++" ...
+    "--" ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Statement(JavaParser.java:4674)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.BlockStatement(JavaParser.java:4827)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.Block(JavaParser.java:4785)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1615)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "@" "@ "" at line 23, column 66.
+Was expecting one of:
+    "this" ...
+    &lt;IDENTIFIER&gt; ...
+    "|" ...
+    "..." ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.VariableDeclaratorId(JavaParser.java:1402)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameter(JavaParser.java:1813)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameters(JavaParser.java:1714)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1658)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputAnnotationsOnArray.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "@" "@ "" at line 23, column 66.
+Was expecting one of:
+    "this" ...
+    &lt;IDENTIFIER&gt; ...
+    "|" ...
+    "..." ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.VariableDeclaratorId(JavaParser.java:1402)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameter(JavaParser.java:1813)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.FormalParameters(JavaParser.java:1714)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1658)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h3><a href="https://github.com/checkstyle/checkstyle/tree/checkstyle-8.10/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java">checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</a></h3>
+<table class="bodyTable" border="0">
+<thead><tr>
+<th></th>
+<th>Message</th>
+<th>Details</th>
+</tr></thead>
+<tbody>
+<tr class="a">
+<td><a id="B1" href="#B1">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:57)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+<tr class="b">
+<td><a id="B2" href="#B2">#</a></td>
+<td>Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java</td>
+<td>net.sourceforge.pmd.PMDException: Error while parsing /target/repositories/checkstyle/target/test-classes/com/puppycrawl/tools/checkstyle/grammars/java8/InputTypeUseAnnotationsOnQualifiedTypes.java
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:99)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:51)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:78)
+	at net.sourceforge.pmd.processor.PmdRunnable.call(PmdRunnable.java:24)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:514)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1135)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+Caused by: net.sourceforge.pmd.lang.java.ast.ParseException: Encountered " "." ". "" at line 10, column 16.
+Was expecting one of:
+    &lt;IDENTIFIER&gt; ...
+    "@" ...
+    "@" ...
+    "@" ...
+    "@" ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    &lt;IDENTIFIER&gt; ...
+    
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.generateParseException(JavaParser.java:11697)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.jj_consume_token(JavaParser.java:11581)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclarator(JavaParser.java:1654)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.MethodDeclaration(JavaParser.java:1603)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBodyDeclaration(JavaParser.java:1239)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceBody(JavaParser.java:1194)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.ClassOrInterfaceDeclaration(JavaParser.java:650)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.TypeDeclaration(JavaParser.java:539)
+	at net.sourceforge.pmd.lang.java.ast.JavaParser.CompilationUnit(JavaParser.java:276)
+	at net.sourceforge.pmd.lang.java.AbstractJavaParser.parse(AbstractJavaParser.java:59)
+	at net.sourceforge.pmd.SourceCodeProcessor.parse(SourceCodeProcessor.java:111)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSource(SourceCodeProcessor.java:175)
+	at net.sourceforge.pmd.SourceCodeProcessor.processSourceCode(SourceCodeProcessor.java:96)
+	... 9 more
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></body>
+</html>
