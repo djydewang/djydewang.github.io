@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "postgresql由oid获取table内容简析"
+title:  "postgresql由oid获取Relation对象简析"
 date:   2019-05-18 21:40:10
 categories: postgresql
 ---
 
 ### 前言
-此文基于postgresql源码(version:devel 12)简单了解其内部表格存储的组织方式，对于不重要的细节留作以后深入理解。
+此文基于postgresql源码(version:devel 12)简单了解其内部表格存储的组织方式，对于不相关的细节留作以后深入理解。
 
 ### 源码解析
 #### 入口 table.c table_open()
@@ -796,7 +796,7 @@ CATALOG(pg_class,1259,RelationRelationId) BKI_BOOTSTRAP BKI_ROWTYPE_OID(83,Relat
 	relp = (Form_pg_class) GETSTRUCT(pg_class_tuple);
 ```
 `GETSTRUCT`的作用主要是获取元组的data部分（不含头～），然后将这部分数据标示为Form_pg_class.
-忽略cache相关代码，观察如何获取关系的全部元组
+忽略cache相关代码，观察如何获取关系的属性字典
 ```
 	/*
 	 * initialize the tuple descriptor (relation->rd_att).
@@ -1030,8 +1030,54 @@ RelationBuildTupleDesc(Relation relation)
 	}
 }
 ```
-这个函数涉及的东西有点复杂--，未完待续。。
-
-
-
+该函数主要用来从pg_attribute表中读出与查询的relation相关的属性结构描述元组,即：
+```
+/*
+ * This struct is passed around within the backend to describe the structure
+ * of tuples.  For tuples coming from on-disk relations, the information is
+ * collected from the pg_attribute, pg_attrdef, and pg_constraint catalogs.
+ * Transient row types (such as the result of a join query) have anonymous
+ * TupleDesc structs that generally omit any constraint info; therefore the
+ * structure is designed to let the constraints be omitted efficiently.
+ *
+ * Note that only user attributes, not system attributes, are mentioned in
+ * TupleDesc.
+ *
+ * If the tupdesc is known to correspond to a named rowtype (such as a table's
+ * rowtype) then tdtypeid identifies that type and tdtypmod is -1.  Otherwise
+ * tdtypeid is RECORDOID, and tdtypmod can be either -1 for a fully anonymous
+ * row type, or a value >= 0 to allow the rowtype to be looked up in the
+ * typcache.c type cache.
+ *
+ * Note that tdtypeid is never the OID of a domain over composite, even if
+ * we are dealing with values that are known (at some higher level) to be of
+ * a domain-over-composite type.  This is because tdtypeid/tdtypmod need to
+ * match up with the type labeling of composite Datums, and those are never
+ * explicitly marked as being of a domain type, either.
+ *
+ * Tuple descriptors that live in caches (relcache or typcache, at present)
+ * are reference-counted: they can be deleted when their reference count goes
+ * to zero.  Tuple descriptors created by the executor need no reference
+ * counting, however: they are simply created in the appropriate memory
+ * context and go away when the context is freed.  We set the tdrefcount
+ * field of such a descriptor to -1, while reference-counted descriptors
+ * always have tdrefcount >= 0.
+ */
+typedef struct TupleDescData
+{
+	int			natts;			/* number of attributes in the tuple */
+	Oid			tdtypeid;		/* composite type ID for tuple type */
+	int32		tdtypmod;		/* typmod for tuple type */
+	int			tdrefcount;		/* reference count, or -1 if not counting */
+	TupleConstr *constr;		/* constraints, or NULL if none */
+	/* attrs[N] is the description of Attribute Number N+1 */
+	FormData_pg_attribute attrs[FLEXIBLE_ARRAY_MEMBER];
+} TupleDescData;
+typedef struct TupleDescData *TupleDesc;
+```
+至此，关于relation对象的主要构造功能已完成（忽略缺失值处理，默认值等等细节）
+### 总结
+postgresql的许多结构描述性信息均以元组的形式存储在表格中，关系字典存储在pg_class表格中，属性字典存储在pg_attribute表中。
+构造Relation对象的过程为，根据oid从pg_class表中获取与该关系相关的关系数据字典，而后根据relation id获取属性字典。
+后续获取Relation的各个元组后，需要根据属性字典对它们进行解析。
 
