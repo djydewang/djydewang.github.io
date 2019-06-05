@@ -1,0 +1,51 @@
+---
+layout: post
+title:  "GFS总结"
+date:   2019-06-04 20:55:10
+categories: Reading
+---
+
+## GFS特性
+* 中心化设计
+* 容灾
+* 支持快照
+* 惰性垃圾回收
+* 支持并发追加写
+
+## 中心化设计
+中心化的设计使得整个系统的管理十分简单高效，切易于实施，google工程师们还是相当务实的！
+GFS的master负责了几乎所有的控制流，为了保证master的高可用及防止master成为系统的性能瓶颈，
+GFS主要做了如下设计：
+* 设定较大的chunk size (64M)
+    * 直接缩小了master上的metedata的大小，管理50TB(包含副本)的数据，metedata大概只有50MB大小。
+    这使得master内存大小不可能成为系统瓶颈。
+    * 使得客户端的请求量变小，客户端每次请求操作一个chunk并得到响应后会将相关信息缓存，下次（缓存未失效）操作相同的chunk不需要再向master请求。
+    那么chunk size越大，缓存命中率就越大，从而减少master负载。
+    * 客户端在同一个chunk中能做的操作更多了，即超出chunk界限的概率变小。
+* 控制流与数据流分离，客户端与chunkserver或者chunkserver与chunkserver间的数据传输都不需要经过master
+* shadow master机制，分流只读请求，尽管这些master的metedata数据可能存在延迟，但还是有对于metedata数据不一致不敏感的应用场景。
+* master操作日志及检查点副本。使得即使一个master停机，也可以迅速重启一个新的master。小尺寸的metedata及检查点对快速恢复起了很大的作用。
+
+## 读流程
+![](/images/GFS-summary/gfs-1.jpeg)
+1. 客户端根据应用程序请求的文件及偏移量计算出该请求操作哪个chunk，将文件名及chunk序列号发送给master
+2. master根据前缀树查找/foo/bar的file-to-chunk映射，根据chunk序列号拿到chunk索引后，查找chunk的位置信息。
+如图所示，客户端请求/foo/bar的第一块chunk，该chunk的标识符为2ef0，再根据2ef0进行映射就可以找到chunk的实际位置信息。
+3. master将chunk句柄及chunk位置信息返回给客户端。
+4. 客户端将相关消息缓存并设置失效时间。
+5. 客户端向对应chunkserver发送chunk句柄及要读取的字节范围。
+6. chunkserver将数据返回给客户端。
+
+## 写流程
+![](/images/GFS-summary/gfs-3.jpeg)
+**此处的写包括随机写和追加写**
+1. 客户端向master请求拥有chunk租约的chunkserver及chunk副本所在位置。
+2. master回复primary chunkserver的标识符和剩余副本所在位置。客户端缓存这些消息，直至租约失效或primary失去连接。
+3. 客户端将需要写入的数据传输至所有副本所在的chunkserver。此处的传输采用链式传输策略，即客户端先选择将数据传输至离它最近（拓扑意义上）
+的chunkserver，然后该chunkserver在接收到字节后，马上将该字节传输至离它最近的下一个chunkserver。如此一来大大增加了
+网络带宽的利用率。chunkserver在接收到数据后会将数据缓存在内部的LRU缓存中。
+4. 当所有的副本chunkserver接收到数据后，客户端发送写指令至primary。primary将所有写操作（可能来自不同客户端）排序，并依次对chunk进行操作。
+5. primary将这种写操作传输至所有secondary副本serverchunk上，所有的secondary server将按照同样的顺序对chunk进行写操作。
+6. 所有secondary向primary回复它们已经完成了写操作。
+7. primary向客户端回复写操作成功（如果是追加写，应该还回复了追加的偏移量是多少）。如果上述过程出现问题，则客户端会尝试从上一次的写起始位置重新写。
+
