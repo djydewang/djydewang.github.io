@@ -49,3 +49,7 @@ GFS主要做了如下设计：
 6. 所有secondary向primary回复它们已经完成了写操作。
 7. primary向客户端回复写操作成功（如果是追加写，应该还回复了追加的偏移量是多少）。如果上述过程出现问题，则客户端会尝试从上一次的写起始位置重新写。
 
+### 参考资料
+[1][https://www.cnblogs.com/fxjwind/archive/2012/07/17/2595494.html](https://www.cnblogs.com/fxjwind/archive/2012/07/17/2595494.html)
+[2][https://blog.csdn.net/qiaojialin/article/details/71574203](https://blog.csdn.net/qiaojialin/article/details/71574203)
+[3][https://blog.csdn.net/xiaofei0859/article/details/53466008](https://blog.csdn.net/xiaofei0859/article/details/53466008)
