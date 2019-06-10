@@ -51,6 +51,7 @@ page的pg_lsn用来定位上一次对该page的修改的日志记录，若要将
    is valid or not, a deliberate design choice which avoids the problem
    of relying on the page contents to decide whether to verify it. Hence
    there are no flag bits relating to checksums.
+   
 #### pd_flags 2B
 > pd_flags contains the following flag bits.  Undefined bits are initialized
  to zero and may be used in the future.
@@ -62,6 +63,7 @@ page的pg_lsn用来定位上一次对该page的修改的日志记录，若要将
 > PD_PAGE_FULL is set if an UPDATE doesn't find enough free space in the
  page for its new tuple version; this suggests that a prune is needed.
  Again, this is just a hint.
+ 
 #### pd_lower 2B
 空闲空间起始位置偏移量
 #### pd_upper 2B
@@ -75,6 +77,7 @@ page的pg_lsn用来定位上一次对该page的修改的日志记录，若要将
    lets us pretend that pre-7.3 databases have page version number zero.
    We constrain page sizes to be multiples of 256, leaving the low eight
    bits available for a version number.
+   
 #### pd_linp
 ItemIdData定义
 ```
@@ -96,7 +99,9 @@ typedef ItemIdData *ItemId;
 #define LP_REDIRECT		2		/* HOT redirect (should have lp_len=0) */
 #define LP_DEAD			3		/* dead, may or may not have storage */
 ```
-他是用来表示一个item的起始位置和长度以及标记。对照实际的页面布局
+
+ItemIdData是用来表示一个item的起始位置和长度以及标记。对照实际的页面布局
+
 ```
   +----------------+---------------------------------+
   | PageHeaderData | linp1 linp2 linp3 ...           |
@@ -114,12 +119,10 @@ typedef ItemIdData *ItemId;
 ```
 在PageHeaderData后紧接着item指针数组，指示各个item的存放位置。可以发现页面的剩余空间，item是从末端向前延伸，
 item指针是从头向后延伸。此处需注意，linp1不一定是指向tuple1的。
+
 #### item
 item一般泛指存储在page中的数据项，它可以是关系元组，也可以是各种索引的索引项。
-具体分析下关系元组的组织结构
-一个关系元祖项起始的23字节为元祖头，里面记录着和事务操作相关的记录及存放元组数据的偏移量，仅接着是指示各个属性是否为null的bitmap，
-而后是Object ID(若元祖头中的相应标志位被设置了)，接着就是正真的元组数据了。关于如何解析这些数据，一般是需要从pg_attribute表中读取该关系的
+具体分析下关系元组的组织结构:
+一个关系元组项起始的23字节为元组头，里面记录着和事务操作相关的记录及存放元组数据的偏移量，仅接着是指示各个属性是否为null的bitmap，
+而后是Object ID(若元组头中的相应标志位被设置了)，接着就是正真的元组数据了。关于如何解析这些数据，一般是需要从pg_attribute表中读取该关系的
 所有属性字典，即每个属性的长度（若不是变长），序号，存储对齐方式等等。
-
-
-
